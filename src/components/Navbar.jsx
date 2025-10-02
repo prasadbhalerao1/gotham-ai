@@ -56,17 +56,21 @@ const NavBar = () => {
       // Determine active section based on scroll position
       if (scrollY < eventsTop) {
         setActiveSection('home');
+        navContainerRef.current.classList.add("home-nav");
         navContainerRef.current.classList.remove("floating-nav", "events-nav", "about-nav", "contact-nav");
       } else if (scrollY >= eventsTop && scrollY < aboutTop) {
         setActiveSection('events');
+        navContainerRef.current.classList.remove("home-nav");
         navContainerRef.current.classList.add("floating-nav", "events-nav");
         navContainerRef.current.classList.remove("about-nav", "contact-nav");
       } else if (scrollY >= aboutTop && scrollY < contactTop) {
         setActiveSection('about');
+        navContainerRef.current.classList.remove("home-nav");
         navContainerRef.current.classList.add("floating-nav", "about-nav");
         navContainerRef.current.classList.remove("events-nav", "contact-nav");
       } else {
         setActiveSection('contact');
+        navContainerRef.current.classList.remove("home-nav");
         navContainerRef.current.classList.add("floating-nav", "contact-nav");
         navContainerRef.current.classList.remove("events-nav", "about-nav");
       }
@@ -78,10 +82,28 @@ const NavBar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [currentScrollY]);
 
+  // Subtle entrance animation for navbar container and links
+  useEffect(() => {
+    if (!navContainerRef.current) return;
+    gsap.fromTo(
+      navContainerRef.current,
+      { y: -20, opacity: 0, filter: "blur(4px)" },
+      { y: 0, opacity: 1, filter: "blur(0px)", duration: 0.7, ease: "power2.out" }
+    );
+    gsap.from(".nav-item-enhanced", {
+      y: -6,
+      opacity: 0,
+      stagger: 0.05,
+      duration: 0.5,
+      delay: 0.1,
+      ease: "power2.out",
+    });
+  }, []);
+
   return (
     <div
       ref={navContainerRef}
-      className="fixed inset-x-2 sm:inset-x-4 top-2 sm:top-4 z-50 h-14 sm:h-16 border-none transition-all duration-700 ease-out bg-black/80 rounded-xl backdrop-blur-xl will-change-transform"
+      className="fixed inset-x-2 sm:inset-x-4 top-2 sm:top-4 z-50 h-14 sm:h-16 border-none transition-all duration-700 ease-out rounded-xl will-change-transform nav-3d"
       style={{
         transform: 'translateZ(0)', // Force hardware acceleration
       }}
@@ -119,7 +141,7 @@ const NavBar = () => {
                   <a
                     key={index}
                     href={`/#${item.toLowerCase()}`}
-                    className={`nav-hover-btn nav-item-enhanced focus:outline-none focus:ring-2 focus:ring-purple-300/50 rounded px-2 py-1 ${isActive ? 'text-yellow-300 font-bold' : ''}`}
+                    className={`nav-hover-btn nav-item-enhanced nav-link-3d focus:outline-none focus:ring-2 focus:ring-purple-300/50 rounded px-2 py-1 ${isActive ? 'text-yellow-300 font-extrabold' : 'text-blue-50/90 font-semibold'}`}
                     onClick={(e) => {
                       e.preventDefault();
                       let elementId = item.toLowerCase();
