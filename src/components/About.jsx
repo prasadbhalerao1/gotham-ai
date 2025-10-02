@@ -28,21 +28,21 @@ const About = () => {
 
   return (
     <div id="about" className="min-h-screen w-screen">
-      <div className="relative mb-8 mt-36 flex flex-col items-center gap-5">
-        <p className="font-general text-sm uppercase md:text-[10px]">
+      <div className="relative mb-8 mt-20 sm:mt-36 flex flex-col items-center gap-5 px-4">
+        <p className="font-general text-sm uppercase md:text-[10px] text-center">
           Welcome to Gotham AI
         </p>
 
         <AnimatedTitle
           title="Expl<b>o</b>re the future of <br /> <b>A</b>I together"
-          containerClass="mt-16 !text-black text-center"
+          containerClass="mt-8 sm:mt-16 !text-black text-center"
         />
 
         <div className="about-subtext">
-          <p>The Era of Intelligence begins your journey into AI starts here</p>
-          <p className="text-gray-500">
+          <p className="text-center font-semibold">The Era of Intelligence begins — your journey into AI starts here</p>
+          <p className="text-gray-500 text-center">
             Gotham AI unites learners, creators, and innovators to explore the
-            world of artificial intelligence building skills, projects, and the
+            world of artificial intelligence, building skills, projects, and the
             future together.
           </p>
         </div>

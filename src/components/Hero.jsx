@@ -29,6 +29,18 @@ const Hero = () => {
     }
   }, [loadedVideos]);
 
+  // Performance optimization: Preload videos
+  useEffect(() => {
+    const preloadVideos = () => {
+      for (let i = 1; i <= totalVideos; i++) {
+        const video = document.createElement('video');
+        video.preload = 'metadata';
+        video.src = getVideoSrc(i);
+      }
+    };
+    preloadVideos();
+  }, []);
+
   const handleMiniVdClick = () => {
     setHasClicked(true);
 
@@ -38,7 +50,10 @@ const Hero = () => {
   useGSAP(
     () => {
       if (hasClicked) {
-        gsap.set("#next-video", { visibility: "visible" });
+        gsap.set("#next-video", { 
+          visibility: "visible",
+          force3D: true // Force hardware acceleration
+        });
         gsap.to("#next-video", {
           transformOrigin: "center center",
           scale: 1,
@@ -46,6 +61,7 @@ const Hero = () => {
           height: "100%",
           duration: 1,
           ease: "power1.inOut",
+          force3D: true,
           onStart: () => nextVdRef.current.play(),
         });
         gsap.from("#current-video", {
@@ -53,6 +69,7 @@ const Hero = () => {
           scale: 0,
           duration: 1.5,
           ease: "power1.inOut",
+          force3D: true,
         });
       }
     },
@@ -66,16 +83,19 @@ const Hero = () => {
     gsap.set("#video-frame", {
       clipPath: "polygon(14% 0, 72% 0, 88% 90%, 0 95%)",
       borderRadius: "0% 0% 40% 10%",
+      force3D: true,
     });
     gsap.from("#video-frame", {
       clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
       borderRadius: "0% 0% 0% 0%",
       ease: "power1.inOut",
+      force3D: true,
       scrollTrigger: {
         trigger: "#video-frame",
         start: "center center",
         end: "bottom center",
-        scrub: true,
+        scrub: 1, // Smoother scrubbing
+        invalidateOnRefresh: true, // Better performance on resize
       },
     });
   });
@@ -86,7 +106,6 @@ const Hero = () => {
     <div className="relative h-dvh w-screen overflow-x-hidden">
       {loading && (
         <div className="flex-center absolute z-[100] h-dvh w-screen overflow-hidden bg-violet-50">
-          {/* https://uiverse.io/G4b413l/tidy-walrus-92 */}
           <div className="three-body">
             <div className="three-body__dot"></div>
             <div className="three-body__dot"></div>
@@ -141,12 +160,12 @@ const Hero = () => {
         </div>
 
         <div className="absolute left-0 top-0 z-40 size-full">
-          <div className="mt-32 px-5 sm:px-10">
-            <h1 className="special-font hero-heading text-blue-100">
+          <div className="mt-24 sm:mt-32 px-4 sm:px-5 md:px-10">
+            <h1 className="special-font hero-heading text-blue-100 mb-4 sm:mb-6">
               Gotham AI
             </h1>
 
-            <p className="mb-5 max-w-64 font-robert-regular text-blue-100">
+            <p className="mb-6 sm:mb-8 max-w-xs sm:max-w-sm md:max-w-64 font-robert-regular text-blue-100 text-sm sm:text-base leading-relaxed">
               Where Minds Meet Machines <br /> The AI Playground for Visionaries
             </p>
 
@@ -155,7 +174,7 @@ const Hero = () => {
               title="Enter Now"
               onClick={() => (window.location.href = "https://google.com")}
               leftIcon={<TiLocationArrow />}
-              containerClass="bg-yellow-300 flex-center gap-1"
+              containerClass="bg-yellow-300 flex-center gap-1 text-sm sm:text-base px-6 sm:px-7 py-2 sm:py-3"
             />
           </div>
         </div>

@@ -81,14 +81,22 @@ const NavBar = () => {
   return (
     <div
       ref={navContainerRef}
-      className="fixed inset-x-0 top-4 z-50 h-16 border-none transition-all duration-700 sm:inset-x-6 sm:bg-transparent sm:rounded-none bg-black/80 rounded-lg backdrop-blur-md"
+      className="fixed inset-x-2 sm:inset-x-4 top-2 sm:top-4 z-50 h-14 sm:h-16 border-none transition-all duration-700 ease-out bg-black/80 rounded-xl backdrop-blur-xl will-change-transform"
+      style={{
+        transform: 'translateZ(0)', // Force hardware acceleration
+      }}
     >
       <header className="absolute top-1/2 w-full -translate-y-1/2">
-        <nav className="flex size-full items-center justify-between p-4">
-          {/* Logo and Product button */}
-          <div className="flex items-center gap-7">
-            <Link to="/" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-              <img src="/img/logo.png" alt="logo" className="w-10 cursor-pointer" />
+        <nav className="flex size-full items-center justify-between px-3 sm:px-4 py-2">
+          {/* Logo */}
+          <div className="flex items-center">
+            <Link 
+              to="/" 
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              aria-label="Gotham AI Home"
+              className="focus:outline-none focus:ring-2 focus:ring-purple-300/50 rounded-lg p-1"
+            >
+              <img src="/img/logo.png" alt="Gotham AI Logo" className="w-8 sm:w-10 cursor-pointer" />
             </Link>
 
             {/* <Button
@@ -101,7 +109,7 @@ const NavBar = () => {
 
           {/* Navigation Links and Audio Button */}
           <div className="flex h-full items-center">
-            <div className="flex md:block">
+            <div className="hidden sm:flex">
               {navItems.map((item, index) => {
                 const isActive = (item === "Event" && activeSection === "events") ||
                                (item === "About" && activeSection === "about") ||
@@ -111,7 +119,7 @@ const NavBar = () => {
                   <a
                     key={index}
                     href={`/#${item.toLowerCase()}`}
-                    className={`nav-hover-btn ${isActive ? 'text-yellow-300 font-semibold' : ''}`}
+                    className={`nav-hover-btn nav-item-enhanced focus:outline-none focus:ring-2 focus:ring-purple-300/50 rounded px-2 py-1 ${isActive ? 'text-yellow-300 font-bold' : ''}`}
                     onClick={(e) => {
                       e.preventDefault();
                       let elementId = item.toLowerCase();
@@ -122,8 +130,6 @@ const NavBar = () => {
                       }
                       
                       const element = document.getElementById(elementId);
-                      console.log('Looking for element with ID:', elementId);
-                      console.log('Found element:', element);
                       if (element) {
                         element.scrollIntoView({ behavior: 'smooth' });
                       }
@@ -135,9 +141,24 @@ const NavBar = () => {
               })}
             </div>
 
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => {
+                // Toggle mobile menu - you can implement this later
+              }}
+              className="sm:hidden flex items-center justify-center w-8 h-8 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-300/50"
+              aria-label="Toggle mobile menu"
+            >
+              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+
             <button
               onClick={toggleAudioIndicator}
-              className="ml-10 flex items-center space-x-0.5"
+              className="ml-3 sm:ml-10 flex items-center space-x-0.5 focus:outline-none focus:ring-2 focus:ring-purple-300/50 rounded p-1"
+              aria-label={`${isAudioPlaying ? 'Pause' : 'Play'} background music`}
+              role="button"
             >
               <audio
                 ref={audioElementRef}

@@ -59,7 +59,7 @@ const Events = () => {
   ];
 
   useGSAP(() => {
-    // Animate title
+    // Animate title with performance optimizations
     gsap.fromTo(
       titleRef.current,
       { y: 100, opacity: 0 },
@@ -68,11 +68,13 @@ const Events = () => {
         opacity: 1,
         duration: 1,
         ease: "power2.out",
+        force3D: true,
         scrollTrigger: {
           trigger: titleRef.current,
           start: "top 80%",
           end: "bottom 20%",
           toggleActions: "play none none reverse",
+          invalidateOnRefresh: true,
         },
       }
     );
@@ -87,37 +89,40 @@ const Events = () => {
         duration: 1,
         delay: 0.3,
         ease: "power2.out",
+        force3D: true,
         scrollTrigger: {
           trigger: eventsContainerRef.current,
           start: "top 80%",
           end: "bottom 20%",
           toggleActions: "play none none reverse",
+          invalidateOnRefresh: true,
         },
       }
     );
 
-    // Animate individual event cards
-    const eventCards =
-      eventsContainerRef.current.querySelectorAll(".event-card");
-    eventCards.forEach((card, index) => {
+    // Animate individual event cards with stagger for better performance
+    const eventCards = eventsContainerRef.current?.querySelectorAll(".event-card");
+    if (eventCards?.length) {
       gsap.fromTo(
-        card,
-        { x: index % 2 === 0 ? -100 : 100, opacity: 0 },
+        eventCards,
+        { y: 60, opacity: 0 },
         {
-          x: 0,
+          y: 0,
           opacity: 1,
           duration: 0.8,
-          delay: 0.5 + index * 0.2,
           ease: "power2.out",
+          force3D: true,
+          stagger: 0.2,
           scrollTrigger: {
-            trigger: card,
-            start: "top 85%",
-            end: "bottom 15%",
+            trigger: eventsContainerRef.current,
+            start: "top 70%",
+            end: "bottom 30%",
             toggleActions: "play none none reverse",
+            invalidateOnRefresh: true,
           },
         }
       );
-    });
+    }
   });
 
   const getStatusColor = (status) => {
@@ -165,7 +170,7 @@ const Events = () => {
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Discover exciting events, workshops, and gatherings that bring the
-            Gotham community together
+            Gotham AI community together to learn, innovate, and shape the future
           </p>
         </div>
 
@@ -177,14 +182,16 @@ const Events = () => {
           {events.map((event) => (
             <div
               key={event.id}
-              className="event-card group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden transform hover:-translate-y-2"
+              className="event-card group bg-white rounded-2xl shadow-lg hover:shadow-2xl card-hover-effect overflow-hidden focus-within:ring-4 focus-within:ring-purple-300/50"
+              role="article"
+              aria-labelledby={`event-title-${event.id}`}
             >
               {/* Event Image */}
-              <div className="relative h-48 overflow-hidden">
+              <div className="relative h-48 overflow-hidden image-hover-zoom">
                 <img
                   src={event.image}
                   alt={event.title}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
 
@@ -215,7 +222,10 @@ const Events = () => {
 
               {/* Event Content */}
               <div className="p-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-purple-600 transition-colors duration-300">
+                <h3 
+                  id={`event-title-${event.id}`}
+                  className="text-xl font-bold text-gray-900 mb-3 group-hover:text-purple-600 transition-colors duration-300"
+                >
                   {event.title}
                 </h3>
 
@@ -246,7 +256,8 @@ const Events = () => {
                       ? window.open("https://google.com", "_blank")
                       : null
                   }
-                  className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105"
+                  className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-3 px-4 rounded-lg button-enhanced focus:outline-none focus:ring-4 focus:ring-purple-300/50"
+                  aria-label={`${event.status === "LIVE NOW" ? "Join live session for" : "Learn more about"} ${event.title}`}
                 >
                   {event.status === "LIVE NOW" ? "Join Live" : "Learn More"}
                 </button>
@@ -258,11 +269,11 @@ const Events = () => {
         {/* Call to Action */}
         <div className="text-center mt-16">
           <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl p-8 text-white">
-            <h3 className="text-2xl font-bold mb-4">Stay Updated</h3>
+            <h3 className="text-2xl font-bold mb-4">Stay Connected</h3>
             <p className="text-purple-100 mb-6 max-w-2xl mx-auto">
               Never miss an event! Subscribe to our newsletter and be the first
-              to know about upcoming events, workshops, and exclusive
-              gatherings.
+              to know about upcoming AI workshops, tech talks, and exclusive
+              community gatherings.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
               <input
@@ -270,7 +281,7 @@ const Events = () => {
                 placeholder="Enter your email"
                 className="flex-1 px-4 py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-300"
               />
-              <button className="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold px-6 py-3 rounded-lg transition-colors duration-300">
+              <button className="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold px-6 py-3 rounded-lg button-enhanced focus:outline-none focus:ring-4 focus:ring-yellow-300/50">
                 Subscribe
               </button>
             </div>

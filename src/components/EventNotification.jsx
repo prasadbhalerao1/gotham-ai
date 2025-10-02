@@ -19,7 +19,7 @@ const EventNotification = () => {
   // Sample current event data
   const currentEvent = {
     title: "NVIDIA AI Session",
-    date: "September 15, 2025",
+    date: "December 15, 2024",
     time: "11:30 AM - 1:30 PM",
     location: "MAC LAB",
     description:
@@ -33,7 +33,7 @@ const EventNotification = () => {
     const timer = setInterval(() => {
       const now = new Date();
       // Parse the actual event date and time from currentEvent
-      const eventStartDate = new Date("September 15, 2025 11:30:00");
+      const eventStartDate = new Date("December 15, 2024 11:30:00");
 
       const distance = eventStartDate.getTime() - now.getTime();
 

@@ -6,7 +6,7 @@ const Button = ({ id, title, rightIcon, leftIcon, containerClass, onClick }) => 
       id={id}
       onClick={onClick}
       className={clsx(
-        "group relative z-10 w-fit cursor-pointer overflow-hidden rounded-full bg-violet-50 px-7 py-3 text-black",
+        "group relative z-10 w-fit cursor-pointer overflow-hidden rounded-full bg-violet-50 px-7 py-3 text-black button-enhanced hover-lift focus:outline-none focus:ring-4 focus:ring-purple-300/50 transition-all duration-300",
         containerClass
       )}
     >
