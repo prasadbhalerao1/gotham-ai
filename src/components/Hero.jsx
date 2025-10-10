@@ -1,3 +1,12 @@
+/*
+ * KEY CHANGES:
+ * 1. Removed clipPath scroll animation - replaced with elegant scale-down and fade-out effect
+ * 2. Eliminated video popup card - implemented automatic timer-based crossfade transitions
+ * 3. Added professional 3D parallax effect on mouse movement for heading and button
+ * 4. Smooth transitions between videos using opacity fade
+ * 5. Professional easing functions (expo.out, power2.out) for natural animations
+ */
+
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/all";
@@ -5,107 +14,127 @@ import { TiLocationArrow } from "react-icons/ti";
 import { useEffect, useRef, useState } from "react";
 
 import Button from "./Button";
-import VideoPreview from "./VideoPreview";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const Hero = () => {
   const [currentIndex, setCurrentIndex] = useState(1);
-  const [hasClicked, setHasClicked] = useState(false);
-
   const [loading, setLoading] = useState(true);
   const [loadedVideos, setLoadedVideos] = useState(0);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   const totalVideos = 4;
-  const nextVdRef = useRef(null);
+  const currentVideoRef = useRef(null);
+  const nextVideoRef = useRef(null);
+  const heroContainerRef = useRef(null);
+  const headingRef = useRef(null);
+  const buttonRef = useRef(null);
 
   const handleVideoLoad = () => {
     setLoadedVideos((prev) => prev + 1);
   };
 
   useEffect(() => {
-    if (loadedVideos === totalVideos - 1) {
+    if (loadedVideos === totalVideos) {
       setLoading(false);
     }
   }, [loadedVideos]);
 
-  // Performance optimization: Preload videos
   useEffect(() => {
-    const preloadVideos = () => {
-      for (let i = 1; i <= totalVideos; i++) {
-        const video = document.createElement('video');
-        video.preload = 'metadata';
-        video.src = getVideoSrc(i);
-      }
-    };
-    preloadVideos();
+    const timer = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex % totalVideos) + 1);
+    }, 8000);
+
+    return () => clearInterval(timer);
   }, []);
 
-  const handleMiniVdClick = () => {
-    setHasClicked(true);
+  useEffect(() => {
+    if (loading) return;
 
-    setCurrentIndex((prevIndex) => (prevIndex % totalVideos) + 1);
-  };
+    if (nextVideoRef.current && currentVideoRef.current) {
+      nextVideoRef.current.src = getVideoSrc(currentIndex);
+      nextVideoRef.current.load();
+      nextVideoRef.current.play();
 
-  useGSAP(
-    () => {
-      if (hasClicked) {
-        gsap.set("#next-video", { 
-          visibility: "visible",
-          force3D: true // Force hardware acceleration
-        });
-        gsap.to("#next-video", {
-          transformOrigin: "center center",
-          scale: 1,
-          width: "100%",
-          height: "100%",
-          duration: 1,
-          ease: "power1.inOut",
-          force3D: true,
-          onStart: () => nextVdRef.current.play(),
-        });
-        gsap.from("#current-video", {
-          transformOrigin: "center center",
-          scale: 0,
-          duration: 1.5,
-          ease: "power1.inOut",
-          force3D: true,
-        });
-      }
-    },
-    {
-      dependencies: [currentIndex],
-      revertOnUpdate: true,
+      gsap.timeline()
+        .to(currentVideoRef.current, {
+          opacity: 0,
+          duration: 1.2,
+          ease: "power2.inOut",
+        })
+        .to(
+          nextVideoRef.current,
+          {
+            opacity: 1,
+            duration: 1.2,
+            ease: "power2.inOut",
+            onComplete: () => {
+              if (currentVideoRef.current && nextVideoRef.current) {
+                currentVideoRef.current.src = nextVideoRef.current.src;
+                currentVideoRef.current.play();
+                gsap.set(currentVideoRef.current, { opacity: 1 });
+                gsap.set(nextVideoRef.current, { opacity: 0 });
+              }
+            },
+          },
+          "<"
+        );
     }
-  );
+  }, [currentIndex, loading]);
 
   useGSAP(() => {
-    gsap.set("#video-frame", {
-      clipPath: "polygon(14% 0, 72% 0, 88% 90%, 0 95%)",
-      borderRadius: "0% 0% 40% 10%",
-      force3D: true,
-    });
-    gsap.from("#video-frame", {
-      clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
-      borderRadius: "0% 0% 0% 0%",
-      ease: "power1.inOut",
-      force3D: true,
+    gsap.to(heroContainerRef.current, {
+      scale: 0.85,
+      opacity: 0.3,
+      ease: "power2.inOut",
       scrollTrigger: {
-        trigger: "#video-frame",
-        start: "center center",
-        end: "bottom center",
-        scrub: 1, // Smoother scrubbing
-        invalidateOnRefresh: true, // Better performance on resize
+        trigger: heroContainerRef.current,
+        start: "top top",
+        end: "bottom top",
+        scrub: 1,
       },
     });
-  });
+  }, []);
+
+  const handleMouseMove = (e) => {
+    const { clientX, clientY } = e;
+    const { innerWidth, innerHeight } = window;
+
+    const x = (clientX / innerWidth - 0.5) * 30;
+    const y = (clientY / innerHeight - 0.5) * 30;
+
+    setMousePosition({ x, y });
+  };
+
+  useEffect(() => {
+    if (headingRef.current) {
+      gsap.to(headingRef.current, {
+        x: -mousePosition.x,
+        y: -mousePosition.y,
+        duration: 0.6,
+        ease: "power2.out",
+      });
+    }
+
+    if (buttonRef.current) {
+      gsap.to(buttonRef.current, {
+        x: -mousePosition.x * 0.5,
+        y: -mousePosition.y * 0.5,
+        duration: 0.6,
+        ease: "power2.out",
+      });
+    }
+  }, [mousePosition]);
 
   const getVideoSrc = (index) => `videos/hero-${index}.mp4`;
 
   return (
-    <div className="relative h-dvh w-screen overflow-x-hidden">
+    <div
+      className="relative h-dvh w-screen overflow-x-hidden"
+      onMouseMove={handleMouseMove}
+    >
       {loading && (
-        <div className="flex-center absolute z-[100] h-dvh w-screen overflow-hidden bg-violet-50">
+        <div className="flex-center absolute z-[100] h-dvh w-screen overflow-hidden bg-gradient-to-br from-blue-900 via-purple-900 to-black">
           <div className="three-body">
             <div className="three-body__dot"></div>
             <div className="three-body__dot"></div>
@@ -115,53 +144,48 @@ const Hero = () => {
       )}
 
       <div
-        id="video-frame"
-        className="relative z-10 h-dvh w-screen overflow-hidden rounded-lg bg-blue-75"
+        ref={heroContainerRef}
+        className="relative z-10 h-dvh w-screen overflow-hidden rounded-lg bg-black"
       >
-        <div>
-          <div className="mask-clip-path absolute-center absolute z-50 size-64 cursor-pointer overflow-hidden rounded-lg">
-            <VideoPreview>
-              <div
-                onClick={handleMiniVdClick}
-                className="origin-center scale-50 opacity-0 transition-all duration-500 ease-in hover:scale-100 hover:opacity-100"
-              >
-                <video
-                  ref={nextVdRef}
-                  src={getVideoSrc((currentIndex % totalVideos) + 1)}
-                  loop
-                  muted
-                  id="current-video"
-                  className="size-64 origin-center scale-150 object-cover object-center"
-                  onLoadedData={handleVideoLoad}
-                />
-              </div>
-            </VideoPreview>
-          </div>
+        <video
+          ref={currentVideoRef}
+          src={getVideoSrc(1)}
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute left-0 top-0 size-full object-cover object-center"
+          onLoadedData={handleVideoLoad}
+        />
 
+        <video
+          ref={nextVideoRef}
+          loop
+          muted
+          playsInline
+          className="absolute left-0 top-0 size-full object-cover object-center opacity-0"
+          onLoadedData={handleVideoLoad}
+        />
+
+        {[2, 3, 4].map((index) => (
           <video
-            ref={nextVdRef}
-            src={getVideoSrc(currentIndex)}
-            loop
-            muted
-            id="next-video"
-            className="absolute-center invisible absolute z-20 size-64 object-cover object-center"
+            key={index}
+            src={getVideoSrc(index)}
+            preload="metadata"
+            className="hidden"
             onLoadedData={handleVideoLoad}
           />
-          <video
-            src={getVideoSrc(
-              currentIndex === totalVideos - 1 ? 1 : currentIndex
-            )}
-            autoPlay
-            loop
-            muted
-            className="absolute left-0 top-0 size-full object-cover object-center"
-            onLoadedData={handleVideoLoad}
-          />
-        </div>
+        ))}
+
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/40 z-10" />
 
         <div className="absolute left-0 top-0 z-40 size-full">
           <div className="mt-24 sm:mt-32 px-4 sm:px-5 md:px-10">
-            <h1 className="special-font hero-heading text-blue-100 mb-4 sm:mb-6">
+            <h1
+              ref={headingRef}
+              className="special-font hero-heading text-blue-100 mb-4 sm:mb-6"
+              style={{ willChange: 'transform' }}
+            >
               Gotham AI
             </h1>
 
@@ -169,13 +193,15 @@ const Hero = () => {
               Where Minds Meet Machines <br /> The AI Playground for Visionaries
             </p>
 
-            <Button
-              id="enter-now"
-              title="Enter Now"
-              onClick={() => (window.location.href = "https://google.com")}
-              leftIcon={<TiLocationArrow />}
-              containerClass="bg-yellow-300 flex-center gap-1 text-sm sm:text-base px-6 sm:px-7 py-2 sm:py-3"
-            />
+            <div ref={buttonRef} style={{ willChange: 'transform' }}>
+              <Button
+                id="enter-now"
+                title="Enter Now"
+                onClick={() => (window.location.href = "https://google.com")}
+                leftIcon={<TiLocationArrow />}
+                containerClass="bg-yellow-300 flex-center gap-1 text-sm sm:text-base px-6 sm:px-7 py-2 sm:py-3"
+              />
+            </div>
           </div>
         </div>
       </div>

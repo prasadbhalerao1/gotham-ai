@@ -20,7 +20,7 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="w-screen bg-gradient-to-br from-gray-900 via-purple-900 to-blue-900 text-white">
+    <footer className="w-screen bg-gradient-to-br from-gray-900 via-blue-900 to-cyan-900 text-white">
       {/* Main Footer Content */}
       <div className="container mx-auto px-4 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -36,15 +36,15 @@ const Footer = () => {
             </p>
             <div className="space-y-2 text-sm text-gray-400">
               <div className="flex items-center gap-2">
-                <MdLocationOn className="w-4 h-4 text-purple-400" />
+                <MdLocationOn className="w-4 h-4 text-blue-400" />
                 <span>JSPM Campus, Pune, India</span>
               </div>
               <div className="flex items-center gap-2">
-                <MdEmail className="w-4 h-4 text-purple-400" />
+                <MdEmail className="w-4 h-4 text-blue-400" />
                 <span>contact@gothamai.com</span>
               </div>
               <div className="flex items-center gap-2">
-                <MdPhone className="w-4 h-4 text-purple-400" />
+                <MdPhone className="w-4 h-4 text-blue-400" />
                 <span>+91 (XXX) XXX-XXXX</span>
               </div>
             </div>
@@ -58,7 +58,7 @@ const Footer = () => {
                 <li key={index}>
                   <a
                     href={link.href}
-                    className="text-gray-300 hover:text-purple-400 transition-colors duration-300 hover-lift inline-block"
+                    className="text-gray-300 hover:text-blue-400 transition-colors duration-300 hover-lift inline-block"
                     onClick={(e) => {
                       e.preventDefault();
                       const element = document.getElementById(link.href.substring(1));
@@ -72,12 +72,12 @@ const Footer = () => {
                 </li>
               ))}
               <li>
-                <a href="#" className="text-gray-300 hover:text-purple-400 transition-colors duration-300 hover-lift inline-block">
+                <a href="#" className="text-gray-300 hover:text-blue-400 transition-colors duration-300 hover-lift inline-block">
                   Join Community
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-300 hover:text-purple-400 transition-colors duration-300 hover-lift inline-block">
+                <a href="#" className="text-gray-300 hover:text-blue-400 transition-colors duration-300 hover-lift inline-block">
                   Resources
                 </a>
               </li>
@@ -98,7 +98,7 @@ const Footer = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={link.label}
-                  className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-300 hover:text-white hover:bg-purple-600 transition-all duration-300 hover-lift group"
+                  className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-300 hover:text-white hover:bg-blue-600 transition-all duration-300 hover-lift group"
                 >
                   <span className="group-hover:scale-110 transition-transform duration-300">
                     {link.icon}
