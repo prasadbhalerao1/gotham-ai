@@ -1,16 +1,16 @@
 export const eventsData = [
   {
     id: 1,
-    title: "NVIDIA AI Session",
-    date: "2024-12-15T11:30:00",
-    dateDisplay: "December 15, 2024",
-    time: "11:30 AM - 1:30 PM",
-    location: "MAC LAB",
+    title: "AI Tech Session",
+    date: "2025-10-11T12:30:00",
+    dateDisplay: "December 15, 2025",
+    time: "12:30 PM",
+    location: "Jaywant Auditorium",
     description:
-      "Discover cutting-edge innovations and real-world case studies on how NVIDIA AI is driving breakthroughs across industries.",
+      "Gain insights from industry leaders in AI & ML!",
     image: "/img/Nvidia-event.png",
     status: "LIVE NOW",
-    attendees: 150,
+    attendees: 250,
     category: "Technology",
   },
   {
