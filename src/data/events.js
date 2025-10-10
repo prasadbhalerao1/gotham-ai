@@ -3,7 +3,7 @@ export const eventsData = [
     id: 1,
     title: "AI Tech Session",
     date: "2025-10-11T12:30:00",
-    dateDisplay: "December 15, 2025",
+    dateDisplay: "October 11, 2025",
     time: "12:30 PM",
     location: "Jaywant Auditorium",
     description:
