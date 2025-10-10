@@ -1,13 +1,11 @@
-import { FaDiscord, FaTwitter, FaYoutube, FaLinkedin, FaInstagram, FaGithub } from "react-icons/fa";
-import { MdEmail, MdLocationOn, MdPhone } from "react-icons/md";
+import { FaDiscord, FaTwitter, FaLinkedin, FaInstagram } from "react-icons/fa";
+import { MdLocationOn } from "react-icons/md";
 
 const socialLinks = [
   { href: "https://discord.com", icon: <FaDiscord />, label: "Discord" },
   { href: "https://twitter.com", icon: <FaTwitter />, label: "Twitter" },
-  { href: "https://youtube.com", icon: <FaYoutube />, label: "YouTube" },
   { href: "https://linkedin.com", icon: <FaLinkedin />, label: "LinkedIn" },
   { href: "https://instagram.com", icon: <FaInstagram />, label: "Instagram" },
-  { href: "https://github.com", icon: <FaGithub />, label: "GitHub" },
 ];
 
 const quickLinks = [
@@ -37,15 +35,7 @@ const Footer = () => {
             <div className="space-y-2 text-sm text-gray-400">
               <div className="flex items-center gap-2">
                 <MdLocationOn className="w-4 h-4 text-blue-400" />
-                <span>JSPM Campus, Pune, India</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <MdEmail className="w-4 h-4 text-blue-400" />
-                <span>contact@gothamai.com</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <MdPhone className="w-4 h-4 text-blue-400" />
-                <span>+91 (XXX) XXX-XXXX</span>
+                <span>JSPM's RSCOE, Tathawade</span>
               </div>
             </div>
           </div>
@@ -72,18 +62,27 @@ const Footer = () => {
                 </li>
               ))}
               <li>
-                <a href="#" className="text-gray-300 hover:text-blue-400 transition-colors duration-300 hover-lift inline-block">
+                <a 
+                  href="https://discord.com" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="text-gray-300 hover:text-blue-400 transition-colors duration-300 hover-lift inline-block"
+                >
                   Join Community
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-300 hover:text-blue-400 transition-colors duration-300 hover-lift inline-block">
+                <a 
+                  href="https://discord.com" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="text-gray-300 hover:text-blue-400 transition-colors duration-300 hover-lift inline-block"
+                >
                   Resources
                 </a>
               </li>
             </ul>
           </div>
-
         </div>
 
         {/* Social Media Section */}
