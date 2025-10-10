@@ -1,46 +1,19 @@
-/*
- * KEY CHANGES:
- * 1. Removed clipPath scroll animation - replaced with elegant scale-down and fade-out effect
- * 2. Eliminated video popup card - implemented automatic timer-based crossfade transitions
- * 3. Added professional 3D parallax effect on mouse movement for heading and button
- * 4. Smooth transitions between videos using opacity fade
- * 5. Professional easing functions (expo.out, power2.out) for natural animations
- */
-
 import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-import { ScrollTrigger } from "gsap/all";
-import { TiLocationArrow } from "react-icons/ti";
 import { useEffect, useRef, useState } from "react";
-
+import { TiLocationArrow } from "react-icons/ti";
 import Button from "./Button";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const Hero = () => {
   const [currentIndex, setCurrentIndex] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [loadedVideos, setLoadedVideos] = useState(0);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isFlipped, setIsFlipped] = useState(false); // Used for Step 4: The Cycle
 
   const totalVideos = 4;
-  const currentVideoRef = useRef(null);
-  const nextVideoRef = useRef(null);
-  const heroContainerRef = useRef(null);
-  const headingRef = useRef(null);
-  const buttonRef = useRef(null);
-
-  const handleVideoLoad = () => {
-    setLoadedVideos((prev) => prev + 1);
-  };
+  const videoRef1 = useRef(null);
+  const videoRef2 = useRef(null);
 
   useEffect(() => {
-    if (loadedVideos === totalVideos) {
-      setLoading(false);
-    }
-  }, [loadedVideos]);
-
-  useEffect(() => {
+    // This timer drives the entire cycle
     const timer = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex % totalVideos) + 1);
     }, 8000);
@@ -51,88 +24,47 @@ const Hero = () => {
   useEffect(() => {
     if (loading) return;
 
-    if (nextVideoRef.current && currentVideoRef.current) {
-      nextVideoRef.current.src = getVideoSrc(currentIndex);
-      nextVideoRef.current.load();
-      nextVideoRef.current.play();
+    // Determine which video is which role for this cycle
+    const outgoingVideo = isFlipped ? videoRef2.current : videoRef1.current; // Video A
+    const incomingVideo = isFlipped ? videoRef1.current : videoRef2.current; // Video B
 
-      gsap.timeline()
-        .to(currentVideoRef.current, {
-          opacity: 0,
-          duration: 1.2,
-          ease: "power2.inOut",
-        })
-        .to(
-          nextVideoRef.current,
-          {
-            opacity: 1,
-            duration: 1.2,
-            ease: "power2.inOut",
-            onComplete: () => {
-              if (currentVideoRef.current && nextVideoRef.current) {
-                currentVideoRef.current.src = nextVideoRef.current.src;
-                currentVideoRef.current.play();
-                gsap.set(currentVideoRef.current, { opacity: 1 });
-                gsap.set(nextVideoRef.current, { opacity: 0 });
-              }
-            },
-          },
-          "<"
-        );
-    }
+    // --- Step 2: The Incoming Video Plays in the Background ---
+    incomingVideo.src = `videos/hero-${currentIndex}.mp4`;
+    incomingVideo.load();
+
+    const handleCanPlayThrough = () => {
+      incomingVideo.play(); // Starts playing while invisible
+
+      // --- Step 1 & 3: The Outgoing Video Fades & The Videos Crossfade ---
+      gsap.timeline({
+        onComplete: () => {
+          // --- Step 4: The Cycle Repeats ---
+          // The roles are flipped for the next transition
+          setIsFlipped((prev) => !prev);
+          incomingVideo.removeEventListener("canplaythrough", handleCanPlayThrough);
+        },
+      })
+      .to(outgoingVideo, { // Video A fades out
+        opacity: 0,
+        duration: 2.0,
+        ease: "none",
+      })
+      .to(incomingVideo, { // Video B fades in
+        opacity: 1,
+        duration: 2.0,
+        ease: "none",
+      }, "<"); // "<" ensures they happen at the same time
+    };
+
+    incomingVideo.addEventListener("canplaythrough", handleCanPlayThrough);
+
+    return () => {
+      incomingVideo.removeEventListener("canplaythrough", handleCanPlayThrough);
+    };
   }, [currentIndex, loading]);
 
-  useGSAP(() => {
-    gsap.to(heroContainerRef.current, {
-      scale: 0.85,
-      opacity: 0.3,
-      ease: "power2.inOut",
-      scrollTrigger: {
-        trigger: heroContainerRef.current,
-        start: "top top",
-        end: "bottom top",
-        scrub: 1,
-      },
-    });
-  }, []);
-
-  const handleMouseMove = (e) => {
-    const { clientX, clientY } = e;
-    const { innerWidth, innerHeight } = window;
-
-    const x = (clientX / innerWidth - 0.5) * 30;
-    const y = (clientY / innerHeight - 0.5) * 30;
-
-    setMousePosition({ x, y });
-  };
-
-  useEffect(() => {
-    if (headingRef.current) {
-      gsap.to(headingRef.current, {
-        x: -mousePosition.x,
-        y: -mousePosition.y,
-        duration: 0.6,
-        ease: "power2.out",
-      });
-    }
-
-    if (buttonRef.current) {
-      gsap.to(buttonRef.current, {
-        x: -mousePosition.x * 0.5,
-        y: -mousePosition.y * 0.5,
-        duration: 0.6,
-        ease: "power2.out",
-      });
-    }
-  }, [mousePosition]);
-
-  const getVideoSrc = (index) => `videos/hero-${index}.mp4`;
-
   return (
-    <div
-      className="relative h-dvh w-screen overflow-x-hidden"
-      onMouseMove={handleMouseMove}
-    >
+    <div className="relative h-dvh w-screen overflow-x-hidden">
       {loading && (
         <div className="flex-center absolute z-[100] h-dvh w-screen overflow-hidden bg-gradient-to-br from-blue-900 via-purple-900 to-black">
           <div className="three-body">
@@ -143,49 +75,31 @@ const Hero = () => {
         </div>
       )}
 
-      <div
-        ref={heroContainerRef}
-        className="relative z-10 h-dvh w-screen overflow-hidden rounded-lg bg-black"
-      >
+      <div className="relative z-10 h-dvh w-screen overflow-hidden rounded-lg bg-black">
         <video
-          ref={currentVideoRef}
-          src={getVideoSrc(1)}
+          ref={videoRef1}
+          src="videos/hero-1.mp4"
           autoPlay
           loop
           muted
           playsInline
           className="absolute left-0 top-0 size-full object-cover object-center"
-          onLoadedData={handleVideoLoad}
+          onLoadedData={() => setLoading(false)}
         />
 
         <video
-          ref={nextVideoRef}
+          ref={videoRef2}
           loop
           muted
           playsInline
           className="absolute left-0 top-0 size-full object-cover object-center opacity-0"
-          onLoadedData={handleVideoLoad}
         />
-
-        {[2, 3, 4].map((index) => (
-          <video
-            key={index}
-            src={getVideoSrc(index)}
-            preload="metadata"
-            className="hidden"
-            onLoadedData={handleVideoLoad}
-          />
-        ))}
 
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/40 z-10" />
 
         <div className="absolute left-0 top-0 z-40 size-full">
           <div className="mt-24 sm:mt-32 px-4 sm:px-5 md:px-10">
-            <h1
-              ref={headingRef}
-              className="special-font hero-heading text-blue-100 mb-4 sm:mb-6"
-              style={{ willChange: 'transform' }}
-            >
+            <h1 className="special-font hero-heading text-blue-100 mb-4 sm:mb-6">
               Gotham AI
             </h1>
 
@@ -193,7 +107,7 @@ const Hero = () => {
               Where Minds Meet Machines <br /> The AI Playground for Visionaries
             </p>
 
-            <div ref={buttonRef} style={{ willChange: 'transform' }}>
+            <div>
               <Button
                 id="enter-now"
                 title="Enter Now"
