@@ -9,7 +9,6 @@ export const eventsData = [
     description:
       "Gain insights from industry leaders in AI & ML!",
     image: "/img/Nvidia-event.png",
-    status: "LIVE NOW",
     attendees: 250,
     category: "Technology",
   },
@@ -22,7 +21,6 @@ export const eventsData = [
     location: "JSPM",
     description: "Something Big is coming.",
     image: "/img/upcomingevent.jpg",
-    status: "UPCOMING",
     attendees: 200,
     category: null,
   },

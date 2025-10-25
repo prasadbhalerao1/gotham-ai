@@ -6,12 +6,13 @@
  * 4. Added fade-in effects for background images
  */
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/all";
 import AnimatedTitle from "./AnimatedTitle";
 import Button from "./Button";
+import ContactModal from "./ContactModal";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -24,6 +25,7 @@ const ImageClipBox = ({ src, clipClass }) => (
 const Contact = () => {
   const containerRef = useRef(null);
   const contentRef = useRef(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useGSAP(() => {
     gsap.fromTo(
@@ -97,15 +99,12 @@ const Contact = () => {
           <Button
             title="contact us"
             containerClass="mt-6 sm:mt-10 cursor-pointer hover:scale-105 transition-transform duration-300"
-            onClick={() => {
-              const element = document.getElementById('contact');
-              if (element) {
-                element.scrollIntoView({ behavior: 'smooth' });
-              }
-            }}
+            onClick={() => setIsModalOpen(true)}
           />
         </div>
       </div>
+
+      <ContactModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </div>
   );
 };

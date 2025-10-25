@@ -1,6 +1,7 @@
 import gsap from "gsap";
 import { useEffect, useRef, useState } from "react";
 import { TiLocationArrow } from "react-icons/ti";
+import { motion, useMotionValue, useSpring } from "framer-motion";
 import Button from "./Button";
 
 const Hero = () => {
@@ -11,6 +12,21 @@ const Hero = () => {
   const totalVideos = 4;
   const videoRef1 = useRef(null);
   const videoRef2 = useRef(null);
+  const heroRef = useRef(null);
+
+  // Mouse tracking for parallax effect
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  // Smooth spring animation for mouse movement with different speeds for layered parallax
+  const smoothMouseX = useSpring(mouseX, { damping: 50, stiffness: 200 });
+  const smoothMouseY = useSpring(mouseY, { damping: 50, stiffness: 200 });
+  
+  const smoothMouseX2 = useSpring(mouseX, { damping: 40, stiffness: 150 });
+  const smoothMouseY2 = useSpring(mouseY, { damping: 40, stiffness: 150 });
+  
+  const smoothMouseX3 = useSpring(mouseX, { damping: 60, stiffness: 250 });
+  const smoothMouseY3 = useSpring(mouseY, { damping: 60, stiffness: 250 });
 
   useEffect(() => {
     // This timer drives the entire cycle
@@ -20,6 +36,28 @@ const Hero = () => {
 
     return () => clearInterval(timer);
   }, []);
+
+  // Mouse tracking effect
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      if (!heroRef.current) return;
+      
+      const rect = heroRef.current.getBoundingClientRect();
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      
+      // Calculate mouse position relative to center (-1 to 1)
+      const x = (e.clientX - rect.left - centerX) / centerX;
+      const y = (e.clientY - rect.top - centerY) / centerY;
+      
+      // Update motion values (multiply for desired parallax strength)
+      mouseX.set(x * 20);
+      mouseY.set(y * 20);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, [mouseX, mouseY]);
 
   useEffect(() => {
     if (loading) return;
@@ -64,7 +102,7 @@ const Hero = () => {
   }, [currentIndex, loading]);
 
   return (
-    <div className="relative h-dvh w-screen overflow-x-hidden">
+    <div ref={heroRef} className="relative h-dvh w-screen overflow-x-hidden">
       {loading && (
         <div className="flex-center absolute z-[100] h-dvh w-screen overflow-hidden bg-gradient-to-br from-blue-900 via-purple-900 to-black">
           <div className="three-body">
@@ -99,15 +137,35 @@ const Hero = () => {
 
         <div className="absolute left-0 top-0 z-40 size-full">
           <div className="mt-24 sm:mt-32 px-4 sm:px-5 md:px-10">
-            <h1 className="special-font hero-heading text-blue-100 mb-4 sm:mb-6">
+            {/* Title with parallax effect */}
+            <motion.h1 
+              className="special-font hero-heading text-blue-100 mb-4 sm:mb-6"
+              style={{
+                x: smoothMouseX,
+                y: smoothMouseY,
+              }}
+            >
               Gotham AI
-            </h1>
+            </motion.h1>
 
-            <p className="mb-6 sm:mb-8 max-w-xs sm:max-w-sm md:max-w-64 font-robert-regular text-blue-100 text-sm sm:text-base leading-relaxed">
+            {/* Subtitle with stronger parallax effect */}
+            <motion.p 
+              className="mb-6 sm:mb-8 max-w-xs sm:max-w-sm md:max-w-64 font-robert-regular text-blue-100 text-sm sm:text-base leading-relaxed"
+              style={{
+                x: smoothMouseX2,
+                y: smoothMouseY2,
+              }}
+            >
               Where Minds Meet Machines <br /> The AI Playground for Visionaries
-            </p>
+            </motion.p>
 
-            <div>
+            {/* Button with subtle parallax */}
+            <motion.div
+              style={{
+                x: smoothMouseX3,
+                y: smoothMouseY3,
+              }}
+            >
               <Button
                 id="enter-now"
                 title="Enter Now"
@@ -115,7 +173,7 @@ const Hero = () => {
                 leftIcon={<TiLocationArrow />}
                 containerClass="bg-yellow-300 flex-center gap-1 text-sm sm:text-base px-6 sm:px-7 py-2 sm:py-3"
               />
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>

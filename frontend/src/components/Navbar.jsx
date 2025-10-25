@@ -10,15 +10,18 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { useEffect, useRef, useState } from "react";
 import { useInView } from "react-intersection-observer";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import ContactModal from "./ContactModal";
 
-const navItems = ["Event", "About", "Contact"];
+const navItems = ["Event", "About", "Resources", "Contact"];
 
 const NavBar = () => {
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
   const [isIndicatorActive, setIsIndicatorActive] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+  const location = useLocation();
 
   const audioElementRef = useRef(null);
   const navContainerRef = useRef(null);
@@ -105,13 +108,31 @@ const NavBar = () => {
 
   const handleLinkClick = (e, item) => {
     e.preventDefault();
+    setIsMenuOpen(false);
+    
+    if (item === "Resources") {
+      window.location.href = '/resources';
+      return;
+    }
+    
+    if (item === "Event") {
+      window.location.href = '/events';
+      return;
+    }
+    
+    // For other items (About, Contact), scroll to section
     let elementId = item.toLowerCase();
-    if (item === "Event") elementId = "events";
+    
+    // If not on home page, navigate to home first
+    if (location.pathname !== '/') {
+      window.location.href = `/#${elementId}`;
+      return;
+    }
+    
     const element = document.getElementById(elementId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
-    setIsMenuOpen(false); // Close menu after clicking
   };
 
   return (
@@ -138,8 +159,9 @@ const NavBar = () => {
           {/* Desktop Navigation */}
           <div className="hidden sm:flex">
             {navItems.map((item) => {
-              const isActive = (item === "Event" && activeSection === "events") ||
+              const isActive = (item === "Event" && location.pathname === "/events") ||
                              (item === "About" && activeSection === "about") ||
+                             (item === "Resources" && location.pathname === "/resources") ||
                              (item === "Contact" && activeSection === "contact");
               return (
                 <a
@@ -205,6 +227,8 @@ const NavBar = () => {
           </ul>
         </nav>
       </div>
+
+      <ContactModal isOpen={isContactModalOpen} onClose={() => setIsContactModalOpen(false)} />
     </div>
   );
 };

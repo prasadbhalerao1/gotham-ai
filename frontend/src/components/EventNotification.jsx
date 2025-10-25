@@ -13,11 +13,14 @@ import {
   IoLocationOutline,
   IoTimeOutline,
 } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import gsap from "gsap";
 import { differenceInDays, differenceInHours, differenceInMinutes, differenceInSeconds, parseISO } from "date-fns";
-import { eventsData } from "../data/events";
+import eventService from "../services/eventService";
 
 const EventNotification = () => {
+  const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(true);
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
@@ -26,10 +29,16 @@ const EventNotification = () => {
     seconds: 0,
   });
 
-  const currentEvent = eventsData[0];
+  // Fetch events from API
+  const { data } = useQuery({
+    queryKey: ['events'],
+    queryFn: () => eventService.getAllEvents(),
+  });
+
+  const currentEvent = data?.data?.[0];
 
   useEffect(() => {
-    if (!currentEvent.date) return;
+    if (!currentEvent?.date) return;
 
     const timer = setInterval(() => {
       const now = new Date();
@@ -50,7 +59,7 @@ const EventNotification = () => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [currentEvent.date]);
+  }, [currentEvent?.date]);
 
   useEffect(() => {
     if (isVisible) {
@@ -72,7 +81,8 @@ const EventNotification = () => {
     });
   };
 
-  if (!isVisible) return null;
+  // Don't show if no event data or not visible
+  if (!isVisible || !currentEvent) return null;
 
   return (
     <div className="event-notification fixed top-20 left-0 right-0 z-40 bg-gradient-to-r from-blue-900/95 via-purple-900/95 to-blue-900/95 backdrop-blur-md border-b border-blue-500/30 shadow-2xl">
@@ -85,9 +95,6 @@ const EventNotification = () => {
                 alt="Current Event"
                 className="w-12 h-12 rounded-lg object-cover border-2 border-blue-400/50"
               />
-              <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs px-1 py-0.5 rounded-full animate-pulse">
-                LIVE
-              </div>
             </div>
 
             <div className="flex-1">
@@ -147,10 +154,10 @@ const EventNotification = () => {
 
           <div className="flex items-center space-x-3">
             <button
-              onClick={() => window.open("https://google.com", "_blank")}
-              className="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded-lg transition-all duration-200 text-sm hover:scale-105"
+              onClick={() => navigate(`/events/${currentEvent.slug}`)}
+              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg transition-all duration-200 text-sm hover:scale-105"
             >
-              Join Live
+              Learn More
             </button>
             <button
               onClick={handleClose}

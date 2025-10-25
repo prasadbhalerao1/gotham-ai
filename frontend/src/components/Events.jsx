@@ -1,13 +1,16 @@
 /*
- * KEY CHANGES:
+ * KEY FEATURES:
  * 1. Imports event data from centralized data file
- * 2. Enhanced staggered fade-up animations with professional easing (expo.out)
- * 3. Improved hover states with tactile feedback
- * 4. Added micro-interactions to buttons with shimmer effects
- * 5. Refined timing for more natural, responsive animations
+ * 2. Fast, snappy card entrance animations (0.45s duration, 0.08s stagger)
+ * 3. Optimized GSAP animations with power2.out easing for smooth performance
+ * 4. Lightweight hover interactions with minimal transform properties
+ * 5. No jitter - removed 3D transforms, using only Y-axis and scale
+ * 6. Performance-focused with simplified animation properties
  */
 
 import { useRef } from "react";
+import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/all";
@@ -17,7 +20,7 @@ import {
   IoTimeOutline,
   IoPeopleOutline,
 } from "react-icons/io5";
-import { eventsData } from "../data/events";
+import eventService from "../services/eventService";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -26,77 +29,81 @@ const Events = () => {
   const titleRef = useRef(null);
   const eventsContainerRef = useRef(null);
 
+  const { data, isLoading } = useQuery({
+    queryKey: ['events'],
+    queryFn: () => eventService.getAllEvents(),
+  });
+
+  // Limit to 3 events on homepage
+  const eventsData = (data?.data || []).slice(0, 3);
+
   useGSAP(() => {
+    // Title animation with smooth fade-in
     gsap.fromTo(
       titleRef.current,
-      { y: 60, opacity: 0 },
+      { y: 20, opacity: 0 },
       {
         y: 0,
         opacity: 1,
-        duration: 1,
-        ease: "expo.out",
-        scrollTrigger: {
-          trigger: titleRef.current,
-          start: "top 80%",
-          end: "bottom 20%",
-          toggleActions: "play none none reverse",
-        },
-      }
-    );
-
-    gsap.fromTo(
-      eventsContainerRef.current,
-      { y: 40, opacity: 0 },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 0.8,
-        delay: 0.2,
+        duration: 0.5,
         ease: "power2.out",
         scrollTrigger: {
-          trigger: eventsContainerRef.current,
-          start: "top 80%",
-          end: "bottom 20%",
+          trigger: titleRef.current,
+          start: "top 85%",
           toggleActions: "play none none reverse",
         },
       }
     );
 
+    // Event cards with smooth, fast staggered animation
     const eventCards = eventsContainerRef.current?.querySelectorAll(".event-card");
     if (eventCards?.length) {
+      gsap.set(eventCards, { transformPerspective: 1000 });
+      
       gsap.fromTo(
         eventCards,
-        { y: 80, opacity: 0, scale: 0.95 },
+        { 
+          y: 30, 
+          opacity: 0, 
+          scale: 0.92,
+        },
         {
           y: 0,
           opacity: 1,
           scale: 1,
-          duration: 0.8,
-          ease: "expo.out",
-          stagger: 0.15,
+          duration: 0.45,
+          ease: "power2.out",
+          stagger: 0.08,
           scrollTrigger: {
             trigger: eventsContainerRef.current,
-            start: "top 70%",
-            end: "bottom 30%",
+            start: "top 75%",
             toggleActions: "play none none reverse",
           },
         }
       );
+
+      // Smooth hover animation
+      eventCards.forEach((card) => {
+        card.addEventListener('mouseenter', () => {
+          gsap.to(card, {
+            y: -8,
+            scale: 1.02,
+            duration: 0.3,
+            ease: "power2.out",
+          });
+        });
+        
+        card.addEventListener('mouseleave', () => {
+          gsap.to(card, {
+            y: 0,
+            scale: 1,
+            duration: 0.3,
+            ease: "power2.out",
+          });
+        });
+      });
     }
   });
-
-  const getStatusColor = (status) => {
-    switch (status) {
-      case "LIVE NOW":
-        return "bg-red-500 text-white";
-      case "UPCOMING":
-        return "bg-blue-500 text-white";
-      case "PAST":
-        return "bg-gray-500 text-white";
-      default:
-        return "bg-gray-500 text-white";
-    }
-  };
 
   const getCategoryColor = (category) => {
     switch (category) {
@@ -132,16 +139,22 @@ const Events = () => {
           </p>
         </div>
 
-        <div
-          ref={eventsContainerRef}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-        >
-          {eventsData.map((event) => (
+        {isLoading ? (
+          <div className="text-center py-20">
+            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-600 mx-auto mb-4"></div>
+            <p className="text-gray-600 text-lg">Loading events...</p>
+          </div>
+        ) : (
+          <div
+            ref={eventsContainerRef}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          >
+            {eventsData.map((event) => (
             <div
-              key={event.id}
-              className="event-card group bg-white rounded-2xl shadow-lg hover:shadow-2xl card-hover-effect overflow-hidden focus-within:ring-4 focus-within:ring-blue-300/50"
+              key={event._id || event.id}
+              className="event-card group bg-white rounded-2xl shadow-lg hover:shadow-2xl overflow-hidden focus-within:ring-4 focus-within:ring-blue-300/50 transition-shadow duration-200"
               role="article"
-              aria-labelledby={`event-title-${event.id}`}
+              aria-labelledby={`event-title-${event._id || event.id}`}
             >
               <div className="relative h-48 overflow-hidden image-hover-zoom">
                 <img
@@ -150,14 +163,6 @@ const Events = () => {
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-
-                <div className="absolute top-4 left-4">
-                  <span
-                    className={`${getStatusColor(event.status)} px-3 py-1 rounded-full text-xs font-semibold animate-pulse`}
-                  >
-                    {event.status}
-                  </span>
-                </div>
 
                 {event.category && (
                   <div className="absolute top-4 right-4">
@@ -204,20 +209,30 @@ const Events = () => {
                   </div>
                 </div>
 
-                <button
-                  onClick={() =>
-                    event.status === "LIVE NOW"
-                      ? window.open("https://google.com", "_blank")
-                      : null
-                  }
-                  className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold py-3 px-4 rounded-lg button-enhanced focus:outline-none focus:ring-4 focus:ring-blue-300/50 transition-all duration-300"
-                  aria-label={`${event.status === "LIVE NOW" ? "Join live session for" : "Learn more about"} ${event.title}`}
+                <Link
+                  to={`/events/${event.slug}`}
+                  className="block w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold py-3 px-4 rounded-lg button-enhanced focus:outline-none focus:ring-4 focus:ring-blue-300/50 transition-all duration-300 text-center"
+                  aria-label={`Learn more about ${event.title}`}
                 >
-                  {event.status === "LIVE NOW" ? "Join Live" : "Learn More"}
-                </button>
+                  Learn More
+                </Link>
               </div>
             </div>
-          ))}
+            ))}
+          </div>
+        )}
+
+        {/* View All Events Button */}
+        <div className="text-center mt-12">
+          <Link
+            to="/events"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-bold text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+          >
+            View All Events
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </Link>
         </div>
 
         <div className="text-center mt-16">
