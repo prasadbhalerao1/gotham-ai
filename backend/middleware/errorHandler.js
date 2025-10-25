@@ -40,6 +40,12 @@ export const errorHandler = (err, req, res, next) => {
     error = new AppError(message, 400);
   }
 
+  // Ensure CORS headers are set on error responses
+  res.setHeader('Access-Control-Allow-Origin', req.headers.origin || 'https://gotham-ai-two.vercel.app');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+
   // Send error response
   res.status(error.statusCode || 500).json({
     success: false,

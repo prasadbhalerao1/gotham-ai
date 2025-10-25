@@ -36,8 +36,12 @@ logger.info(`Frontend Origin: ${process.env.FRONTEND_ORIGIN || 'Not set'}`);
 // Connect to database
 connectDB();
 
-// Security middleware
-app.use(helmet());
+// Security middleware - Configure helmet for Vercel serverless
+app.use(helmet({
+  crossOriginResourcePolicy: false,
+  crossOriginOpenerPolicy: false,
+  crossOriginEmbedderPolicy: false,
+}));
 
 // CORS configuration - Allow multiple origins
 const allowedOrigins = [
@@ -67,8 +71,10 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-// Handle preflight requests
-app.options('*', cors(corsOptions));
+// Handle preflight requests explicitly
+app.options('*', cors(corsOptions), (req, res) => {
+  res.status(200).end();
+});
 
 // Body parser middleware
 app.use(express.json({ limit: '10mb' }));
