@@ -33,8 +33,22 @@ logger.info(`Environment: ${process.env.NODE_ENV || 'development'}`);
 logger.info(`MongoDB URI: ${process.env.MONGODB_URI ? 'Set ✓' : 'Missing ✗'}`);
 logger.info(`Frontend Origin: ${process.env.FRONTEND_ORIGIN || 'Not set'}`);
 
-// Connect to database
-connectDB();
+// Database connection middleware - ensures connection before each request
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    logger.error('Database connection failed:', error);
+    // Set CORS headers on error
+    res.setHeader('Access-Control-Allow-Origin', req.headers.origin || 'https://gotham-ai-two.vercel.app');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.status(500).json({
+      success: false,
+      error: 'Database connection failed',
+    });
+  }
+});
 
 // Security middleware - Configure helmet for Vercel serverless
 app.use(helmet({
