@@ -1,34 +1,10 @@
-# 🚀 Gotham AI Platform
+# 🚀 Gotham AI
 
-<div align="center">
+**Gotham AI** is a student-driven community dedicated to exploring the transformative world of Artificial Intelligence.  
+We connect learners, developers, and innovators through engaging events, workshops, and projects that foster creativity, collaboration, and technical growth.  
 
-![Gotham AI](https://img.shields.io/badge/Gotham-AI-blue?style=for-the-badge)
-![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react)
-![Node.js](https://img.shields.io/badge/Node.js-Express-339933?style=for-the-badge&logo=node.js)
-![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?style=for-the-badge&logo=mongodb)
-![Tailwind](https://img.shields.io/badge/Tailwind-CSS-38B2AC?style=for-the-badge&logo=tailwind-css)
+Our mission is to **empower the next generation of AI enthusiasts** to turn ideas into impact — shaping the intelligent future, together.
 
-**A modern, full-stack AI community platform with beautiful animations and seamless user experience**
-
-[Quick Start](#-quick-start) • [Features](#-features) • [Documentation](#-documentation) • [Demo](#-demo)
-
-</div>
-
----
-
-## 📖 Table of Contents
-
-- [Overview](#-overview)
-- [Features](#-features)
-- [Tech Stack](#-tech-stack)
-- [Quick Start](#-quick-start)
-- [Project Structure](#-project-structure)
-- [Documentation](#-documentation)
-- [Screenshots](#-screenshots)
-- [Contributing](#-contributing)
-- [License](#-license)
-
----
 
 ## 🌟 Overview
 
@@ -41,8 +17,6 @@ Gotham AI is a comprehensive platform designed to bring together AI enthusiasts,
 - **Data-Driven** - Content managed through MongoDB, no code changes needed
 
 ---
-
-## ✨ Features
 
 ### 🎯 Core Features
 
@@ -124,6 +98,35 @@ Gotham AI is a comprehensive platform designed to bring together AI enthusiasts,
 
 ---
 
+
+## 📁 Project Structure
+
+```
+Gotham-AI/
+├── backend/                 # Node.js + Express backend
+│   ├── config/             # Database configuration
+│   ├── controllers/        # Request handlers
+│   ├── middleware/         # Error handling, validation
+│   ├── models/             # MongoDB schemas
+│   ├── routes/             # API routes
+│   ├── scripts/            # Database seeding
+│   ├── utils/              # Email service, logger
+│   ├── server.js           # Main server file
+│   └── package.json
+│
+├── frontend/               # React + Vite frontend
+│   ├── public/            # Static assets
+│   ├── src/
+│   │   ├── components/    # Reusable components
+│   │   ├── pages/         # Page components
+│   │   ├── services/      # API services
+│   │   ├── config/        # Configuration
+│   │   ├── App.jsx        # Main app
+│   │   └── main.jsx       # Entry point
+│   └── package.json
+└── README.md              # This file
+```
+
 ## ⚡ Quick Start
 
 ### Prerequisites
@@ -164,74 +167,6 @@ Gotham AI is a comprehensive platform designed to bring together AI enthusiasts,
    http://localhost:5173
    ```
 
-**That's it! 🎉**
-
-For detailed setup instructions, see [START_HERE.md](START_HERE.md)
-
----
-
-## 📁 Project Structure
-
-```
-Gotham-AI/
-├── backend/                 # Node.js + Express backend
-│   ├── config/             # Database configuration
-│   ├── controllers/        # Request handlers
-│   ├── middleware/         # Error handling, validation
-│   ├── models/             # MongoDB schemas
-│   ├── routes/             # API routes
-│   ├── scripts/            # Database seeding
-│   ├── utils/              # Email service, logger
-│   ├── server.js           # Main server file
-│   └── package.json
-│
-├── frontend/               # React + Vite frontend
-│   ├── public/            # Static assets
-│   ├── src/
-│   │   ├── components/    # Reusable components
-│   │   ├── pages/         # Page components
-│   │   ├── services/      # API services
-│   │   ├── config/        # Configuration
-│   │   ├── App.jsx        # Main app
-│   │   └── main.jsx       # Entry point
-│   └── package.json
-│
-├── START_HERE.md          # Quick start guide
-├── QUICK_START.md         # 5-minute setup
-├── SETUP_GUIDE.md         # Detailed setup
-├── IMPLEMENTATION_SUMMARY.md  # What was built
-└── README.md              # This file
-```
-
----
-
-## 📚 Documentation
-
-| Document | Description |
-|----------|-------------|
-| [START_HERE.md](START_HERE.md) | **Start here!** Quick setup guide |
-| [QUICK_START.md](QUICK_START.md) | 5-minute quick start |
-| [SETUP_GUIDE.md](SETUP_GUIDE.md) | Comprehensive setup instructions |
-| [IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md) | Complete feature list |
-| [backend/README.md](backend/README.md) | Backend documentation |
-| [frontend/README.md](frontend/README.md) | Frontend documentation |
-
----
-
-## 🖼️ Screenshots
-
-### Home Page
-Beautiful hero section with smooth animations and event listings.
-
-### Event Detail Page
-Full event information with photo gallery, speakers, and registration.
-
-### Resources Hub
-Searchable and filterable resource library with advanced filters.
-
-### Contact Modal
-Beautiful animated form with validation and email integration.
-
 ---
 
 ## 🎯 Key Highlights
@@ -263,7 +198,7 @@ Beautiful animated form with validation and email integration.
 
 ---
 
-## 🚀 API Endpoints
+## 🚀 Key API Endpoints
 
 ### Contact
 - `POST /api/contact` - Submit contact form
@@ -284,16 +219,6 @@ Beautiful animated form with validation and email integration.
 
 ---
 
-## 🌐 Pages & Routes
-
-| Route | Description |
-|-------|-------------|
-| `/` | Home page with hero, events, about, contact |
-| `/events/:slug` | Event detail page with gallery and speakers |
-| `/resources` | Resources hub with search and filters |
-| `/resources/:slug` | Resource detail page with full information |
-
----
 
 ## 🔧 Environment Variables
 
@@ -314,38 +239,6 @@ VITE_API_URL=http://localhost:5000/api
 ```
 
 ---
-
-## 🧪 Testing
-
-### Test Contact Form
-1. Click "Contact Us"
-2. Fill out the form
-3. Submit
-4. Check email for confirmation
-5. Check MongoDB for entry
-
-### Test Events
-1. Browse events on home page
-2. Click "Learn More"
-3. View event details
-4. Check gallery and speakers
-
-### Test Resources
-1. Navigate to Resources page
-2. Try search functionality
-3. Use filters
-4. Click on a resource
-
----
-
-## 🚢 Deployment
-
-### Live Deployment
-
-- **Frontend:** [https://gotham-ai-two.vercel.app/](https://gotham-ai-two.vercel.app/)
-- **Backend API:** [https://gotham-backend.vercel.app/](https://gotham-backend.vercel.app/)
-
-### Deploy Your Own
 
 #### Backend (Vercel)
 
@@ -421,35 +314,6 @@ Contributions are welcome! Please follow these steps:
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
----
-
-## 📝 License
-
-This project is open source and available under the [MIT License](LICENSE).
-
----
-
-## 🙏 Acknowledgments
-
-- **React Team** - For the amazing library
-- **Vercel** - For Vite and hosting
-- **MongoDB** - For the database
-- **GSAP** - For professional animations
-- **Framer** - For Framer Motion
-- **Tailwind Labs** - For Tailwind CSS
-
----
-
-## 📧 Contact
-
-**Project Maintainer:** Tarun Karn
-
-**Email:** prasadbhalerao279@gmail.com
-
-**GitHub:** [@tarun-karn](https://github.com/tarun-karn)
-
----
-
 ## 🌟 Star This Repository
 
 If you find this project useful, please consider giving it a star! ⭐
@@ -458,8 +322,6 @@ If you find this project useful, please consider giving it a star! ⭐
 
 <div align="center">
 
-**Built with ❤️ for the AI Community**
-
-[Report Bug](https://github.com/tarun-karn/Gotham-AI/issues) • [Request Feature](https://github.com/tarun-karn/Gotham-AI/issues)
+**Built with ❤️ for the Gotham AI Community**
 
 </div>
