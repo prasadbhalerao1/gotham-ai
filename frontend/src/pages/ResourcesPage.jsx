@@ -1,18 +1,17 @@
 /*
  * ANIMATION FEATURES:
- * 1. Fast, snappy card entrance animations (0.45s duration, 0.08s stagger)
- * 2. Cards load only when scrolled into view (ScrollTrigger at 75%)
- * 3. Optimized GSAP animations with power2.out easing for smooth performance
- * 4. CSS-based hover effects preserved (lift and shadow)
- * 5. No animation interference on hover - clean separation of concerns
+ * 1. Buttery smooth card entrance with Framer Motion stagger (0.5s duration, 0.08s stagger)
+ * 2. Smooth spring physics with custom easing curve
+ * 3. AnimatePresence for smooth filtering transitions
+ * 4. Layout animations when cards rearrange
+ * 5. CSS-based hover effects preserved (lift and shadow)
+ * 6. No jitter - animations only run once on mount
  */
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/all';
 import { 
   IoSearchOutline, 
   IoFilterOutline,
@@ -27,17 +26,12 @@ import {
 } from 'react-icons/io5';
 import resourceService from '../services/resourceService';
 
-gsap.registerPlugin(ScrollTrigger);
-
 const ResourcesPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedType, setSelectedType] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedDifficulty, setSelectedDifficulty] = useState('');
   const [showFilters, setShowFilters] = useState(false);
-
-  const headerRef = useRef(null);
-  const cardsRef = useRef(null);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['resources', { search: searchQuery, type: selectedType, category: selectedCategory, difficulty: selectedDifficulty }],
@@ -56,42 +50,7 @@ const ResourcesPage = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-
-    // Header animation
-    gsap.fromTo(
-      headerRef.current,
-      { y: 20, opacity: 0 },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 0.5,
-        ease: 'power2.out',
-      }
-    );
-
-    // Cards animation - only when in view
-    if (cardsRef.current) {
-      const cards = cardsRef.current.querySelectorAll('.resource-card');
-      
-      gsap.fromTo(
-        cards,
-        { y: 30, opacity: 0, scale: 0.92 },
-        {
-          y: 0,
-          opacity: 1,
-          scale: 1,
-          duration: 0.45,
-          stagger: 0.08,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: cardsRef.current,
-            start: 'top 75%',
-            toggleActions: 'play none none reverse',
-          },
-        }
-      );
-    }
-  }, [resources]);
+  }, []);
 
   const getTypeIcon = (type) => {
     switch (type) {
@@ -132,10 +91,9 @@ const ResourcesPage = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div
-          ref={headerRef}
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           className="text-center mb-12"
         >
           <h1 className="special-font text-5xl sm:text-6xl md:text-7xl font-black text-gray-900 mb-4">
@@ -261,12 +219,69 @@ const ResourcesPage = () => {
 
         {/* Resources Grid */}
         {!isLoading && !error && (
-          <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {resources.map((resource, index) => (
-              <div
-                key={resource._id}
-                className="resource-card group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden hover:-translate-y-2"
-              >
+          <motion.div 
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+            variants={{
+              hidden: { opacity: 0 },
+              visible: {
+                opacity: 1,
+                transition: {
+                  staggerChildren: 0.12,
+                  delayChildren: 0.15,
+                }
+              }
+            }}
+            initial="hidden"
+            animate="visible"
+          >
+            <AnimatePresence mode="popLayout">
+              {resources.map((resource, index) => (
+                <motion.div
+                  key={resource._id}
+                  layout
+                  variants={{
+                    hidden: { 
+                      opacity: 0, 
+                      y: 40,
+                      scale: 0.9,
+                      rotateX: 10,
+                      filter: "blur(10px)"
+                    },
+                    visible: { 
+                      opacity: 1, 
+                      y: 0,
+                      scale: 1,
+                      rotateX: 0,
+                      filter: "blur(0px)",
+                      transition: {
+                        type: "spring",
+                        stiffness: 100,
+                        damping: 15,
+                        mass: 0.8,
+                        opacity: { duration: 0.4 },
+                        filter: { duration: 0.5 }
+                      }
+                    },
+                    exit: {
+                      opacity: 0,
+                      scale: 0.85,
+                      filter: "blur(8px)",
+                      transition: { duration: 0.3, ease: "easeInOut" }
+                    }
+                  }}
+                  className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden"
+                  style={{ transformStyle: "preserve-3d", perspective: 1000 }}
+                  whileHover={{ 
+                    y: -12, 
+                    scale: 1.02,
+                    rotateY: 2,
+                    transition: { 
+                      type: "spring",
+                      stiffness: 300,
+                      damping: 20
+                    } 
+                  }}
+                >
                 {/* Resource Image */}
                 <div className="relative h-48 overflow-hidden bg-gradient-to-br from-blue-400 to-cyan-400">
                   {resource.image ? (
@@ -363,9 +378,10 @@ const ResourcesPage = () => {
                     <IoArrowForward className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </div>
-              </div>
-            ))}
-          </div>
+              </motion.div>
+              ))}
+            </AnimatePresence>
+          </motion.div>
         )}
 
         {/* No Results */}

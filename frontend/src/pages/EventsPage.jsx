@@ -1,9 +1,7 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/all';
 import {
   IoCalendarOutline,
   IoLocationOutline,
@@ -14,15 +12,10 @@ import {
 } from 'react-icons/io5';
 import eventService from '../services/eventService';
 
-gsap.registerPlugin(ScrollTrigger);
-
 const EventsPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [showFilters, setShowFilters] = useState(false);
-
-  const headerRef = useRef(null);
-  const cardsRef = useRef(null);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['events'],
@@ -44,38 +37,7 @@ const EventsPage = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-
-    gsap.fromTo(
-      headerRef.current,
-      { y: 50, opacity: 0 },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 0.8,
-        ease: 'power3.out',
-      }
-    );
-
-    if (cardsRef.current) {
-      const cards = cardsRef.current.querySelectorAll('.event-card');
-      gsap.fromTo(
-        cards,
-        { y: 60, opacity: 0, scale: 0.95 },
-        {
-          y: 0,
-          opacity: 1,
-          scale: 1,
-          duration: 0.6,
-          stagger: 0.1,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: cardsRef.current,
-            start: 'top 80%',
-          },
-        }
-      );
-    }
-  }, [filteredEvents]);
+  }, []);
 
   const getCategoryColor = (category) => {
     switch (category) {
@@ -97,10 +59,9 @@ const EventsPage = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div
-          ref={headerRef}
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           className="text-center mb-12"
         >
           <h1 className="special-font text-5xl sm:text-6xl md:text-7xl font-black text-gray-900 mb-4">
@@ -196,13 +157,69 @@ const EventsPage = () => {
 
         {/* Events Grid */}
         {!isLoading && !error && (
-          <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredEvents.map((event) => (
-              <motion.div
-                key={event._id}
-                className="event-card group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden"
-                whileHover={{ y: -8 }}
-              >
+          <motion.div 
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+            variants={{
+              hidden: { opacity: 0 },
+              visible: {
+                opacity: 1,
+                transition: {
+                  staggerChildren: 0.12,
+                  delayChildren: 0.15,
+                }
+              }
+            }}
+            initial="hidden"
+            animate="visible"
+          >
+            <AnimatePresence mode="popLayout">
+              {filteredEvents.map((event, index) => (
+                <motion.div
+                  key={event._id}
+                  layout
+                  variants={{
+                    hidden: { 
+                      opacity: 0, 
+                      y: 40,
+                      scale: 0.9,
+                      rotateX: 10,
+                      filter: "blur(10px)"
+                    },
+                    visible: { 
+                      opacity: 1, 
+                      y: 0,
+                      scale: 1,
+                      rotateX: 0,
+                      filter: "blur(0px)",
+                      transition: {
+                        type: "spring",
+                        stiffness: 100,
+                        damping: 15,
+                        mass: 0.8,
+                        opacity: { duration: 0.4 },
+                        filter: { duration: 0.5 }
+                      }
+                    },
+                    exit: {
+                      opacity: 0,
+                      scale: 0.85,
+                      filter: "blur(8px)",
+                      transition: { duration: 0.3, ease: "easeInOut" }
+                    }
+                  }}
+                  className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden"
+                  style={{ transformStyle: "preserve-3d", perspective: 1000 }}
+                  whileHover={{ 
+                    y: -12, 
+                    scale: 1.02,
+                    rotateY: 2,
+                    transition: { 
+                      type: "spring",
+                      stiffness: 300,
+                      damping: 20
+                    } 
+                  }}
+                >
                 {/* Event Image */}
                 <div className="relative h-48 overflow-hidden">
                   <img
@@ -263,8 +280,9 @@ const EventsPage = () => {
                   </Link>
                 </div>
               </motion.div>
-            ))}
-          </div>
+              ))}
+            </AnimatePresence>
+          </motion.div>
         )}
 
         {/* No Results */}
