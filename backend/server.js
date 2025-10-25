@@ -3,6 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
+import mongoose from 'mongoose';
 import 'express-async-errors';
 
 import connectDB from './config/database.js';
@@ -16,6 +17,21 @@ import resourceRoutes from './routes/resourceRoutes.js';
 
 // Initialize express app
 const app = express();
+
+// Log startup with visible console output
+console.log('\n' + '='.repeat(60));
+console.log('🚀 GOTHAM AI BACKEND STARTING...');
+console.log('='.repeat(60));
+console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
+console.log(`🗄️  MongoDB URI: ${process.env.MONGODB_URI ? '✓ Configured' : '✗ MISSING'}`);
+console.log(`🌐 Frontend Origin: ${process.env.FRONTEND_ORIGIN || 'http://localhost:5173'}`);
+console.log(`📧 Email: ${process.env.EMAIL_USER ? '✓ Configured' : '✗ MISSING'}`);
+console.log('='.repeat(60) + '\n');
+
+logger.info('🚀 Starting Gotham AI Backend...');
+logger.info(`Environment: ${process.env.NODE_ENV || 'development'}`);
+logger.info(`MongoDB URI: ${process.env.MONGODB_URI ? 'Set ✓' : 'Missing ✗'}`);
+logger.info(`Frontend Origin: ${process.env.FRONTEND_ORIGIN || 'Not set'}`);
 
 // Connect to database
 connectDB();
@@ -46,19 +62,59 @@ if (process.env.NODE_ENV === 'development') {
   }));
 }
 
-// Health check endpoint
+// Root endpoint with visible status
+app.get('/', (req, res) => {
+  console.log('✓ Root endpoint hit');
+  logger.info('Root endpoint hit');
+  res.status(200).json({
+    success: true,
+    message: '🚀 Gotham AI Backend API',
+    version: '1.0.0',
+    status: 'running',
+    timestamp: new Date().toISOString(),
+    endpoints: {
+      health: '/health',
+      contact: '/api/contact',
+      events: '/api/events',
+      resources: '/api/resources',
+    },
+  });
+});
+
+// Health check endpoint with MongoDB status
 app.get('/health', (req, res) => {
+  const dbStatus = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected';
+  console.log(`✓ Health check - MongoDB: ${dbStatus}`);
+  logger.info(`Health check endpoint hit - MongoDB: ${dbStatus}`);
+  
   res.status(200).json({
     success: true,
     message: 'Server is running',
     timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development',
+    mongodb: dbStatus,
+    uptime: process.uptime(),
   });
 });
 
-// API routes
-app.use('/api/contact', contactRoutes);
-app.use('/api/events', eventRoutes);
-app.use('/api/resources', resourceRoutes);
+// API routes with logging
+app.use('/api/contact', (req, res, next) => {
+  console.log(`→ Contact: ${req.method} ${req.path}`);
+  logger.info(`Contact route: ${req.method} ${req.path}`);
+  next();
+}, contactRoutes);
+
+app.use('/api/events', (req, res, next) => {
+  console.log(`→ Events: ${req.method} ${req.path}`);
+  logger.info(`Events route: ${req.method} ${req.path}`);
+  next();
+}, eventRoutes);
+
+app.use('/api/resources', (req, res, next) => {
+  console.log(`→ Resources: ${req.method} ${req.path}`);
+  logger.info(`Resources route: ${req.method} ${req.path}`);
+  next();
+}, resourceRoutes);
 
 // 404 handler
 app.use(notFound);
@@ -69,6 +125,13 @@ app.use(errorHandler);
 // Start server
 const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT, () => {
+  console.log('\n' + '='.repeat(60));
+  console.log(`✅ SERVER RUNNING ON PORT ${PORT}`);
+  console.log(`📍 Mode: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`🌐 Local: http://localhost:${PORT}`);
+  console.log(`🏥 Health: http://localhost:${PORT}/health`);
+  console.log('='.repeat(60) + '\n');
+  
   logger.info(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
 });
 

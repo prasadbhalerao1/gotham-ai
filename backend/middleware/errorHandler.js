@@ -50,6 +50,8 @@ export const errorHandler = (err, req, res, next) => {
 
 // 404 handler
 export const notFound = (req, res, next) => {
+  console.log(`❌ 404 Not Found: ${req.method} ${req.originalUrl}`);
+  logger.error(`404 Not Found: ${req.method} ${req.originalUrl}`);
   const error = new AppError(`Not Found - ${req.originalUrl}`, 404);
   next(error);
 };
