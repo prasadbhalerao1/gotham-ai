@@ -39,13 +39,36 @@ connectDB();
 // Security middleware
 app.use(helmet());
 
-// CORS configuration
+// CORS configuration - Allow multiple origins
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'https://gotham-ai-two.vercel.app',
+  process.env.FRONTEND_ORIGIN,
+].filter(Boolean);
+
 const corsOptions = {
-  origin: process.env.FRONTEND_ORIGIN || 'http://localhost:5173',
+  origin: function (origin, callback) {
+    // Allow requests with no origin (mobile apps, Postman, etc.)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      console.log(`❌ CORS blocked origin: ${origin}`);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
   optionsSuccessStatus: 200,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
 };
+
 app.use(cors(corsOptions));
+
+// Handle preflight requests
+app.options('*', cors(corsOptions));
 
 // Body parser middleware
 app.use(express.json({ limit: '10mb' }));
