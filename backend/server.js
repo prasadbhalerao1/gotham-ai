@@ -145,29 +145,35 @@ app.use(notFound);
 // Error handler
 app.use(errorHandler);
 
-// Start server
-const PORT = process.env.PORT || 5000;
-const server = app.listen(PORT, () => {
-  console.log('\n' + '='.repeat(60));
-  console.log(`✅ SERVER RUNNING ON PORT ${PORT}`);
-  console.log(`📍 Mode: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`🌐 Local: http://localhost:${PORT}`);
-  console.log(`🏥 Health: http://localhost:${PORT}/health`);
-  console.log('='.repeat(60) + '\n');
-  
-  logger.info(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
-});
+// For local development only
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 5000;
+  const server = app.listen(PORT, () => {
+    console.log('\n' + '='.repeat(60));
+    console.log(`✅ SERVER RUNNING ON PORT ${PORT}`);
+    console.log(`📍 Mode: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`🌐 Local: http://localhost:${PORT}`);
+    console.log(`🏥 Health: http://localhost:${PORT}/health`);
+    console.log('='.repeat(60) + '\n');
+    
+    logger.info(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+  });
 
-// Handle unhandled promise rejections
-process.on('unhandledRejection', (err) => {
-  logger.error('Unhandled Rejection:', err);
-  server.close(() => process.exit(1));
-});
+  // Handle unhandled promise rejections
+  process.on('unhandledRejection', (err) => {
+    logger.error('Unhandled Rejection:', err);
+    server.close(() => process.exit(1));
+  });
 
-// Handle uncaught exceptions
-process.on('uncaughtException', (err) => {
-  logger.error('Uncaught Exception:', err);
-  process.exit(1);
-});
+  // Handle uncaught exceptions
+  process.on('uncaughtException', (err) => {
+    logger.error('Uncaught Exception:', err);
+    process.exit(1);
+  });
+} else {
+  console.log('🚀 Vercel serverless mode - app exported');
+  logger.info('Running in Vercel serverless mode');
+}
 
+// Export for Vercel
 export default app;
