@@ -192,7 +192,7 @@ const ProjectDetailPage = () => {
             <div className="absolute inset-0 bg-gradient-to-tr from-slate-950 via-slate-900/80 to-transparent"></div>
 
             <div className="relative z-10 p-8 sm:p-12 flex flex-col justify-end h-full">
-              <div className="flex flex-wrap items-center gap-4 mb-4">
+              <div className="flex flex-wrap items-center gap-4 mb-4 hidden">
                 <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur text-sm font-semibold">
                   <IoBriefcaseOutline className="w-5 h-5 text-cyan-300" />
                   {project.industryPartner}
