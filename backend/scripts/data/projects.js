@@ -22,14 +22,10 @@ Designed for industries with large on-ground operations, FAAMS eliminates attend
       "Role-based access with full admin control",
     ],
     projectTeam: [
-      { name: "Sanika Sadre", role: "Community Project Lead, ML Engineer" },
+      { name: "Sanika Sadre", role: "Community Project Lead" },
     ],
-    gallery: [
-      "/img/about.webp",
-      "/img/upcomingevent.jpg",
-      "/img/contact-2.webp",
-    ],
-    disableDetail: true,
+    gallery: [],
+    disableDetail: false,
     heroImage: "/img/about.webp",
     tags: ["FieldOps", "Enterprise", "AI"],
     published: true,
@@ -58,14 +54,10 @@ Built on trusted open-source components, Derby layers people counting, behaviora
       "Secure, scalable open-source architecture",
     ],
     projectTeam: [
-      { name: "Aayush Deshpande", role: "Community Project Lead, ML Engineer" },
+      { name: "Aayush Deshpande", role: "Project Lead" },
     ],
-    gallery: [
-      "/img/contact-1.webp",
-      "/img/Nvidia-event.png",
-      "/img/event-hackers.svg",
-    ],
-    disableDetail: true,
+    gallery: [],
+    disableDetail: false,
     heroImage: "/img/contact-1.webp",
     tags: ["Computer Vision", "Security", "Edge AI"],
     published: true,
@@ -81,6 +73,7 @@ It ensures confidentiality, integrity, and authenticity for every session, addre
     status: "Documentation Phase",
     industryPartner: "Army Design Bureau (Indian Army)",
     source: "Project obtained through Versanix Technologies Community",
+    sourceLink: "",
     keyCapabilities: [
       "Quantum-resistant cryptographic suites",
       "Secure communication for Army Data Network",
@@ -90,12 +83,8 @@ It ensures confidentiality, integrity, and authenticity for every session, addre
       "Indigenous browser tailored for military use",
     ],
     projectTeam: [{ name: "Shruti Baviskar", role: "Community Project Lead" }],
-    gallery: [
-      "/img/contact-2.webp",
-      "/img/event-sih.svg",
-      "/img/event-mit.svg",
-    ],
-    disableDetail: true,
+    gallery: [],
+    disableDetail: false,
     heroImage: "/img/contact-2.webp",
     tags: ["Cybersecurity", "PQC", "Defense"],
     published: true,
@@ -126,12 +115,12 @@ By correlating behavior across anonymized channels, the platform accelerates inv
       "Secure evidence management with chain-of-custody",
     ],
     projectTeam: [
-      { name: "Sanika Sadre", role: "Community Project Lead, ML Engineer" },
+      { name: "Sanika Sadre", role: "Community Project Lead" },
     ],
+    gallery: [],
+    disableDetail: false,
     heroImage: "/img/swordman.webp",
     tags: ["Cybersecurity", "Blockchain", "Forensics"],
     published: true,
-  },
-  // Add new projects here - they'll automatically be included when you run the seed script!
+  }
 ];
-

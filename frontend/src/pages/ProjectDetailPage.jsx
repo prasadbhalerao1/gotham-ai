@@ -72,7 +72,7 @@ const ProjectDetailPage = () => {
     );
   }
 
-  const galleryItems = (project.gallery?.length ? project.gallery : [project.heroImage]).filter(Boolean).map((img) => ({
+  const galleryItems = (project.gallery ?? []).filter(Boolean).map((img) => ({
     original: img,
     thumbnail: img,
   }));
@@ -106,10 +106,11 @@ const ProjectDetailPage = () => {
                 <h1 className="special-font text-4xl font-black mb-2">{project.title}</h1>
                 <p className="text-slate-200">{project.shortDescription}</p>
               </div>
+              {galleryItems.length > 0 && (
               <div className="rounded-2xl overflow-hidden bg-white/5 p-4">
                 <div className="gallery-container">
                   <ImageGallery
-                    items={galleryItems.length ? galleryItems : [{ original: project.heroImage, thumbnail: project.heroImage }]}
+                    items={galleryItems}
                     showPlayButton={false}
                     showFullscreenButton={true}
                     autoPlay={false}
@@ -128,6 +129,7 @@ const ProjectDetailPage = () => {
                   />
                 </div>
               </div>
+              )}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="bg-white/5 rounded-2xl p-4">
                   <p className="text-xs uppercase tracking-wide text-cyan-200 font-semibold mb-1">Industry Partner</p>
