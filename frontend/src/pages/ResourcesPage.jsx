@@ -269,7 +269,7 @@ const ResourcesPage = () => {
                       transition: { duration: 0.3, ease: "easeInOut" }
                     }
                   }}
-                  className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden"
+                  className="group relative bg-white/95 backdrop-blur rounded-3xl border border-white/60 shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden"
                   style={{ transformStyle: "preserve-3d", perspective: 1000 }}
                   whileHover={{ 
                     y: -12, 
@@ -283,7 +283,11 @@ const ResourcesPage = () => {
                   }}
                 >
                 {/* Resource Image */}
-                <div className="relative h-48 overflow-hidden bg-gradient-to-br from-blue-400 to-cyan-400">
+                <div className="relative h-52 overflow-hidden bg-gradient-to-br from-blue-500 to-cyan-500">
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                    <div className="absolute -top-12 -right-12 w-40 h-40 bg-white/30 blur-3xl"></div>
+                    <div className="absolute -bottom-12 -left-12 w-40 h-40 bg-cyan-200/30 blur-3xl"></div>
+                  </div>
                   {resource.image ? (
                     <img 
                       src={resource.image} 
@@ -369,14 +373,27 @@ const ResourcesPage = () => {
                     </div>
                   )}
 
-                  {/* Action Button */}
-                  <Link
-                    to={`/resources/${resource.slug}`}
-                    className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 group-hover:shadow-lg"
-                  >
-                    Learn More
-                    <IoArrowForward className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                  </Link>
+                  {/* Action Buttons */}
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <Link
+                      to={`/resources/${resource.slug}`}
+                      className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 group-hover:shadow-lg"
+                    >
+                      Learn More
+                      <IoArrowForward className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    </Link>
+                    {resource.url && (
+                      <a
+                        href={resource.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex-1 flex items-center justify-center gap-2 border border-gray-200 text-gray-700 font-semibold py-3 px-4 rounded-xl hover:border-blue-400 hover:text-blue-600 transition-all duration-300"
+                      >
+                        Visit Resource
+                        <IoArrowForward className="w-5 h-5" />
+                      </a>
+                    )}
+                  </div>
                 </div>
               </motion.div>
               ))}

@@ -13,7 +13,7 @@ import { useInView } from "react-intersection-observer";
 import { Link, useLocation } from "react-router-dom";
 import ContactModal from "./ContactModal";
 
-const navItems = ["Event", "About", "Resources", "Contact"];
+const navItems = ["Event", "Projects", "About", "Contact"];
 
 const NavBar = () => {
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
@@ -110,13 +110,13 @@ const NavBar = () => {
     e.preventDefault();
     setIsMenuOpen(false);
     
-    if (item === "Resources") {
-      window.location.href = '/resources';
+    if (item === "Event") {
+      window.location.href = '/events';
       return;
     }
     
-    if (item === "Event") {
-      window.location.href = '/events';
+    if (item === "Projects") {
+      window.location.href = '/projects';
       return;
     }
     
@@ -159,14 +159,20 @@ const NavBar = () => {
           {/* Desktop Navigation */}
           <div className="hidden sm:flex">
             {navItems.map((item) => {
-              const isActive = (item === "Event" && location.pathname === "/events") ||
+              const href =
+                item === "Event"
+                  ? "/events"
+                  : item === "Projects"
+                  ? "/projects"
+                  : `/#${item.toLowerCase()}`;
+              const isActive = (item === "Event" && location.pathname.startsWith("/events")) ||
+                             (item === "Projects" && location.pathname.startsWith("/projects")) ||
                              (item === "About" && activeSection === "about") ||
-                             (item === "Resources" && location.pathname === "/resources") ||
                              (item === "Contact" && activeSection === "contact");
               return (
                 <a
                   key={item}
-                  href={`/#${item.toLowerCase()}`}
+                  href={href}
                   className={`nav-hover-btn nav-item-enhanced nav-link-3d focus:outline-none focus:ring-2 focus:ring-yellow-300/50 rounded px-2 py-1 transition-all duration-300 ${isActive ? 'text-yellow-300 font-extrabold scale-110' : 'text-blue-50/90 font-semibold'}`}
                   onClick={(e) => handleLinkClick(e, item)}
                 >
@@ -213,17 +219,25 @@ const NavBar = () => {
       >
         <nav>
           <ul className="flex flex-col items-center space-y-4">
-            {navItems.map((item) => (
+            {navItems.map((item) => {
+              const href =
+                item === "Event"
+                  ? "/events"
+                  : item === "Projects"
+                  ? "/projects"
+                  : `#${item.toLowerCase()}`;
+              return (
               <li key={item}>
                 <a
-                  href={`#${item.toLowerCase()}`}
+                  href={href}
                   className="text-blue-50/90 hover:text-yellow-300 text-lg font-semibold py-2"
                   onClick={(e) => handleLinkClick(e, item)}
                 >
                   {item}
                 </a>
               </li>
-            ))}
+              );
+            })}
           </ul>
         </nav>
       </div>

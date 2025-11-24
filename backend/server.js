@@ -14,6 +14,7 @@ import { errorHandler, notFound } from './middleware/errorHandler.js';
 import contactRoutes from './routes/contactRoutes.js';
 import eventRoutes from './routes/eventRoutes.js';
 import resourceRoutes from './routes/resourceRoutes.js';
+import projectRoutes from './routes/projectRoutes.js';
 
 // Initialize express app
 const app = express();
@@ -120,6 +121,7 @@ app.get('/', (req, res) => {
       contact: '/api/contact',
       events: '/api/events',
       resources: '/api/resources',
+      projects: '/api/projects',
     },
   });
 });
@@ -158,6 +160,12 @@ app.use('/api/resources', (req, res, next) => {
   logger.info(`Resources route: ${req.method} ${req.path}`);
   next();
 }, resourceRoutes);
+
+app.use('/api/projects', (req, res, next) => {
+  console.log(`→ Projects: ${req.method} ${req.path}`);
+  logger.info(`Projects route: ${req.method} ${req.path}`);
+  next();
+}, projectRoutes);
 
 // 404 handler
 app.use(notFound);

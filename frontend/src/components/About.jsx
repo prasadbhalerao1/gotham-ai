@@ -91,6 +91,9 @@ const About = () => {
             world of artificial intelligence, building skills, projects, and the
             future together.
           </p>
+          <p className="text-gray-500 text-center text-sm mt-4 italic">
+            in collaboration with Versanix Technologies
+          </p>
         </div>
       </div>
 

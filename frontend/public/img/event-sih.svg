@@ -1,0 +1,31 @@
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="gradSIH" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#022c22"/>
+      <stop offset="50%" stop-color="#047857"/>
+      <stop offset="100%" stop-color="#0ea5e9"/>
+    </linearGradient>
+    <radialGradient id="pulseSIH" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" stop-color="#ecfccb" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#bbf7d0" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#gradSIH)"/>
+  <circle cx="400" cy="300" r="220" fill="url(#pulseSIH)"/>
+  <g stroke="#bbf7d0" stroke-width="3" stroke-linecap="round">
+    <path d="M120 320 Q200 260 280 320 T440 320 T600 320 T760 320"/>
+    <path d="M120 380 Q200 440 280 380 T440 380 T600 380 T760 380"/>
+  </g>
+  <g fill="#ecfccb">
+    <rect x="180" y="200" width="80" height="140" rx="12" opacity="0.7"/>
+    <rect x="340" y="160" width="120" height="200" rx="16"/>
+    <rect x="540" y="220" width="90" height="120" rx="12" opacity="0.6"/>
+  </g>
+  <text x="70" y="520" fill="#f0fdf4" font-size="48" font-family="Arial, sans-serif" font-weight="bold">
+    SIH Guidance Session
+  </text>
+  <text x="70" y="565" fill="#dcfce7" font-size="24" font-family="Arial, sans-serif">
+    Mentorship • Pitch polish • Prototype roadmaps
+  </text>
+</svg>
+

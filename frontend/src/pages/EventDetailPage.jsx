@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
@@ -8,7 +8,6 @@ import {
   IoTimeOutline, 
   IoPeopleOutline,
   IoArrowBack,
-  IoShareSocialOutline 
 } from 'react-icons/io5';
 import eventService from '../services/eventService';
 import ImageGallery from 'react-image-gallery';
@@ -16,7 +15,6 @@ import 'react-image-gallery/styles/css/image-gallery.css';
 
 const EventDetailPage = () => {
   const { slug } = useParams();
-  const [selectedImage, setSelectedImage] = useState(null);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['event', slug],
@@ -70,10 +68,101 @@ const EventDetailPage = () => {
     );
   }
 
-  const galleryImages = event.gallery?.map(img => ({
+  const galleryImages = event?.gallery?.map(img => ({
     original: img,
     thumbnail: img,
   })) || [];
+
+  if (event.galleryOnly) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-blue-50 py-24">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-8">
+            <Link 
+              to="/events" 
+              className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold transition-colors"
+            >
+              <IoArrowBack className="w-5 h-5" /> Back to Events
+            </Link>
+          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="bg-white rounded-3xl shadow-2xl overflow-hidden"
+          >
+            {/* Hero Section */}
+            <div className="relative h-72">
+              <img
+                src={event.image}
+                alt={event.title}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+              <div className="absolute bottom-0 p-8">
+                <h1 className="special-font text-4xl sm:text-5xl font-black text-white mb-2">
+                  {event.title}
+                </h1>
+              </div>
+            </div>
+
+            <div className="p-8 space-y-8">
+              {/* Description */}
+              {event.description && (
+                <div className="bg-gray-50 rounded-2xl p-6">
+                  <h2 className="text-2xl font-bold text-gray-900 mb-4">About This Event</h2>
+                  <p className="text-gray-700 leading-relaxed">{event.description}</p>
+                </div>
+              )}
+
+              {/* Speakers */}
+              {event.speakers && event.speakers.length > 0 && (
+                <div className="bg-gray-50 rounded-2xl p-6">
+                  <h2 className="text-2xl font-bold text-gray-900 mb-4">Speakers</h2>
+                  <div className="space-y-4">
+                    {event.speakers.map((speaker, index) => (
+                      <div
+                        key={index}
+                        className="flex items-start gap-4 p-4 bg-white rounded-xl"
+                      >
+                        <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-full flex items-center justify-center text-white font-bold text-xl flex-shrink-0">
+                          {speaker.name?.charAt(0) || 'S'}
+                        </div>
+                        <div>
+                          {speaker.name && (
+                            <h4 className="font-bold text-gray-900">{speaker.name}</h4>
+                          )}
+                          {speaker.title && (
+                            <p className="text-sm text-blue-600 mb-1">{speaker.title}</p>
+                          )}
+                          {speaker.bio && (
+                            <p className="text-sm text-gray-600">{speaker.bio}</p>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Gallery */}
+              {galleryImages.length > 0 && (
+                <div className="bg-gray-50 rounded-2xl p-6">
+                  <h2 className="text-2xl font-bold text-gray-900 mb-4">Photo Gallery</h2>
+                  <ImageGallery
+                    items={galleryImages}
+                    showPlayButton={false}
+                    showFullscreenButton={true}
+                    autoPlay={false}
+                  />
+                </div>
+              )}
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-blue-50 py-24">
@@ -108,11 +197,6 @@ const EventDetailPage = () => {
               className="w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
-            
-            {/* Category Badge */}
-            <button className="absolute top-6 right-6 bg-white/90 hover:bg-white p-3 rounded-full transition-colors">
-              <IoShareSocialOutline className="w-6 h-6 text-gray-800" />
-            </button>
 
             {/* Title Overlay */}
             <div className="absolute bottom-0 left-0 right-0 p-8">
@@ -124,7 +208,7 @@ const EventDetailPage = () => {
 
           {/* Event Info Cards */}
           <div className="p-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div className={`grid grid-cols-1 md:grid-cols-2 ${event.attendees && event.attendees > 0 ? 'lg:grid-cols-4' : 'lg:grid-cols-3'} gap-6 mb-8`}>
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -170,20 +254,22 @@ const EventDetailPage = () => {
                 </div>
               </motion.div>
 
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 }}
-                className="flex items-center gap-4 p-4 bg-blue-50 rounded-xl"
-              >
-                <div className="p-3 bg-blue-600 rounded-lg">
-                  <IoPeopleOutline className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <p className="text-sm text-gray-600 font-medium">Attendees</p>
-                  <p className="text-gray-900 font-bold">{event.attendees}+</p>
-                </div>
-              </motion.div>
+              {event.attendees && event.attendees > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5 }}
+                  className="flex items-center gap-4 p-4 bg-blue-50 rounded-xl"
+                >
+                  <div className="p-3 bg-blue-600 rounded-lg">
+                    <IoPeopleOutline className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-600 font-medium">Attendees</p>
+                    <p className="text-gray-900 font-bold">{event.attendees}+</p>
+                  </div>
+                </motion.div>
+              )}
             </div>
 
           </div>
@@ -199,18 +285,22 @@ const EventDetailPage = () => {
             className="lg:col-span-2"
           >
             {/* Description */}
-            <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">About This Event</h2>
-              <p className="text-gray-700 text-lg leading-relaxed mb-6">
-                {event.description}
-              </p>
-              
-              {/* Event Content */}
-              <div 
-                className="prose prose-lg max-w-none"
-                dangerouslySetInnerHTML={{ __html: event.content }}
-              />
-            </div>
+            {event.description && (
+              <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
+                <h2 className="text-3xl font-bold text-gray-900 mb-4">About This Event</h2>
+                <p className="text-gray-700 text-lg leading-relaxed mb-6">
+                  {event.description}
+                </p>
+                
+                {/* Event Content */}
+                {event.content && (
+                  <div 
+                    className="prose prose-lg max-w-none"
+                    dangerouslySetInnerHTML={{ __html: event.content }}
+                  />
+                )}
+              </div>
+            )}
 
             {/* Photo Gallery */}
             {galleryImages.length > 0 && (

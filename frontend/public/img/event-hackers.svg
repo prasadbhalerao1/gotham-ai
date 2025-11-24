@@ -1,0 +1,44 @@
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="gradHackers" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="50%" stop-color="#0b2f54"/>
+      <stop offset="100%" stop-color="#0f766e"/>
+    </linearGradient>
+    <linearGradient id="gridGlow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#34d399" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#22d3ee" stop-opacity="0.5"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#gradHackers)"/>
+  <g stroke="url(#gridGlow)" stroke-width="0.5">
+    <path d="M0 500 L800 400" />
+    <path d="M0 450 L800 350" />
+    <path d="M0 550 L800 450" />
+    <path d="M0 600 L800 500" />
+    <path d="M50 300 L50 600" />
+    <path d="M150 300 L150 600" />
+    <path d="M250 300 L250 600" />
+    <path d="M350 300 L350 600" />
+    <path d="M450 300 L450 600" />
+    <path d="M550 300 L550 600" />
+    <path d="M650 300 L650 600" />
+    <path d="M750 300 L750 600" />
+  </g>
+  <g fill="none" stroke="#22d3ee" stroke-width="4" stroke-linecap="round">
+    <path d="M120 180 C220 120 320 180 420 140" />
+    <path d="M420 140 C520 100 620 160 720 120" />
+  </g>
+  <g>
+    <circle cx="200" cy="200" r="45" fill="#0ea5e9" opacity="0.8"/>
+    <circle cx="400" cy="120" r="55" fill="#14b8a6" opacity="0.5"/>
+    <circle cx="620" cy="160" r="35" fill="#38bdf8" opacity="0.7"/>
+  </g>
+  <text x="60" y="520" fill="#e2e8f0" font-size="48" font-family="Arial, sans-serif" font-weight="bold">
+    Hacker's Meetup
+  </text>
+  <text x="60" y="565" fill="#94a3b8" font-size="24" font-family="Arial, sans-serif">
+    Live exploits • Red-team demos • Security art
+  </text>
+</svg>
+

@@ -1,0 +1,90 @@
+/* Custom styles for image gallery */
+.image-gallery {
+  width: 100%;
+  height: 100%;
+}
+
+.image-gallery-content.fullscreen {
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.image-gallery-slide img {
+  width: 100%;
+  height: auto;
+  max-height: 80vh;
+  object-fit: contain;
+  margin: 0 auto;
+  display: block;
+}
+
+.image-gallery-thumbnails-wrapper {
+  margin-top: 10px;
+}
+
+.image-gallery-thumbnails {
+  padding: 10px 0;
+  text-align: center;
+}
+
+.image-gallery-thumbnail {
+  display: inline-block;
+  margin: 0 5px;
+  border: 2px solid transparent;
+  transition: border-color 0.3s ease;
+  width: 80px;
+  height: 60px;
+  overflow: hidden;
+}
+
+.image-gallery-thumbnail.active,
+.image-gallery-thumbnail:focus {
+  border-color: #3b82f6;
+  outline: none;
+}
+
+.image-gallery-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Fullscreen styles */
+.image-gallery-content.fullscreen .image-gallery-slide img {
+  max-height: 85vh;
+}
+
+/* Navigation buttons */
+.image-gallery-icon {
+  color: white;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+  transition: all 0.3s ease;
+}
+
+.image-gallery-icon:hover {
+  color: #93c5fd;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .image-gallery-slide img {
+    max-height: 60vh;
+  }
+  
+  .image-gallery-thumbnail {
+    width: 60px;
+    height: 45px;
+  }
+}
+
+/* Fix for fullscreen mode on mobile */
+.image-gallery-slide-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100%;
+}
+
+/* Ensure thumbnails are properly aligned */
+.image-gallery-thumbnails-container {
+  text-align: center;
+}

@@ -50,7 +50,7 @@ const eventSchema = new mongoose.Schema(
     },
     category: {
       type: String,
-      enum: ['Technology', 'Gaming', 'Networking', 'Workshop', 'Seminar', 'Other'],
+      enum: ['Technology', 'Gaming', 'Networking', 'Workshop', 'Seminar', 'Security', 'Other'],
     },
     speakers: [{
       name: String,
@@ -67,6 +67,10 @@ const eventSchema = new mongoose.Schema(
     published: {
       type: Boolean,
       default: true,
+    },
+    galleryOnly: {
+      type: Boolean,
+      default: false,
     },
   },
   {

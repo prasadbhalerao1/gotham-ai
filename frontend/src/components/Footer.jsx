@@ -1,3 +1,4 @@
+import { Link, useLocation } from "react-router-dom";
 import { FaDiscord, FaTwitter, FaLinkedin, FaInstagram } from "react-icons/fa";
 import { MdLocationOn } from "react-icons/md";
 
@@ -9,13 +10,16 @@ const socialLinks = [
 ];
 
 const quickLinks = [
-  { href: "#events", label: "Events" },
-  { href: "#about", label: "About" },
-  { href: "#contact", label: "Contact" },
+  { label: "Events", type: "section", target: "events" },
+  { label: "About", type: "section", target: "about" },
+  { label: "Contact", type: "section", target: "contact" },
+  { label: "Projects", type: "route", target: "/projects" },
+  { label: "Resources", type: "route", target: "/resources" },
 ];
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const location = useLocation();
 
   return (
     <footer className="w-screen bg-gradient-to-br from-gray-900 via-blue-900 to-cyan-900 text-white">
@@ -46,19 +50,31 @@ const Footer = () => {
             <ul className="space-y-2">
               {quickLinks.map((link, index) => (
                 <li key={index}>
-                  <a
-                    href={link.href}
-                    className="text-gray-300 hover:text-blue-400 transition-colors duration-300 hover-lift inline-block"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      const element = document.getElementById(link.href.substring(1));
-                      if (element) {
-                        element.scrollIntoView({ behavior: 'smooth' });
-                      }
-                    }}
-                  >
-                    {link.label}
-                  </a>
+                  {link.type === 'route' ? (
+                    <Link
+                      to={link.target}
+                      className="text-gray-300 hover:text-blue-400 transition-colors duration-300 hover-lift inline-block"
+                    >
+                      {link.label}
+                    </Link>
+                  ) : (
+                    <button
+                      type="button"
+                      className="text-left text-gray-300 hover:text-blue-400 transition-colors duration-300 hover-lift inline-block"
+                      onClick={() => {
+                        if (location.pathname !== '/') {
+                          window.location.href = `/#${link.target}`;
+                          return;
+                        }
+                        const element = document.getElementById(link.target);
+                        if (element) {
+                          element.scrollIntoView({ behavior: 'smooth' });
+                        }
+                      }}
+                    >
+                      {link.label}
+                    </button>
+                  )}
                 </li>
               ))}
               <li>
@@ -69,16 +85,6 @@ const Footer = () => {
                   className="text-gray-300 hover:text-blue-400 transition-colors duration-300 hover-lift inline-block"
                 >
                   Join Community
-                </a>
-              </li>
-              <li>
-                <a 
-                  href="https://discord.com" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="text-gray-300 hover:text-blue-400 transition-colors duration-300 hover-lift inline-block"
-                >
-                  Resources
                 </a>
               </li>
             </ul>

@@ -175,6 +175,7 @@ const EventsPage = () => {
             <AnimatePresence mode="popLayout">
               {filteredEvents.map((event, index) => (
                 <motion.div
+                  id={event.slug}
                   key={event._id}
                   layout
                   variants={{
@@ -207,7 +208,7 @@ const EventsPage = () => {
                       transition: { duration: 0.3, ease: "easeInOut" }
                     }
                   }}
-                  className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden"
+                  className="group relative bg-white/90 backdrop-blur rounded-3xl border border-white/50 shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden"
                   style={{ transformStyle: "preserve-3d", perspective: 1000 }}
                   whileHover={{ 
                     y: -12, 
@@ -221,7 +222,8 @@ const EventsPage = () => {
                   }}
                 >
                 {/* Event Image */}
-                <div className="relative h-48 overflow-hidden">
+                <div className="relative h-56 overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-900/40 to-cyan-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   <img
                     src={event.image}
                     alt={event.title}
@@ -240,7 +242,7 @@ const EventsPage = () => {
 
                   {/* Attendees */}
                   {event.attendees && (
-                    <div className="absolute bottom-4 right-4 flex items-center space-x-1 text-white text-sm">
+                    <div className="absolute bottom-4 right-4 flex items-center space-x-1 text-white text-sm bg-black/30 backdrop-blur px-3 py-1 rounded-full">
                       <IoPeopleOutline className="w-4 h-4" />
                       <span>{event.attendees}</span>
                     </div>
@@ -274,7 +276,7 @@ const EventsPage = () => {
 
                   <Link
                     to={`/events/${event.slug}`}
-                    className="block w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 text-center"
+                    className="block w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 text-center"
                   >
                     Learn More
                   </Link>

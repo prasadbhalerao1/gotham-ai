@@ -152,15 +152,16 @@ const Events = () => {
             {eventsData.map((event) => (
             <div
               key={event._id || event.id}
-              className="event-card group bg-white rounded-2xl shadow-lg hover:shadow-2xl overflow-hidden focus-within:ring-4 focus-within:ring-blue-300/50 transition-shadow duration-200"
+              className="event-card group bg-white/80 backdrop-blur rounded-3xl border border-white/40 shadow-lg hover:shadow-2xl overflow-hidden focus-within:ring-4 focus-within:ring-blue-300/50 transition-all duration-300"
               role="article"
               aria-labelledby={`event-title-${event._id || event.id}`}
             >
-              <div className="relative h-48 overflow-hidden image-hover-zoom">
+              <div className="relative h-56 overflow-hidden image-hover-zoom">
+                <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/20 to-blue-800/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 <img
                   src={event.image}
                   alt={event.title}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
 

@@ -1,0 +1,33 @@
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="gradMIT" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="60%" stop-color="#1d4ed8"/>
+      <stop offset="100%" stop-color="#38bdf8"/>
+    </linearGradient>
+    <linearGradient id="beamMIT" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fff" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#93c5fd" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#gradMIT)"/>
+  <g fill="url(#beamMIT)">
+    <rect x="80" y="80" width="140" height="280" rx="20"/>
+    <rect x="280" y="60" width="140" height="320" rx="20"/>
+    <rect x="480" y="100" width="140" height="260" rx="20"/>
+    <rect x="280" y="420" width="240" height="40" rx="8"/>
+  </g>
+  <g stroke="#bae6fd" stroke-width="4" stroke-linecap="round">
+    <path d="M140 200 L660 320"/>
+    <path d="M140 260 L660 380"/>
+    <path d="M140 320 L660 440"/>
+  </g>
+  <circle cx="650" cy="150" r="70" fill="#fbbf24" opacity="0.45"/>
+  <text x="70" y="520" fill="#e0f2fe" font-size="48" font-family="Arial, sans-serif" font-weight="bold">
+    MIT Alandi Tech Session
+  </text>
+  <text x="70" y="565" fill="#bfdbfe" font-size="24" font-family="Arial, sans-serif">
+    Research collides with product builds • Vision & robotics
+  </text>
+</svg>
+
