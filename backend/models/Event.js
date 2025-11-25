@@ -31,7 +31,7 @@ const eventSchema = new mongoose.Schema(
     },
     time: {
       type: String,
-      required: true,
+      trim: true,
     },
     location: {
       type: String,

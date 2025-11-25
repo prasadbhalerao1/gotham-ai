@@ -200,10 +200,12 @@ const Events = () => {
                     <IoCalendarOutline className="w-4 h-4 text-blue-500" />
                     <span>{event.dateDisplay}</span>
                   </div>
-                  <div className="flex items-center space-x-2 text-sm text-gray-600">
-                    <IoTimeOutline className="w-4 h-4 text-cyan-500" />
-                    <span>{event.time}</span>
-                  </div>
+                  {event.time && (
+                    <div className="flex items-center space-x-2 text-sm text-gray-600">
+                      <IoTimeOutline className="w-4 h-4 text-cyan-500" />
+                      <span>{event.time}</span>
+                    </div>
+                  )}
                   <div className="flex items-center space-x-2 text-sm text-gray-600">
                     <IoLocationOutline className="w-4 h-4 text-green-500" />
                     <span>{event.location}</span>

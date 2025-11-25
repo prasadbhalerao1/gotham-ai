@@ -107,44 +107,7 @@ const EventDetailPage = () => {
             </div>
 
             <div className="p-8 space-y-8">
-              {/* Description */}
-              {event.description && (
-                <div className="bg-gray-50 rounded-2xl p-6">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-4">About This Event</h2>
-                  <p className="text-gray-700 leading-relaxed">{event.description}</p>
-                </div>
-              )}
-
-              {/* Speakers */}
-              {event.speakers && event.speakers.length > 0 && (
-                <div className="bg-gray-50 rounded-2xl p-6">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-4">Speakers</h2>
-                  <div className="space-y-4">
-                    {event.speakers.map((speaker, index) => (
-                      <div
-                        key={index}
-                        className="flex items-start gap-4 p-4 bg-white rounded-xl"
-                      >
-                        <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-full flex items-center justify-center text-white font-bold text-xl flex-shrink-0">
-                          {speaker.name?.charAt(0) || 'S'}
-                        </div>
-                        <div>
-                          {speaker.name && (
-                            <h4 className="font-bold text-gray-900">{speaker.name}</h4>
-                          )}
-                          {speaker.title && (
-                            <p className="text-sm text-blue-600 mb-1">{speaker.title}</p>
-                          )}
-                          {speaker.bio && (
-                            <p className="text-sm text-gray-600">{speaker.bio}</p>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
+              {/* Gallery Only view: show only gallery */}
               {/* Gallery */}
               {galleryImages.length > 0 && (
                 <div className="bg-gray-50 rounded-2xl p-6">
@@ -224,20 +187,22 @@ const EventDetailPage = () => {
                 </div>
               </motion.div>
 
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-                className="flex items-center gap-4 p-4 bg-cyan-50 rounded-xl"
-              >
-                <div className="p-3 bg-cyan-600 rounded-lg">
-                  <IoTimeOutline className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <p className="text-sm text-gray-600 font-medium">Time</p>
-                  <p className="text-gray-900 font-bold">{event.time}</p>
-                </div>
-              </motion.div>
+              {event.time && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                  className="flex items-center gap-4 p-4 bg-cyan-50 rounded-xl"
+                >
+                  <div className="p-3 bg-cyan-600 rounded-lg">
+                    <IoTimeOutline className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-600 font-medium">Time</p>
+                    <p className="text-gray-900 font-bold">{event.time}</p>
+                  </div>
+                </motion.div>
+              )}
 
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -337,12 +302,15 @@ const EventDetailPage = () => {
                       transition={{ delay: 0.5 + index * 0.1 }}
                       className="flex items-start gap-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
                     >
-                      <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-full flex items-center justify-center text-white font-bold text-xl flex-shrink-0">
-                        {speaker.name.charAt(0)}
+                      <div className="w-16 h-16 rounded-full overflow-hidden flex-shrink-0 bg-gradient-to-br from-blue-600 to-cyan-600 text-white font-bold text-xl flex items-center justify-center">
+                        {speaker.image ? (
+                          <img src={speaker.image} alt={speaker.name} className="w-full h-full object-cover" />
+                        ) : (
+                          speaker.name.charAt(0)
+                        )}
                       </div>
                       <div>
                         <h4 className="font-bold text-gray-900">{speaker.name}</h4>
-                        <p className="text-sm text-blue-600 mb-1">{speaker.title}</p>
                         <p className="text-sm text-gray-600">{speaker.bio}</p>
                       </div>
                     </motion.div>

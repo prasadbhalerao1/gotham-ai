@@ -3,114 +3,73 @@ export const events = [
     title: "AI Tech Session",
     slug: "ai-tech-session-2025",
     description:
-      "Gain insights from industry leaders in AI & ML! Join us for an immersive session exploring the latest breakthroughs in artificial intelligence.",
+      "Experience an exciting journey from the basics of machine learning to real-world AI tools that are transforming accessibility!",
     content: `
-      <h2>About the Event</h2>
-      <p>Join us for an exclusive AI Tech Session where industry leaders share their insights on the latest developments in artificial intelligence and machine learning.</p>
-      
-      <h3>What You'll Learn</h3>
-      <ul>
-        <li>Latest trends in AI and Machine Learning</li>
-        <li>Real-world applications of AI in various industries</li>
-        <li>Career opportunities in AI</li>
-        <li>Hands-on demonstrations and Q&A sessions</li>
-      </ul>
-      
-      <h3>Who Should Attend</h3>
-      <p>This event is perfect for students, professionals, and anyone interested in learning about AI and its applications.</p>
+      <h1>Event Description</h1>
+
+<h2>Session by Br. Bhushan Akerkar</h2>
+<ul>
+  <li>Introduced the core idea of how machines learn from data.</li>
+  <li>Explained basic ML math in a simple way — patterns, functions, and errors.</li>
+  <li>Covered key topics such as:
+    <ul>
+      <li>Regression — predicting continuous values.</li>
+      <li>Classification — grouping and labeling data.</li>
+      <li>How a model improves by adjusting itself after each example.</li>
+    </ul>
+  </li>
+  <li>Used everyday examples to show how these concepts work in real life.</li>
+</ul>
+
+<h2>Session by Ms. Deepali Bhavale</h2>
+<ul>
+  <li>Focused on how AI is applied in practical, human-centered ways.</li>
+  <li>Explained how AI supports accessibility for:
+    <ul>
+      <li>People with vision challenges</li>
+      <li>People with reading difficulties</li>
+      <li>Users who need assistance with daily digital tasks</li>
+    </ul>
+  </li>
+  <li>Demonstrated AI tools that help simplify learning and improve independence.</li>
+  <li>Showed how thoughtful design can make technology easier for everyone to use.</li>
+</ul>
+
+<h2>Overall Takeaway</h2>
+<ul>
+  <li>Students gained both a strong foundation in how machine learning works and an understanding of how AI can meaningfully help people.</li>
+  <li>The event connected technical concepts with real, everyday applications.</li>
+</ul>
     `,
     date: new Date("2025-10-11T12:30:00"),
     dateDisplay: "October 11, 2025",
     time: "12:30 PM - 4:00 PM",
     location: "Jaywant Auditorium, JSPM Campus",
-    image: "/img/Nvidia-event.png",
+    image: "/img/gotham-jspm/gotham-jspm1.jpg",
     gallery: [
-      "/img/Nvidia-event.png",
-      "/img/ai-event-1.jpg",
-      "/img/ai-event-2.jpg",
-      "/img/ai-event-3.jpg",
+      "/img/gotham-jspm/gotham-jspm1.jpg",
+      "/img/gotham-jspm/gotham-jspm2.jpg",
+      "/img/gotham-jspm/gotham-jspm3.jpg",
+      "/img/gotham-jspm/gotham-jspm4.jpg",
+      "/img/gotham-jspm/gotham-jspm5.jpg",
+      "/img/gotham-jspm/gotham-jspm6.jpg",
+      "/img/gotham-jspm/gotham-jspm7.jpg",
     ],
-    attendees: 250,
+    attendees: 500,
     category: "Technology",
     speakers: [
       {
-        name: "Dr. Sarah Johnson",
-        title: "AI Research Lead at Tech Corp",
-        bio: "Leading AI researcher with 15+ years of experience",
-        image: "/img/speaker-1.jpg",
+        name: "Dr. Bhushan Akerkar",
+        bio: "B.Tech IIT (BHU) graduate, certified in ML & AI, with industry experience at HP, L&T, and TCS, former Chief Information Officer at Hindalco, and a passionate mentor and speaker in emerging technologies.",
+        image: "/img/Bhushan_Akerkar.jpeg",
       },
       {
-        name: "Prof. Michael Chen",
-        title: "Professor of Computer Science",
-        bio: "Expert in machine learning and neural networks",
-        image: "/img/speaker-2.jpg",
+        name: "Dr. Deepali Bhavale",
+        bio: "VJTI alumna, tech lead, and author of “Intelligent Inclusion,” is an ex–Bank of America professional experienced in leading AI projects and dedicated to making education and technology more accessible.",
+        image: "/img/Deepali_Bhavale.jpg",
       },
     ],
     tags: ["AI", "Machine Learning", "Technology", "Workshop"],
-    published: true,
-  },
-  {
-    title: "Deep Learning Workshop",
-    slug: "deep-learning-workshop",
-    description:
-      "Hands-on workshop covering neural networks, CNNs, and RNNs. Build your first deep learning model!",
-    content: `
-      <h2>Workshop Overview</h2>
-      <p>A comprehensive hands-on workshop where you'll learn to build and train deep learning models from scratch.</p>
-      
-      <h3>Topics Covered</h3>
-      <ul>
-        <li>Introduction to Neural Networks</li>
-        <li>Convolutional Neural Networks (CNNs)</li>
-        <li>Recurrent Neural Networks (RNNs)</li>
-        <li>Transfer Learning and Fine-tuning</li>
-        <li>Building real-world applications</li>
-      </ul>
-      
-      <h3>Prerequisites</h3>
-      <p>Basic Python programming knowledge and familiarity with machine learning concepts.</p>
-    `,
-    date: new Date("2025-11-15T10:00:00"),
-    dateDisplay: "November 15, 2025",
-    time: "10:00 AM - 5:00 PM",
-    location: "Computer Lab, Building A",
-    image: "/img/deep-learning.jpg",
-    gallery: [
-      "/img/deep-learning.jpg",
-      "/img/workshop-1.jpg",
-      "/img/workshop-2.jpg",
-    ],
-    attendees: 150,
-    category: "Workshop",
-    tags: ["Deep Learning", "Neural Networks", "Python", "Hands-on"],
-    published: true,
-  },
-  {
-    title: "AI Networking Mixer",
-    slug: "ai-networking-mixer",
-    description:
-      "Connect with AI enthusiasts, professionals, and researchers. Expand your network in the AI community!",
-    content: `
-      <h2>Event Details</h2>
-      <p>An evening of networking with fellow AI enthusiasts, industry professionals, and researchers.</p>
-      
-      <h3>What to Expect</h3>
-      <ul>
-        <li>Meet and connect with AI professionals</li>
-        <li>Share ideas and collaborate on projects</li>
-        <li>Learn about career opportunities</li>
-        <li>Enjoy refreshments and casual conversations</li>
-      </ul>
-    `,
-    date: new Date("2025-12-01T18:00:00"),
-    dateDisplay: "December 1, 2025",
-    time: "6:00 PM - 9:00 PM",
-    location: "Innovation Hub, Tech Park",
-    image: "/img/networking.jpg",
-    gallery: ["/img/networking.jpg"],
-    attendees: 200,
-    category: "Networking",
-    tags: ["Networking", "Community", "Career"],
     published: true,
   },
   {
@@ -130,55 +89,63 @@ export const events = [
     `,
     date: new Date("2025-01-07T18:30:00"),
     dateDisplay: "January 7, 2025",
-    time: "6:30 PM - 9:30 PM",
-    location: "Gotham AI Cyber Range, Pune",
-    image: "/img/event-hackers.svg",
-    gallery: [
-      "/img/event-hackers.svg",
-      "/img/upcomingevent.jpg",
-      "/img/Nvidia-event.png",
-    ],
+    time: "",
+    location: "JSPM's RSCOE",
+    image: "/img/cyber/cyber.jpg",
+    gallery: ["/img/cyber/cyber.jpg"],
     attendees: 90,
     category: "Security",
     tags: ["Cybersecurity", "Hackers", "Meetup"],
     published: true,
-    galleryOnly: true,
+    galleryOnly: false,
   },
   {
-    title: "MIT Alandi Tech Session",
-    slug: "mit-alandi-tech-session-2025",
-    description:
-      "Campus-wide deep dive on applied AI systems, co-hosted with MIT Alandi faculty and Gotham AI architects.",
+    title: "MIT ADT Tech Session",
+    slug: "mit-adt-tech-session-2025",
+    description: "Deep dive on Artificial intelligence",
     content: `
       <h2>Session Flow</h2>
-      <p>The session mixes keynote briefings with live build-alongs showcasing how Gotham AI productizes research.</p>
-      <h3>Agenda</h3>
-      <ul>
-        <li>Vision transformers for aerial imaging</li>
-        <li>Edge deployment playbook for robotics</li>
-        <li>Student lightning demos + mentorship pods</li>
-      </ul>
+  <p>Versanix conducted a hands-on tech meetup featuring three project tracks: AI, Blockchain, and IoT. Students collaborated in teams, built real-world prototypes, and interacted with mentors and industry experts.</p>
+
+  <h2>Project Tracks</h2>
+
+  <h3>1. AI in Action</h3>
+  <p><strong>Projects:</strong> Chatbots, Sentiment Analysis, Image Classification<br>
+     <strong>Skills:</strong> Python, TensorFlow/PyTorch, APIs</p>
+
+  <h3>2. Blockchain Beyond Crypto</h3>
+  <p><strong>Projects:</strong> Voting Systems, Supply Chain Tracking, Token Apps<br>
+     <strong>Skills:</strong> Solidity, Ethereum, Polygon, Hyperledger</p>
+
+  <h3>3. IoT & Edge Computing</h3>
+  <p><strong>Projects:</strong> Smart Home Automation, Health Monitoring, Predictive Maintenance<br>
+     <strong>Skills:</strong> Arduino/Raspberry Pi, MQTT, Cloud Integration</p>
+
+  <h2>Student & Department Benefits</h2>
+  <ul>
+    <li>Exposure to industry-relevant technologies</li>
+    <li>Practical, team-based project development</li>
+    <li>Mentor and expert interaction</li>
+    <li>Enhanced innovation-driven department profile</li>
+  </ul>
+
     `,
     date: new Date("2025-09-13T10:00:00"),
     dateDisplay: "September 13, 2025",
-    time: "10:00 AM - 4:00 PM",
-    location: "MIT Art, Design and Technology University, Alandi",
-    image: "/img/event-mit.svg",
-    gallery: [
-      "/img/event-mit.svg",
-      "/img/contact-1.webp",
-      "/img/contact-2.webp",
-    ],
-    attendees: 320,
+    time: "",
+    location: "MIT ADT",
+    image: "/img/mit/mit.jpg",
+    gallery: ["/img/mit/mit.jpg"],
+    attendees: 100,
     category: "Technology",
     tags: ["Campus", "Workshop", "AI Systems"],
     published: true,
-    galleryOnly: true,
+    galleryOnly: false,
     speakers: [
       {
-        name: "Suresh Kadam",
-        title: "Senior AI Strategist",
-        bio: "Drives applied AI transformations across education and defense partners.",
+        name: "Shripad Punde",
+        bio: "network security /forensics/security researcher/Network security expert/Blue Teaming.",
+        image: "/img/Shripad_Punde.jpg",
       },
     ],
   },
@@ -188,31 +155,36 @@ export const events = [
     description:
       "Smart India Hackathon prep clinic covering ideation, submission strategy, and rapid prototyping best practices.",
     content: `
-      <h2>What You Will Learn</h2>
-      <p>Mentors from Versanix and Gotham AI walk teams through solutioning frameworks, PoC scoping, and demo readiness.</p>
-      <h3>Included Clinics</h3>
+      <h2>What did Will Learn</h2>
+      <p>Mr.Shripad walked us through the process of making a great ppt, how to stand out in the pitch </p>
+      <h3>Included</h3>
       <ul>
-        <li>Problem statement deep reads with mentors</li>
-        <li>Design partner roundtables with industry evaluators</li>
+        <li>Problem statement deep dive with mentor</li>
         <li>Pitch mechanics: storytelling + live feedback</li>
       </ul>
     `,
     date: new Date("2025-09-22T11:00:00"),
     dateDisplay: "September 22, 2025",
     time: "11:00 AM - 3:00 PM",
-    location: "Gotham AI Studio, Pune",
-    image: "/img/event-sih.svg",
-    gallery: ["/img/event-sih.svg", "/img/about.webp", "/img/swordman.webp"],
-    attendees: 210,
+    location: "Intel lab, JSPM's RSCOE",
+    image: "/img/sih/sih1.jpg",
+    gallery: [
+      "/img/sih/sih1.jpg",
+      "/img/sih/sih2.jpg",
+      "/img/sih/sih3.jpg",
+      "/img/sih/sih4.jpg",
+    ],
+    attendees: 40,
     category: "Workshop",
     tags: ["SIH", "Mentorship", "Hackathon Prep"],
     published: true,
-    galleryOnly: true,
+    galleryOnly: false,
     speakers: [
       {
-        name: "Suresh Kadam",
+        name: "Shripad Punde",
         title: "Smart India Hackathon Coach",
-        bio: "Mentors national teams on ideation discipline and submission excellence.",
+        bio: "network security /forensics/security researcher/Network security expert/Blue Teaming.",
+        image: "/img/Shripad_Punde.jpg",
       },
     ],
   },
@@ -232,16 +204,17 @@ export const events = [
       </ul>
       <p>The top three teams receive paid pilot opportunities with Versanix ecosystem partners.</p>
     `,
-    date: new Date("2025-02-08T09:00:00"),
-    dateDisplay: "February 8-9, 2025",
-    time: "Starts 9:00 AM IST",
-    location: "Innovation Hub, JSPM Campus",
+    date: new Date("2026-02-08T09:00:00"),
+    dateDisplay: "February, 2026",
+    time: "will be revealed soon",
+    location: "will be revealed soon",
     image: "/img/upcomingevent.jpg",
     gallery: ["/img/upcomingevent.jpg"],
-    attendees: 180,
+    attendees: null,
     category: "Technology",
     tags: ["Hackathon", "AI Builders", "Versanix"],
     published: true,
+    galleryOnly: true,
   },
   {
     title: "Gotham AI x E-Cell Hackathon",
@@ -259,17 +232,17 @@ export const events = [
       </ul>
       <p>Showcase your MVP to a panel of 12 VCs and industry veterans.</p>
     `,
-    date: new Date("2025-03-22T10:00:00"),
-    dateDisplay: "March 22-23, 2025",
-    time: "Starts 10:00 AM IST",
-    location: "Entrepreneurship Cell Arena, Pune",
-    image: "/img/Nvidia-event.png",
-    gallery: ["/img/Nvidia-event.png"],
-    attendees: 220,
+    date: new Date("2026-03-22T10:00:00"),
+    dateDisplay: "March, 2026",
+    time: "will be revealed soon",
+    location: "will be revealed soon",
+    image: "/img/upcomingevent.jpg",
+    gallery: ["/img/upcomingevent.jpg"],
+    attendees: null,
     category: "Networking",
     tags: ["Hackathon", "Startup", "E-Cell"],
     published: true,
+    galleryOnly: true,
   },
   // Add new events here - they'll automatically be included when you run the seed script!
 ];
-
