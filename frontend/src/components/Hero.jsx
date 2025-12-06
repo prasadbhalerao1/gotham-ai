@@ -167,9 +167,9 @@ const Hero = () => {
               }}
             >
               <Button
-                id="enter-now"
-                title="Enter Now"
-                onClick={() => (window.location.href = "https://google.com")}
+                id="join-us"
+                title="JOIN US"
+                onClick={() => (window.location.href = "https://docs.google.com/forms/d/e/1FAIpQLSc3ns7PZxGni5YExgTcGIsX-f_95syZ5__7tKeA9Wt4YKLMBw/viewform")}
                 leftIcon={<TiLocationArrow />}
                 containerClass="bg-yellow-300 flex-center gap-1 text-sm sm:text-base px-6 sm:px-7 py-2 sm:py-3"
               />
