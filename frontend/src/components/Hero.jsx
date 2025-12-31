@@ -104,7 +104,7 @@ const Hero = () => {
 
   return (
     <div ref={heroRef} className="relative h-dvh w-screen overflow-x-hidden">
-      {/* Loading overlay removed for LCP optimization - Text renders immediately */}
+      {loading && <Loading />}
 
       <div className="relative z-10 h-dvh w-screen overflow-hidden rounded-lg bg-black">
         <video
