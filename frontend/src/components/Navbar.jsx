@@ -151,7 +151,13 @@ const NavBar = () => {
             aria-label="Gotham AI Home"
             className="focus:outline-none focus:ring-2 focus:ring-yellow-300/50 rounded-lg p-1"
           >
-            <img src="/img/logo.png" alt="Gotham AI Logo" className="w-8 sm:w-10 cursor-pointer hover:scale-110 transition-transform duration-300" />
+            <img 
+              src="/img/logo.png" 
+              alt="Gotham AI Logo" 
+              width="40" 
+              height="40" 
+              className="w-8 sm:w-10 h-auto cursor-pointer hover:scale-110 transition-transform duration-300" 
+            />
           </Link>
         </div>
 

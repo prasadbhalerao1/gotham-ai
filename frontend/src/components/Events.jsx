@@ -108,7 +108,7 @@ const Events = () => {
   const getCategoryColor = (category) => {
     switch (category) {
       case "Technology":
-        return "bg-blue-500";
+        return "bg-blue-600";
       case "Gaming":
         return "bg-green-500";
       case "Networking":
@@ -252,7 +252,10 @@ const Events = () => {
                 placeholder="Enter your email"
                 className="flex-1 px-4 py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-300"
               />
-              <button className="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold px-6 py-3 rounded-lg button-enhanced focus:outline-none focus:ring-4 focus:ring-yellow-300/50 transition-all duration-300">
+              <button 
+                className="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold px-6 py-3 rounded-lg button-enhanced focus:outline-none focus:ring-4 focus:ring-yellow-300/50 transition-all duration-300"
+                aria-label="Subscribe to newsletter"
+              >
                 Subscribe
               </button>
             </div>

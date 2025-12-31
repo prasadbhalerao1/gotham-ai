@@ -121,6 +121,7 @@ const Hero = () => {
           loop
           muted
           playsInline
+          preload="metadata"
           className="absolute left-0 top-0 size-full object-cover object-center"
           onLoadedData={() => setLoading(false)}
         />

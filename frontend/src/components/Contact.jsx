@@ -18,7 +18,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 const ImageClipBox = ({ src, clipClass }) => (
   <div className={clipClass}>
-    <img src={src} alt="" />
+    <img src={src} alt="" width="320" height="320" className="w-full h-full object-cover" />
   </div>
 );
 

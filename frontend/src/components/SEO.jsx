@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 const SEO = ({ title, description, keywords, canonical, type = 'website', name = 'Gotham AI' }) => {
   const siteUrl = 'https://gotham-ai.vercel.app';
   const defaultDescription = 'Gotham AI at RSCOE - The premier Versanix Community AI hub leading innovation in Deep Learning, AIML, and CSBS.';
-  const defaultKeywords = 'Gotham AI, Gotham Club, RSCOE, Versanix, AI Club, Deep Learning, Artificial Intelligence, Prasad Bhalerao';
+  const defaultKeywords = 'Gotham AI, Gotham Club, RSCOE, Versanix, AI Club, Deep Learning, Artificial Intelligence, Prasad Bhalerao, JSPM RSCOE, Rajarshi Shahu College Of Engineering, Tathawade, IIT Tathawade, Gautam AI, CSBS, Versanix Community, AIML';
   
   // Clean up title
   const fullTitle = title === name ? title : `${title} | ${name}`;

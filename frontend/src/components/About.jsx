@@ -102,6 +102,8 @@ const About = () => {
           <img
             src="img/about.webp"
             alt="Background"
+            width="1920"
+            height="1080"
             className="absolute left-0 top-0 size-full object-cover"
           />
         </div>

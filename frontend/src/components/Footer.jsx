@@ -71,6 +71,7 @@ const Footer = () => {
                           element.scrollIntoView({ behavior: 'smooth' });
                         }
                       }}
+                      aria-label={`Scroll to ${link.label}`}
                     >
                       {link.label}
                     </button>
