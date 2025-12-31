@@ -1,12 +1,12 @@
 import { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-
 import { HelmetProvider } from 'react-helmet-async';
 
 import ErrorBoundary from './components/ErrorBoundary';
 import Layout from './components/Layout';
 import HomePage from './pages/HomePage';
+import Loading from './components/Loading';
 
 const EventsPage = lazy(() => import('./pages/EventsPage'));
 const EventDetailPage = lazy(() => import('./pages/EventDetailPage'));
@@ -31,7 +31,7 @@ function App() {
       <HelmetProvider>
         <QueryClientProvider client={queryClient}>
           <Router>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<Loading />}>
             <Routes>
               <Route path="/" element={<Layout />}>
                 <Route index element={<HomePage />} />

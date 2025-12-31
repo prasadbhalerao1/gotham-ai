@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { TiLocationArrow } from "react-icons/ti";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import Button from "./Button";
+import Loading from "./Loading";
 
 const Hero = () => {
   const [currentIndex, setCurrentIndex] = useState(1);
@@ -103,15 +104,7 @@ const Hero = () => {
 
   return (
     <div ref={heroRef} className="relative h-dvh w-screen overflow-x-hidden">
-      {loading && (
-        <div className="flex-center absolute z-[100] h-dvh w-screen overflow-hidden bg-gradient-to-br from-blue-900 via-purple-900 to-black">
-          <div className="three-body">
-            <div className="three-body__dot"></div>
-            <div className="three-body__dot"></div>
-            <div className="three-body__dot"></div>
-          </div>
-        </div>
-      )}
+      {loading && <Loading />}
 
       <div className="relative z-10 h-dvh w-screen overflow-hidden rounded-lg bg-black">
         <video
