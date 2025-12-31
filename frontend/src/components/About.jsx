@@ -105,6 +105,7 @@ const About = () => {
             width="1920"
             height="1080"
             className="absolute left-0 top-0 size-full object-cover"
+            loading="lazy"
           />
         </div>
       </div>

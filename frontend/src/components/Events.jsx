@@ -162,6 +162,7 @@ const Events = () => {
                   src={event.image}
                   alt={event.title}
                   className="w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-500"
+                  loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
 
@@ -251,6 +252,7 @@ const Events = () => {
                 type="email"
                 placeholder="Enter your email"
                 className="flex-1 px-4 py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                aria-label="Email address"
               />
               <button 
                 className="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold px-6 py-3 rounded-lg button-enhanced focus:outline-none focus:ring-4 focus:ring-yellow-300/50 transition-all duration-300"

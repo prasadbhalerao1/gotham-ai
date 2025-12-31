@@ -101,6 +101,7 @@ const ContactModal = ({ isOpen, onClose }) => {
                   onClick={handleClose}
                   disabled={mutation.isPending}
                   className="absolute top-4 right-4 p-2 bg-white/20 hover:bg-white/30 rounded-full transition-colors disabled:opacity-50"
+                  aria-label="Close modal"
                 >
                   <IoCloseOutline className="w-6 h-6 text-white" />
                 </button>
@@ -149,12 +150,13 @@ const ContactModal = ({ isOpen, onClose }) => {
               <form onSubmit={handleSubmit(onSubmit)} className="p-8 space-y-6">
                 {/* Name Field */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-2">
                     Full Name <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
                     <IoPersonOutline className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                     <input
+                      id="name"
                       {...register('name')}
                       type="text"
                       placeholder="John Doe"
@@ -172,12 +174,13 @@ const ContactModal = ({ isOpen, onClose }) => {
 
                 {/* Email Field */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
                     Email Address <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
                     <IoMailOutline className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                     <input
+                      id="email"
                       {...register('email')}
                       type="email"
                       placeholder="john@example.com"
@@ -195,12 +198,13 @@ const ContactModal = ({ isOpen, onClose }) => {
 
                 {/* Phone Field (Optional) */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label htmlFor="phone" className="block text-sm font-semibold text-gray-700 mb-2">
                     Phone Number <span className="text-gray-400 text-xs">(Optional)</span>
                   </label>
                   <div className="relative">
                     <IoCallOutline className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                     <input
+                      id="phone"
                       {...register('phone')}
                       type="tel"
                       placeholder="+1 (555) 123-4567"
@@ -218,12 +222,13 @@ const ContactModal = ({ isOpen, onClose }) => {
 
                 {/* Subject Field */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label htmlFor="subject" className="block text-sm font-semibold text-gray-700 mb-2">
                     Subject <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
                     <IoDocumentTextOutline className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                     <input
+                      id="subject"
                       {...register('subject')}
                       type="text"
                       placeholder="What would you like to discuss?"
@@ -241,10 +246,11 @@ const ContactModal = ({ isOpen, onClose }) => {
 
                 {/* Message Field */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label htmlFor="message" className="block text-sm font-semibold text-gray-700 mb-2">
                     Message <span className="text-red-500">*</span>
                   </label>
                   <textarea
+                    id="message"
                     {...register('message')}
                     rows="5"
                     placeholder="Tell us more about your inquiry..."
