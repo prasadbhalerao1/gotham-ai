@@ -25,6 +25,7 @@ import {
   IoArrowForward
 } from 'react-icons/io5';
 import resourceService from '../services/resourceService';
+import SEO from '../components/SEO';
 
 const ResourcesPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -88,6 +89,11 @@ const ResourcesPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-teal-50 py-24">
+      <SEO 
+        title="Resources" 
+        description="Access curated AI benchmarks, datasets, and learning materials."
+        canonical="https://gotham-ai.vercel.app/resources"
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div

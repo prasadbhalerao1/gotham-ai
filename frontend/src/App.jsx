@@ -2,6 +2,8 @@ import { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
+import { HelmetProvider } from 'react-helmet-async';
+
 import ErrorBoundary from './components/ErrorBoundary';
 import Layout from './components/Layout';
 import HomePage from './pages/HomePage';
@@ -26,8 +28,9 @@ const queryClient = new QueryClient({
 function App() {
   return (
     <ErrorBoundary>
-      <QueryClientProvider client={queryClient}>
-        <Router>
+      <HelmetProvider>
+        <QueryClientProvider client={queryClient}>
+          <Router>
           <Suspense fallback={<div>Loading...</div>}>
             <Routes>
               <Route path="/" element={<Layout />}>
@@ -42,7 +45,8 @@ function App() {
             </Routes>
           </Suspense>
         </Router>
-      </QueryClientProvider>
+        </QueryClientProvider>
+      </HelmetProvider>
     </ErrorBoundary>
   );
 }

@@ -106,6 +106,9 @@ if (process.env.NODE_ENV === 'development') {
   }));
 }
 
+// Serve static files from public directory (for robots.txt)
+app.use(express.static('public'));
+
 // Root endpoint with visible status
 app.get('/', (req, res) => {
   console.log('✓ Root endpoint hit');

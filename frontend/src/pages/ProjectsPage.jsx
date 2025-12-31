@@ -9,6 +9,7 @@ import {
   IoChevronForward,
 } from 'react-icons/io5';
 import projectService from '../services/projectService';
+import SEO from '../components/SEO';
 
 const statusStyles = {
   'In Progress': 'bg-green-100 text-green-700',
@@ -42,6 +43,11 @@ const ProjectsPage = () => {
 
   return (
     <section className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 py-24">
+      <SEO 
+        title="Projects" 
+        description="Explore strategic AI projects and collaborations at Gotham AI Labs."
+        canonical="https://gotham-ai.vercel.app/projects"
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-white">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
