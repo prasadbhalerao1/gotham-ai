@@ -10,15 +10,21 @@ import { useRef, useState } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/all";
-import AnimatedTitle from "./AnimatedTitle";
-import Button from "./Button";
-import ContactModal from "./ContactModal";
+import AnimatedTitle from "./AnimatedTitle.jsx";
+import Button from "./Button.jsx";
+import ContactModal from "./ContactModal.jsx";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const ImageClipBox = ({ src, clipClass }) => (
   <div className={clipClass}>
-    <img src={src} alt="" width="320" height="320" className="w-full h-full object-cover" />
+    <img
+      src={src}
+      alt=""
+      width="320"
+      height="320"
+      className="w-full h-full object-cover"
+    />
   </div>
 );
 
@@ -41,7 +47,7 @@ const Contact = () => {
           start: "top 80%",
           toggleActions: "play none none reverse",
         },
-      }
+      },
     );
 
     gsap.fromTo(
@@ -58,12 +64,15 @@ const Contact = () => {
           start: "top 80%",
           toggleActions: "play none none reverse",
         },
-      }
+      },
     );
   });
 
   return (
-    <div id="contact" className="my-10 sm:my-20 min-h-96 w-screen px-4 sm:px-10">
+    <div
+      id="contact"
+      className="my-10 sm:my-20 min-h-96 w-screen px-4 sm:px-10"
+    >
       <div
         ref={containerRef}
         className="relative rounded-lg bg-black py-12 sm:py-16 md:py-24 text-blue-50 overflow-hidden"
@@ -86,7 +95,10 @@ const Contact = () => {
           />
         </div>
 
-        <div ref={contentRef} className="flex flex-col items-center text-center relative z-10 px-4">
+        <div
+          ref={contentRef}
+          className="flex flex-col items-center text-center relative z-10 px-4"
+        >
           <p className="mb-6 sm:mb-10 font-general text-[10px] sm:text-xs uppercase tracking-wider">
             Join Gotham
           </p>
@@ -104,7 +116,10 @@ const Contact = () => {
         </div>
       </div>
 
-      <ContactModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <ContactModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 };

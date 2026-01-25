@@ -10,12 +10,18 @@ body {
   background-color: #dfdff0;
   font-family: "General Sans", sans-serif;
   scroll-behavior: smooth;
+  scroll-padding-top: 80px; /* Account for fixed navbar */
   line-height: 1.6;
   color: #1a1a1a;
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+}
+
+/* Optimize scrolling performance */
+* {
+  -webkit-overflow-scrolling: touch; /* Smooth momentum scrolling on iOS */
 }
 
 @layer base {
@@ -122,8 +128,13 @@ body {
     .home-nav {
       background-color: rgba(0, 0, 0, 0.85);
     }
-    .events-nav, .about-nav {
-      background: linear-gradient( to right, rgba(30, 58, 138, 0.95), rgba(14, 116, 144, 0.95) );
+    .events-nav,
+    .about-nav {
+      background: linear-gradient(
+        to right,
+        rgba(30, 58, 138, 0.95),
+        rgba(14, 116, 144, 0.95)
+      );
     }
   }
 
@@ -374,12 +385,6 @@ body {
   }
 }
 
-.nav-3d {
-  transform-style: preserve-3d;
-  perspective: 900px;
-  will-change: transform, box-shadow, filter;
-}
-
 .nav-link-3d {
   transform: translateZ(0);
   transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -449,7 +454,7 @@ body {
     transform: translateY(-2px);
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
   }
-  
+
   .nav-item-enhanced::before {
     content: "";
     position: absolute;
@@ -568,4 +573,61 @@ body {
   100% {
     background-position: 0% 50%;
   }
+}
+
+/* Event Content Styles (Scoped & Minimal) */
+.event-content {
+  color: #374151; /* gray-700 */
+}
+
+.event-content article {
+  margin-bottom: 2.5rem;
+}
+
+.event-content h2 {
+  font-family: "General Sans", sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827; /* gray-900 */
+  margin-top: 0;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e5e7eb; /* gray-200 */
+}
+
+.event-content h3 {
+  font-family: "General Sans", sans-serif;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1f2937; /* gray-800 */
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.event-content p {
+  margin-bottom: 1rem;
+  line-height: 1.7;
+  color: #4b5563; /* gray-600 */
+}
+
+.event-content ul {
+  list-style-type: disc;
+  padding-left: 1.25rem;
+  margin-bottom: 1.5rem;
+  color: #4b5563; /* gray-600 */
+}
+
+.event-content li {
+  margin-bottom: 0.5rem;
+  padding-left: 0.25rem;
+  line-height: 1.6;
+}
+
+.event-content strong {
+  font-weight: 600;
+  color: #111827; /* gray-900 */
+}
+
+.event-content header {
+  margin-bottom: 2rem;
 }

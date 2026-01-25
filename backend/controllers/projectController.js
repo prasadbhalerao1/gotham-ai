@@ -1,14 +1,15 @@
-import Project from '../models/Project.js';
-import { AppError } from '../middleware/errorHandler.js';
+import Project from "../models/Project.js";
+import logger from "../utils/logger.js";
+import { AppError } from "../middleware/errorHandler.js";
 
 // @desc    Get all projects
 // @route   GET /api/projects
 // @access  Public
 const parseBoolean = (value, defaultValue) => {
   if (value === undefined) return defaultValue;
-  if (typeof value === 'boolean') return value;
-  if (typeof value === 'string') {
-    return value.toLowerCase() === 'true';
+  if (typeof value === "boolean") return value;
+  if (typeof value === "string") {
+    return value.toLowerCase() === "true";
   }
   return defaultValue;
 };
@@ -49,7 +50,7 @@ export const getProjectBySlug = async (req, res, next) => {
     });
 
     if (!project) {
-      throw new AppError('Project not found', 404);
+      throw new AppError("Project not found", 404);
     }
 
     res.status(200).json({
@@ -60,64 +61,3 @@ export const getProjectBySlug = async (req, res, next) => {
     next(error);
   }
 };
-
-// @desc    Create project
-// @route   POST /api/projects
-// @access  Private (future)
-export const createProject = async (req, res, next) => {
-  try {
-    const project = await Project.create(req.body);
-
-    res.status(201).json({
-      success: true,
-      data: project,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
-// @desc    Update project
-// @route   PUT /api/projects/:id
-// @access  Private (future)
-export const updateProject = async (req, res, next) => {
-  try {
-    const project = await Project.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true, runValidators: true }
-    );
-
-    if (!project) {
-      throw new AppError('Project not found', 404);
-    }
-
-    res.status(200).json({
-      success: true,
-      data: project,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
-// @desc    Delete project
-// @route   DELETE /api/projects/:id
-// @access  Private (future)
-export const deleteProject = async (req, res, next) => {
-  try {
-    const project = await Project.findByIdAndDelete(req.params.id);
-
-    if (!project) {
-      throw new AppError('Project not found', 404);
-    }
-
-    res.status(200).json({
-      success: true,
-      message: 'Project deleted successfully',
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-

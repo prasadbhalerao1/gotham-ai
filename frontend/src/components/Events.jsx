@@ -30,7 +30,7 @@ const Events = () => {
   const eventsContainerRef = useRef(null);
 
   const { data, isLoading } = useQuery({
-    queryKey: ['events'],
+    queryKey: ["events"],
     queryFn: () => eventService.getAllEvents(),
   });
 
@@ -52,19 +52,20 @@ const Events = () => {
           start: "top 85%",
           toggleActions: "play none none reverse",
         },
-      }
+      },
     );
 
     // Event cards with smooth, fast staggered animation
-    const eventCards = eventsContainerRef.current?.querySelectorAll(".event-card");
+    const eventCards =
+      eventsContainerRef.current?.querySelectorAll(".event-card");
     if (eventCards?.length) {
       gsap.set(eventCards, { transformPerspective: 1000 });
-      
+
       gsap.fromTo(
         eventCards,
-        { 
-          y: 30, 
-          opacity: 0, 
+        {
+          y: 30,
+          opacity: 0,
           scale: 0.92,
         },
         {
@@ -79,12 +80,12 @@ const Events = () => {
             start: "top 75%",
             toggleActions: "play none none reverse",
           },
-        }
+        },
       );
 
       // Smooth hover animation
       eventCards.forEach((card) => {
-        card.addEventListener('mouseenter', () => {
+        card.addEventListener("mouseenter", () => {
           gsap.to(card, {
             y: -8,
             scale: 1.02,
@@ -92,8 +93,8 @@ const Events = () => {
             ease: "power2.out",
           });
         });
-        
-        card.addEventListener('mouseleave', () => {
+
+        card.addEventListener("mouseleave", () => {
           gsap.to(card, {
             y: 0,
             scale: 1,
@@ -122,7 +123,7 @@ const Events = () => {
     <section
       ref={eventsRef}
       id="events"
-      className="relative min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-blue-50 py-20"
+      className="relative min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-blue-50 py-20 isolate"
     >
       <div className="absolute inset-0 opacity-5">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(0,0,0,0.15)_1px,transparent_0)] bg-[length:20px_20px]"></div>
@@ -135,7 +136,8 @@ const Events = () => {
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Discover exciting events, workshops, and gatherings that bring the
-            Gotham AI community together to learn, innovate, and shape the future
+            Gotham AI community together to learn, innovate, and shape the
+            future
           </p>
         </div>
 
@@ -150,78 +152,78 @@ const Events = () => {
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           >
             {eventsData.map((event) => (
-            <div
-              key={event._id || event.id}
-              className="event-card group bg-white/80 backdrop-blur rounded-3xl border border-white/40 shadow-lg hover:shadow-2xl overflow-hidden focus-within:ring-4 focus-within:ring-blue-300/50 transition-all duration-300"
-              role="article"
-              aria-labelledby={`event-title-${event._id || event.id}`}
-            >
-              <div className="relative h-56 overflow-hidden image-hover-zoom">
-                <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/20 to-blue-800/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <img
-                  src={event.image}
-                  alt={event.title}
-                  className="w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-500"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+              <div
+                key={event._id || event.id}
+                className="event-card group bg-white/80 backdrop-blur rounded-3xl border border-white/40 shadow-lg hover:shadow-2xl overflow-hidden focus-within:ring-4 focus-within:ring-blue-300/50 transition-all duration-300"
+                role="article"
+                aria-labelledby={`event-title-${event._id || event.id}`}
+              >
+                <div className="relative h-56 overflow-hidden image-hover-zoom">
+                  <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/20 to-blue-800/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <img
+                    src={event.image}
+                    alt={event.title}
+                    className="w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-500"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
 
-                {event.category && (
-                  <div className="absolute top-4 right-4">
-                    <span
-                      className={`${getCategoryColor(event.category)} text-white px-3 py-1 rounded-full text-xs font-semibold`}
-                    >
-                      {event.category}
-                    </span>
-                  </div>
-                )}
-
-                {event.attendees && (
-                  <div className="absolute bottom-4 right-4 flex items-center space-x-1 text-white text-sm">
-                    <IoPeopleOutline className="w-4 h-4" />
-                    <span>{event.attendees}</span>
-                  </div>
-                )}
-              </div>
-
-              <div className="p-6">
-                <h3
-                  id={`event-title-${event.id}`}
-                  className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors duration-300"
-                >
-                  {event.title}
-                </h3>
-
-                <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                  {event.description}
-                </p>
-
-                <div className="space-y-2 mb-4">
-                  <div className="flex items-center space-x-2 text-sm text-gray-600">
-                    <IoCalendarOutline className="w-4 h-4 text-blue-500" />
-                    <span>{event.dateDisplay}</span>
-                  </div>
-                  {event.time && (
-                    <div className="flex items-center space-x-2 text-sm text-gray-600">
-                      <IoTimeOutline className="w-4 h-4 text-cyan-500" />
-                      <span>{event.time}</span>
+                  {event.category && (
+                    <div className="absolute top-4 right-4">
+                      <span
+                        className={`${getCategoryColor(event.category)} text-white px-3 py-1 rounded-full text-xs font-semibold`}
+                      >
+                        {event.category}
+                      </span>
                     </div>
                   )}
-                  <div className="flex items-center space-x-2 text-sm text-gray-600">
-                    <IoLocationOutline className="w-4 h-4 text-green-500" />
-                    <span>{event.location}</span>
-                  </div>
+
+                  {event.attendees && (
+                    <div className="absolute bottom-4 right-4 flex items-center space-x-1 text-white text-sm">
+                      <IoPeopleOutline className="w-4 h-4" />
+                      <span>{event.attendees}</span>
+                    </div>
+                  )}
                 </div>
 
-                <Link
-                  to={`/events/${event.slug}`}
-                  className="block w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold py-3 px-4 rounded-lg button-enhanced focus:outline-none focus:ring-4 focus:ring-blue-300/50 transition-all duration-300 text-center"
-                  aria-label={`Learn more about ${event.title}`}
-                >
-                  Learn More
-                </Link>
+                <div className="p-6">
+                  <h3
+                    id={`event-title-${event.id}`}
+                    className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors duration-300"
+                  >
+                    {event.title}
+                  </h3>
+
+                  <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                    {event.description}
+                  </p>
+
+                  <div className="space-y-2 mb-4">
+                    <div className="flex items-center space-x-2 text-sm text-gray-600">
+                      <IoCalendarOutline className="w-4 h-4 text-blue-500" />
+                      <span>{event.dateDisplay}</span>
+                    </div>
+                    {event.time && (
+                      <div className="flex items-center space-x-2 text-sm text-gray-600">
+                        <IoTimeOutline className="w-4 h-4 text-cyan-500" />
+                        <span>{event.time}</span>
+                      </div>
+                    )}
+                    <div className="flex items-center space-x-2 text-sm text-gray-600">
+                      <IoLocationOutline className="w-4 h-4 text-green-500" />
+                      <span>{event.location}</span>
+                    </div>
+                  </div>
+
+                  <Link
+                    to={`/events/${event.slug}`}
+                    className="block w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold py-3 px-4 rounded-lg button-enhanced focus:outline-none focus:ring-4 focus:ring-blue-300/50 transition-all duration-300 text-center"
+                    aria-label={`Learn more about ${event.title}`}
+                  >
+                    Learn More
+                  </Link>
+                </div>
               </div>
-            </div>
             ))}
           </div>
         )}
@@ -233,8 +235,18 @@ const Events = () => {
             className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-bold text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
           >
             View All Events
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M17 8l4 4m0 0l-4 4m4-4H3"
+              />
             </svg>
           </Link>
         </div>
@@ -254,7 +266,7 @@ const Events = () => {
                 className="flex-1 px-4 py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-300"
                 aria-label="Email address"
               />
-              <button 
+              <button
                 className="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold px-6 py-3 rounded-lg button-enhanced focus:outline-none focus:ring-4 focus:ring-yellow-300/50 transition-all duration-300"
                 aria-label="Subscribe to newsletter"
               >

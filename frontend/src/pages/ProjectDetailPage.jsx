@@ -1,7 +1,7 @@
-import { useEffect, useMemo } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import { motion } from 'framer-motion';
+import { useEffect, useMemo } from "react";
+import { useParams, Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { motion } from "framer-motion";
 import {
   IoArrowBack,
   IoBriefcaseOutline,
@@ -10,24 +10,24 @@ import {
   IoRibbonOutline,
   IoPeopleOutline,
   IoCheckmarkCircleOutline,
-} from 'react-icons/io5';
-import projectService from '../services/projectService';
-import ImageGallery from 'react-image-gallery';
-import 'react-image-gallery/styles/css/image-gallery.css';
-import '../styles/gallery.css';
+} from "react-icons/io5";
+import projectService from "../services/projectService";
+import ImageGallery from "react-image-gallery";
+import "react-image-gallery/styles/css/image-gallery.css";
+import "../styles/gallery.css";
 
 const statusBadge = {
-  'In Progress': 'bg-green-100 text-green-700',
-  'Documentation Phase': 'bg-yellow-50 text-yellow-700',
-  Completed: 'bg-blue-100 text-blue-700',
-  'On Hold': 'bg-gray-100 text-gray-600',
+  "In Progress": "bg-green-100 text-green-700",
+  "Documentation Phase": "bg-yellow-50 text-yellow-700",
+  Completed: "bg-blue-100 text-blue-700",
+  "On Hold": "bg-gray-100 text-gray-600",
 };
 
 const ProjectDetailPage = () => {
   const { slug } = useParams();
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['project', slug],
+    queryKey: ["project", slug],
     queryFn: () => projectService.getProjectBySlug(slug),
   });
 
@@ -35,11 +35,14 @@ const ProjectDetailPage = () => {
 
   const overviewParagraphs = useMemo(() => {
     if (!project?.overview) return [];
-    return project.overview.split('\n').map((para) => para.trim()).filter(Boolean);
+    return project.overview
+      .split("\n")
+      .map((para) => para.trim())
+      .filter(Boolean);
   }, [project?.overview]);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
   if (isLoading) {
@@ -59,7 +62,7 @@ const ProjectDetailPage = () => {
         <div>
           <h2 className="text-3xl font-bold mb-4">Project not found</h2>
           <p className="text-slate-300 mb-6">
-            {error ? error.message : 'The requested project is unavailable.'}
+            {error ? error.message : "The requested project is unavailable."}
           </p>
           <Link
             to="/projects"
@@ -102,41 +105,49 @@ const ProjectDetailPage = () => {
           >
             <div className="p-8 space-y-6">
               <div>
-                <p className="uppercase tracking-[0.4em] text-cyan-300 text-xs mb-3">Spotlight</p>
-                <h1 className="special-font text-4xl font-black mb-2">{project.title}</h1>
+                <p className="uppercase tracking-[0.4em] text-cyan-300 text-xs mb-3">
+                  Spotlight
+                </p>
+                <h1 className="special-font text-4xl font-black mb-2">
+                  {project.title}
+                </h1>
                 <p className="text-slate-200">{project.shortDescription}</p>
               </div>
               {galleryItems.length > 0 && (
-              <div className="rounded-2xl overflow-hidden bg-white/5 p-4">
-                <div className="gallery-container">
-                  <ImageGallery
-                    items={galleryItems}
-                    showPlayButton={false}
-                    showFullscreenButton={true}
-                    autoPlay={false}
-                    showThumbnails={galleryItems.length > 1}
-                    showNav={galleryItems.length > 1}
-                    additionalClass="custom-gallery"
-                    renderItem={(item) => (
-                      <div className="gallery-slide">
-                        <img
-                          src={item.original}
-                          alt={item.originalAlt || project.title}
-                          className="gallery-image"
-                        />
-                      </div>
-                    )}
-                  />
+                <div className="rounded-2xl overflow-hidden bg-white/5 p-4">
+                  <div className="gallery-container">
+                    <ImageGallery
+                      items={galleryItems}
+                      showPlayButton={false}
+                      showFullscreenButton={true}
+                      autoPlay={false}
+                      showThumbnails={galleryItems.length > 1}
+                      showNav={galleryItems.length > 1}
+                      additionalClass="custom-gallery"
+                      renderItem={(item) => (
+                        <div className="gallery-slide">
+                          <img
+                            src={item.original}
+                            alt={item.originalAlt || project.title}
+                            className="gallery-image"
+                          />
+                        </div>
+                      )}
+                    />
+                  </div>
                 </div>
-              </div>
               )}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="bg-white/5 rounded-2xl p-4">
-                  <p className="text-xs uppercase tracking-wide text-cyan-200 font-semibold mb-1">Industry Partner</p>
+                  <p className="text-xs uppercase tracking-wide text-cyan-200 font-semibold mb-1">
+                    Industry Partner
+                  </p>
                   <p className="text-xl font-bold">{project.industryPartner}</p>
                 </div>
                 <div className="bg-white/5 rounded-2xl p-4">
-                  <p className="text-xs uppercase tracking-wide text-cyan-200 font-semibold mb-1">Status</p>
+                  <p className="text-xs uppercase tracking-wide text-cyan-200 font-semibold mb-1">
+                    Status
+                  </p>
                   <p className="text-xl font-bold">{project.status}</p>
                 </div>
               </div>
@@ -145,7 +156,10 @@ const ProjectDetailPage = () => {
                   <h2 className="text-2xl font-bold mb-4">Key Capabilities</h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {project.keyCapabilities.map((capability, index) => (
-                      <div key={index} className="flex items-start gap-3 text-slate-200">
+                      <div
+                        key={index}
+                        className="flex items-start gap-3 text-slate-200"
+                      >
                         <span className="mt-1 h-2 w-2 rounded-full bg-cyan-400"></span>
                         {capability}
                       </div>
@@ -194,15 +208,6 @@ const ProjectDetailPage = () => {
             <div className="absolute inset-0 bg-gradient-to-tr from-slate-950 via-slate-900/80 to-transparent"></div>
 
             <div className="relative z-10 p-8 sm:p-12 flex flex-col justify-end h-full">
-              <div className="flex flex-wrap items-center gap-4 mb-4 hidden">
-                <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur text-sm font-semibold">
-                  <IoBriefcaseOutline className="w-5 h-5 text-cyan-300" />
-                  {project.industryPartner}
-                </span>
-                <span className={`px-4 py-1.5 rounded-full text-sm font-semibold ${statusBadge[project.status] || 'bg-white/90 text-slate-800'}`}>
-                  {project.status}
-                </span>
-              </div>
               <h1 className="special-font text-4xl sm:text-5xl md:text-6xl font-black mb-3">
                 {project.title}
               </h1>
@@ -219,7 +224,9 @@ const ProjectDetailPage = () => {
                   <IoBusinessOutline className="w-5 h-5" />
                   Industry Partner
                 </div>
-                <p className="text-white text-lg font-bold">{project.industryPartner}</p>
+                <p className="text-white text-lg font-bold">
+                  {project.industryPartner}
+                </p>
               </div>
               <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
                 <div className="flex items-center gap-3 mb-2 text-cyan-300 font-semibold">
@@ -245,7 +252,9 @@ const ProjectDetailPage = () => {
                   <IoPeopleOutline className="w-5 h-5" />
                   Gotham AI Team
                 </div>
-                <p className="text-white text-lg font-bold">Versanix Community</p>
+                <p className="text-white text-lg font-bold">
+                  Versanix Community
+                </p>
               </div>
             </div>
 
@@ -288,7 +297,9 @@ const ProjectDetailPage = () => {
 
                 {project.keyCapabilities?.length > 0 && (
                   <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
-                    <h2 className="text-3xl font-bold mb-6">Key Capabilities</h2>
+                    <h2 className="text-3xl font-bold mb-6">
+                      Key Capabilities
+                    </h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {project.keyCapabilities.map((capability, index) => (
                         <div
@@ -310,26 +321,15 @@ const ProjectDetailPage = () => {
                     <h3 className="text-2xl font-bold mb-5">Project Team</h3>
                     <div className="space-y-4">
                       {project.projectTeam.map((member, index) => (
-                        <div key={index} className="bg-white/5 border border-white/5 rounded-2xl p-4">
-                          <p className="text-white font-semibold">{member.name}</p>
+                        <div
+                          key={index}
+                          className="bg-white/5 border border-white/5 rounded-2xl p-4"
+                        >
+                          <p className="text-white font-semibold">
+                            {member.name}
+                          </p>
                           <p className="text-cyan-300 text-sm">{member.role}</p>
                         </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {project.tags?.length > 0 && (
-                  <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
-                    <h3 className="text-2xl font-bold mb-4">Focus Tags</h3>
-                    <div className="flex flex-wrap gap-2">
-                      {project.tags.map((tag, index) => (
-                        <span
-                          key={index}
-                          className="px-3 py-1 text-sm rounded-full bg-white/10 border border-white/10"
-                        >
-                          #{tag}
-                        </span>
                       ))}
                     </div>
                   </div>
@@ -344,4 +344,3 @@ const ProjectDetailPage = () => {
 };
 
 export default ProjectDetailPage;
-

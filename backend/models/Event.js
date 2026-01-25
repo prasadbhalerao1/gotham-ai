@@ -1,10 +1,10 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const eventSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      required: [true, 'Event title is required'],
+      required: [true, "Event title is required"],
       trim: true,
     },
     slug: {
@@ -16,11 +16,11 @@ const eventSchema = new mongoose.Schema(
     },
     description: {
       type: String,
-      required: [true, 'Event description is required'],
+      required: [true, "Event description is required"],
     },
     content: {
       type: String,
-      required: [true, 'Event content is required'],
+      required: [true, "Event content is required"],
     },
     date: {
       type: Date,
@@ -41,29 +41,38 @@ const eventSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    gallery: [{
-      type: String,
-    }],
+    gallery: [
+      {
+        type: String,
+      },
+    ],
     attendees: {
       type: Number,
       default: 0,
     },
     category: {
       type: String,
-      enum: ['Technology', 'Gaming', 'Networking', 'Workshop', 'Seminar', 'Security', 'Other'],
+      enum: [
+        "Technology",
+        "Gaming",
+        "Networking",
+        "Workshop",
+        "Seminar",
+        "Security",
+        "Other",
+      ],
     },
-    speakers: [{
-      name: String,
-      title: String,
-      bio: String,
-      image: String,
-    }],
+    speakers: [
+      {
+        name: String,
+        title: String,
+        bio: String,
+        image: String,
+      },
+    ],
     registrationLink: {
       type: String,
     },
-    tags: [{
-      type: String,
-    }],
     published: {
       type: Boolean,
       default: true,
@@ -75,13 +84,13 @@ const eventSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 // Index for faster queries (slug index is auto-created by unique: true)
 eventSchema.index({ date: -1 });
 eventSchema.index({ published: 1 });
 
-const Event = mongoose.model('Event', eventSchema);
+const Event = mongoose.model("Event", eventSchema);
 
 export default Event;

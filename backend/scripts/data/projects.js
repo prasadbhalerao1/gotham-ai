@@ -21,13 +21,11 @@ Designed for industries with large on-ground operations, FAAMS eliminates attend
       "Issue reporting and escalation matrix",
       "Role-based access with full admin control",
     ],
-    projectTeam: [
-      { name: "Sanika Sadre", role: "Community Project Lead" },
-    ],
+    projectTeam: [{ name: "Sanika Sadre", role: "Community Project Lead" }],
     gallery: [],
     disableDetail: false,
     heroImage: "/img/about.webp",
-    tags: ["FieldOps", "Enterprise", "AI"],
+
     published: true,
   },
   {
@@ -53,13 +51,11 @@ Built on trusted open-source components, Derby layers people counting, behaviora
       "Web dashboard for enrollment & audit logs",
       "Secure, scalable open-source architecture",
     ],
-    projectTeam: [
-      { name: "Aayush Deshpande", role: "Project Lead" },
-    ],
+    projectTeam: [{ name: "Aayush Deshpande", role: "Project Lead" }],
     gallery: [],
     disableDetail: false,
     heroImage: "/img/contact-1.webp",
-    tags: ["Computer Vision", "Security", "Edge AI"],
+
     published: true,
   },
   {
@@ -86,7 +82,7 @@ It ensures confidentiality, integrity, and authenticity for every session, addre
     gallery: [],
     disableDetail: false,
     heroImage: "/img/contact-2.webp",
-    tags: ["Cybersecurity", "PQC", "Defense"],
+
     published: true,
   },
   {
@@ -114,13 +110,11 @@ By correlating behavior across anonymized channels, the platform accelerates inv
       "SOC/SIEM and threat intel feed integrations",
       "Secure evidence management with chain-of-custody",
     ],
-    projectTeam: [
-      { name: "Sanika Sadre", role: "Community Project Lead" },
-    ],
+    projectTeam: [{ name: "Sanika Sadre", role: "Community Project Lead" }],
     gallery: [],
     disableDetail: false,
     heroImage: "/img/swordman.webp",
-    tags: ["Cybersecurity", "Blockchain", "Forensics"],
+
     published: true,
-  }
+  },
 ];

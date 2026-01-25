@@ -11,7 +11,7 @@ export const resources = [
     image: "/img/ml-intro.jpg",
     url: "https://example.com/ml-intro",
     author: "Gotham AI Team",
-    tags: ["Machine Learning", "Beginner", "Tutorial"],
+
     featured: true,
     published: true,
   },
@@ -26,7 +26,7 @@ export const resources = [
     image: "/img/dl-course.jpg",
     url: "https://example.com/dl-course",
     author: "Andrew Ng",
-    tags: ["Deep Learning", "Course", "Neural Networks"],
+
     featured: true,
     published: true,
   },
@@ -41,7 +41,7 @@ export const resources = [
     image: "/img/nlp-tutorial.jpg",
     url: "https://example.com/nlp-tutorial",
     author: "Jane Smith",
-    tags: ["NLP", "Python", "Text Processing"],
+
     featured: true,
     published: true,
   },
@@ -56,7 +56,7 @@ export const resources = [
     image: "/img/cv-fundamentals.jpg",
     url: "https://example.com/cv-fundamentals",
     author: "Gotham AI Team",
-    tags: ["Computer Vision", "Image Processing", "OpenCV"],
+
     featured: false,
     published: true,
   },
@@ -71,7 +71,7 @@ export const resources = [
     image: "/img/tensorflow-guide.jpg",
     url: "https://example.com/tensorflow-guide",
     author: "Tech Publications",
-    tags: ["TensorFlow", "Deep Learning", "Python"],
+
     featured: false,
     published: true,
   },
@@ -86,7 +86,7 @@ export const resources = [
     image: "/img/imagenet.jpg",
     url: "https://example.com/imagenet",
     author: "Stanford University",
-    tags: ["Dataset", "Computer Vision", "Classification"],
+
     featured: false,
     published: true,
   },
@@ -101,7 +101,7 @@ export const resources = [
     image: "/img/rl-book.jpg",
     url: "https://example.com/rl-book",
     author: "Sutton & Barto",
-    tags: ["Reinforcement Learning", "Theory", "Algorithms"],
+
     featured: false,
     published: true,
   },
@@ -116,10 +116,9 @@ export const resources = [
     image: "/img/pytorch-tutorials.jpg",
     url: "https://pytorch.org/tutorials",
     author: "PyTorch Team",
-    tags: ["PyTorch", "Deep Learning", "Tutorial"],
+
     featured: true,
     published: true,
   },
   // Add new resources here - they'll automatically be included when you run the seed script!
 ];
-

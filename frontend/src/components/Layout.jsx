@@ -1,11 +1,11 @@
-import { Outlet, useLocation } from 'react-router-dom';
-import NavBar from './Navbar';
-import Footer from './Footer';
-import EventNotification from './EventNotification';
+import { Outlet, useLocation } from "react-router-dom";
+import NavBar from "./Navbar.jsx";
+import Footer from "./Footer.jsx";
+import EventNotification from "./EventNotification.jsx";
 
 const Layout = () => {
   const location = useLocation();
-  const isHomePage = location.pathname === '/';
+  const isHomePage = location.pathname === "/";
 
   return (
     <div className="relative min-h-screen w-screen overflow-x-hidden">

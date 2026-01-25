@@ -1,10 +1,10 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const projectSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      required: [true, 'Project title is required'],
+      required: [true, "Project title is required"],
       trim: true,
     },
     slug: {
@@ -25,8 +25,8 @@ const projectSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ['In Progress', 'Documentation Phase', 'Completed', 'On Hold'],
-      default: 'In Progress',
+      enum: ["In Progress", "Documentation Phase", "Completed", "On Hold"],
+      default: "In Progress",
     },
     industryPartner: {
       type: String,
@@ -52,27 +52,23 @@ const projectSchema = new mongoose.Schema(
         role: { type: String, required: true, trim: true },
       },
     ],
-    gallery: [{
-      type: String,
-    }],
+    gallery: [
+      {
+        type: String,
+      },
+    ],
     disableDetail: {
       type: Boolean,
       default: false,
     },
     heroImage: {
       type: String,
-      default: '/img/about.webp',
+      default: "/img/about.webp",
     },
     featured: {
       type: Boolean,
       default: true,
     },
-    tags: [
-      {
-        type: String,
-        trim: true,
-      },
-    ],
     published: {
       type: Boolean,
       default: true,
@@ -80,13 +76,12 @@ const projectSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 projectSchema.index({ featured: 1 });
 projectSchema.index({ published: 1 });
 
-const Project = mongoose.model('Project', projectSchema);
+const Project = mongoose.model("Project", projectSchema);
 
 export default Project;
-
