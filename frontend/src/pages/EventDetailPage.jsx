@@ -12,6 +12,7 @@ import {
 import eventService from "../services/eventService";
 import ImageGallery from "react-image-gallery";
 import "react-image-gallery/styles/css/image-gallery.css";
+import "../styles/gallery.css";
 
 const EventDetailPage = () => {
   const { slug } = useParams();
@@ -32,10 +33,10 @@ const EventDetailPage = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-cyan-50 to-blue-50">
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 via-cyan-50 to-blue-50">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 text-lg">Loading event details...</p>
+          <div className="mx-auto mb-4 size-16 animate-spin rounded-full border-y-4 border-blue-600"></div>
+          <p className="text-lg text-gray-600">Loading event details...</p>
         </div>
       </div>
     );
@@ -43,11 +44,11 @@ const EventDetailPage = () => {
 
   if (error || !event) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-cyan-50 to-blue-50 px-4">
-        <div className="text-center max-w-md">
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 via-cyan-50 to-blue-50 px-4">
+        <div className="max-w-md text-center">
           <div className="mb-6">
             <svg
-              className="w-20 h-20 mx-auto text-gray-400"
+              className="mx-auto size-20 text-gray-400"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -60,22 +61,22 @@ const EventDetailPage = () => {
               />
             </svg>
           </div>
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">
+          <h2 className="mb-4 text-3xl font-bold text-gray-900">
             Event Not Found
           </h2>
-          <p className="text-gray-600 mb-2">
+          <p className="mb-2 text-gray-600">
             {error
               ? error.message
               : "The event you're looking for doesn't exist."}
           </p>
           {error && (
-            <p className="text-sm text-gray-500 mb-8">
+            <p className="mb-8 text-sm text-gray-500">
               Please try again or contact support if the problem persists.
             </p>
           )}
           <Link
             to="/#events"
-            className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+            className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-white transition-colors hover:bg-blue-700"
           >
             <IoArrowBack /> Back to Events
           </Link>
@@ -93,48 +94,49 @@ const EventDetailPage = () => {
   if (event.galleryOnly) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-blue-50 py-24">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <div className="mb-8">
             <Link
               to="/events"
-              className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold transition-colors"
+              className="inline-flex items-center gap-2 font-semibold text-blue-600 transition-colors hover:text-blue-700"
             >
-              <IoArrowBack className="w-5 h-5" /> Back to Events
+              <IoArrowBack className="size-5" /> Back to Events
             </Link>
           </div>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="bg-white rounded-3xl shadow-2xl overflow-hidden"
+            className="overflow-hidden rounded-3xl bg-white shadow-2xl"
           >
             {/* Hero Section */}
             <div className="relative h-72">
               <img
                 src={event.image}
                 alt={event.title}
-                className="w-full h-full object-cover"
+                className="size-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
               <div className="absolute bottom-0 p-8">
-                <h1 className="special-font text-4xl sm:text-5xl font-black text-white mb-2">
+                <h1 className="special-font mb-2 text-4xl font-black text-white sm:text-5xl">
                   {event.title}
                 </h1>
               </div>
             </div>
 
-            <div className="p-8 space-y-8">
+            <div className="space-y-8 p-8">
               {/* Gallery Only view: show only gallery */}
               {/* Gallery */}
               {galleryImages.length > 0 && (
-                <div className="bg-gray-50 rounded-2xl p-6">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                <div className="rounded-2xl bg-gray-50 p-6">
+                  <h2 className="mb-4 text-2xl font-bold text-gray-900">
                     Photo Gallery
                   </h2>
                   <ImageGallery
                     items={galleryImages}
                     showPlayButton={false}
                     showFullscreenButton={true}
+                    additionalClass="custom-gallery"
                     autoPlay={false}
                   />
                 </div>
@@ -148,7 +150,7 @@ const EventDetailPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-blue-50 py-24">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Back Button */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
@@ -158,9 +160,9 @@ const EventDetailPage = () => {
         >
           <Link
             to="/#events"
-            className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold transition-colors"
+            className="inline-flex items-center gap-2 font-semibold text-blue-600 transition-colors hover:text-blue-700"
           >
-            <IoArrowBack className="w-5 h-5" /> Back to Events
+            <IoArrowBack className="size-5" /> Back to Events
           </Link>
         </motion.div>
 
@@ -169,20 +171,20 @@ const EventDetailPage = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="bg-white rounded-3xl shadow-2xl overflow-hidden mb-12"
+          className="mb-12 overflow-hidden rounded-3xl bg-white shadow-2xl"
         >
           {/* Header Image */}
           <div className="relative h-96 overflow-hidden">
             <img
               src={event.image}
               alt={event.title}
-              className="w-full h-full object-cover"
+              className="size-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
 
             {/* Title Overlay */}
-            <div className="absolute bottom-0 left-0 right-0 p-8">
-              <h1 className="special-font text-4xl sm:text-5xl md:text-6xl font-black text-white mb-4">
+            <div className="absolute inset-x-0 bottom-0 p-8">
+              <h1 className="special-font mb-4 text-4xl font-black text-white sm:text-5xl md:text-6xl">
                 {event.title}
               </h1>
             </div>
@@ -191,20 +193,20 @@ const EventDetailPage = () => {
           {/* Event Info Cards */}
           <div className="p-8">
             <div
-              className={`grid grid-cols-1 md:grid-cols-2 ${event.attendees && event.attendees > 0 ? "lg:grid-cols-4" : "lg:grid-cols-3"} gap-6 mb-8`}
+              className={`grid grid-cols-1 md:grid-cols-2 ${event.attendees && event.attendees > 0 ? "lg:grid-cols-4" : "lg:grid-cols-3"} mb-8 gap-6`}
             >
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="flex items-center gap-4 p-4 bg-blue-50 rounded-xl"
+                className="flex items-center gap-4 rounded-xl bg-blue-50 p-4"
               >
-                <div className="p-3 bg-blue-600 rounded-lg">
-                  <IoCalendarOutline className="w-6 h-6 text-white" />
+                <div className="rounded-lg bg-blue-600 p-3">
+                  <IoCalendarOutline className="size-6 text-white" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600 font-medium">Date</p>
-                  <p className="text-gray-900 font-bold">{event.dateDisplay}</p>
+                  <p className="text-sm font-medium text-gray-600">Date</p>
+                  <p className="font-bold text-gray-900">{event.dateDisplay}</p>
                 </div>
               </motion.div>
 
@@ -213,14 +215,14 @@ const EventDetailPage = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 }}
-                  className="flex items-center gap-4 p-4 bg-cyan-50 rounded-xl"
+                  className="flex items-center gap-4 rounded-xl bg-cyan-50 p-4"
                 >
-                  <div className="p-3 bg-cyan-600 rounded-lg">
-                    <IoTimeOutline className="w-6 h-6 text-white" />
+                  <div className="rounded-lg bg-cyan-600 p-3">
+                    <IoTimeOutline className="size-6 text-white" />
                   </div>
                   <div>
-                    <p className="text-sm text-gray-600 font-medium">Time</p>
-                    <p className="text-gray-900 font-bold">{event.time}</p>
+                    <p className="text-sm font-medium text-gray-600">Time</p>
+                    <p className="font-bold text-gray-900">{event.time}</p>
                   </div>
                 </motion.div>
               )}
@@ -229,14 +231,14 @@ const EventDetailPage = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="flex items-center gap-4 p-4 bg-green-50 rounded-xl"
+                className="flex items-center gap-4 rounded-xl bg-green-50 p-4"
               >
-                <div className="p-3 bg-green-600 rounded-lg">
-                  <IoLocationOutline className="w-6 h-6 text-white" />
+                <div className="rounded-lg bg-green-600 p-3">
+                  <IoLocationOutline className="size-6 text-white" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600 font-medium">Location</p>
-                  <p className="text-gray-900 font-bold">{event.location}</p>
+                  <p className="text-sm font-medium text-gray-600">Location</p>
+                  <p className="font-bold text-gray-900">{event.location}</p>
                 </div>
               </motion.div>
 
@@ -245,16 +247,16 @@ const EventDetailPage = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5 }}
-                  className="flex items-center gap-4 p-4 bg-blue-50 rounded-xl"
+                  className="flex items-center gap-4 rounded-xl bg-blue-50 p-4"
                 >
-                  <div className="p-3 bg-blue-600 rounded-lg">
-                    <IoPeopleOutline className="w-6 h-6 text-white" />
+                  <div className="rounded-lg bg-blue-600 p-3">
+                    <IoPeopleOutline className="size-6 text-white" />
                   </div>
                   <div>
-                    <p className="text-sm text-gray-600 font-medium">
+                    <p className="text-sm font-medium text-gray-600">
                       Attendees
                     </p>
-                    <p className="text-gray-900 font-bold">
+                    <p className="font-bold text-gray-900">
                       {event.attendees}+
                     </p>
                   </div>
@@ -265,7 +267,7 @@ const EventDetailPage = () => {
         </motion.div>
 
         {/* Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
           {/* Main Content */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -275,11 +277,11 @@ const EventDetailPage = () => {
           >
             {/* Description */}
             {event.description && (
-              <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
-                <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <div className="mb-8 rounded-2xl bg-white p-8 shadow-lg">
+                <h2 className="mb-4 text-3xl font-bold text-gray-900">
                   About This Event
                 </h2>
-                <p className="text-gray-700 text-lg leading-relaxed mb-6">
+                <p className="mb-6 text-lg leading-relaxed text-gray-700">
                   {event.description}
                 </p>
 
@@ -295,8 +297,8 @@ const EventDetailPage = () => {
 
             {/* Photo Gallery */}
             {galleryImages.length > 0 && (
-              <div className="bg-white rounded-2xl shadow-lg p-8">
-                <h2 className="text-3xl font-bold text-gray-900 mb-6">
+              <div className="rounded-2xl bg-white p-8 shadow-lg">
+                <h2 className="mb-6 text-3xl font-bold text-gray-900">
                   Event Gallery
                 </h2>
                 <ImageGallery
@@ -304,6 +306,7 @@ const EventDetailPage = () => {
                   showPlayButton={false}
                   showFullscreenButton={true}
                   showNav={true}
+                  additionalClass="custom-gallery"
                   autoPlay={false}
                 />
               </div>
@@ -319,8 +322,8 @@ const EventDetailPage = () => {
           >
             {/* Speakers */}
             {event.speakers && event.speakers.length > 0 && (
-              <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">
+              <div className="mb-8 rounded-2xl bg-white p-6 shadow-lg">
+                <h3 className="mb-4 text-2xl font-bold text-gray-900">
                   Speakers
                 </h3>
                 <div className="space-y-4">
@@ -330,14 +333,14 @@ const EventDetailPage = () => {
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.5 + index * 0.1 }}
-                      className="flex items-start gap-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
+                      className="flex items-start gap-4 rounded-xl bg-gray-50 p-4 transition-colors hover:bg-gray-100"
                     >
-                      <div className="w-16 h-16 rounded-full overflow-hidden flex-shrink-0 bg-gradient-to-br from-blue-600 to-cyan-600 text-white font-bold text-xl flex items-center justify-center">
+                      <div className="flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-blue-600 to-cyan-600 text-xl font-bold text-white">
                         {speaker.image ? (
                           <img
                             src={speaker.image}
                             alt={speaker.name}
-                            className="w-full h-full object-cover"
+                            className="size-full object-cover"
                           />
                         ) : (
                           speaker.name.charAt(0)

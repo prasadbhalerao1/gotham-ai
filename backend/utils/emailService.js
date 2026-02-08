@@ -1,10 +1,10 @@
-import nodemailer from 'nodemailer';
-import logger from './logger.js';
+import nodemailer from "nodemailer";
+import logger from "./logger.js";
 
 // Create transporter with Gmail configuration
 const createTransporter = () => {
   return nodemailer.createTransport({
-    host: 'smtp.gmail.com',
+    host: "smtp.gmail.com",
     port: 587,
     secure: false, // use false for STARTTLS; true for SSL on port 465
     auth: {
@@ -22,7 +22,7 @@ export const sendThankYouEmail = async (userEmail, userName) => {
     const mailOptions = {
       from: `"Gotham AI Team" <${process.env.EMAIL_USER}>`,
       to: userEmail,
-      subject: 'Thank You for Contacting Gotham AI',
+      subject: "Thank You for Contacting Gotham AI",
       html: `
         <!DOCTYPE html>
         <html>
@@ -92,7 +92,7 @@ export const sendThankYouEmail = async (userEmail, userName) => {
     logger.info(`Thank you email sent to ${userEmail}: ${info.messageId}`);
     return { success: true, messageId: info.messageId };
   } catch (error) {
-    logger.error('Error sending thank you email:', error);
+    logger.error("Error sending thank you email:", error);
     throw error;
   }
 };
@@ -158,12 +158,16 @@ export const sendAdminNotification = async (contactData) => {
               <span class="label">Email:</span>
               ${contactData.email}
             </div>
-            ${contactData.phone ? `
+            ${
+              contactData.phone
+                ? `
             <div class="field">
               <span class="label">Phone:</span>
               ${contactData.phone}
             </div>
-            ` : ''}
+            `
+                : ""
+            }
             <div class="field">
               <span class="label">Subject:</span>
               ${contactData.subject}
@@ -186,7 +190,7 @@ export const sendAdminNotification = async (contactData) => {
     logger.info(`Admin notification sent: ${info.messageId}`);
     return { success: true, messageId: info.messageId };
   } catch (error) {
-    logger.error('Error sending admin notification:', error);
+    logger.error("Error sending admin notification:", error);
     throw error;
   }
 };

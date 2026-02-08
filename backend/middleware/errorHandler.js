@@ -1,4 +1,4 @@
-import logger from '../utils/logger.js';
+import logger from "../utils/logger.js";
 
 // Custom error class
 export class AppError extends Error {
@@ -23,34 +23,45 @@ export const errorHandler = (err, req, res, next) => {
   });
 
   // Mongoose bad ObjectId
-  if (err.name === 'CastError') {
-    const message = 'Resource not found';
+  if (err.name === "CastError") {
+    const message = "Resource not found";
     error = new AppError(message, 404);
   }
 
   // Mongoose duplicate key
   if (err.code === 11000) {
-    const message = 'Duplicate field value entered';
+    const message = "Duplicate field value entered";
     error = new AppError(message, 400);
   }
 
   // Mongoose validation error
-  if (err.name === 'ValidationError') {
-    const message = Object.values(err.errors).map(val => val.message).join(', ');
+  if (err.name === "ValidationError") {
+    const message = Object.values(err.errors)
+      .map((val) => val.message)
+      .join(", ");
     error = new AppError(message, 400);
   }
 
   // Ensure CORS headers are set on error responses
-  res.setHeader('Access-Control-Allow-Origin', req.headers.origin || 'https://gotham-ai-two.vercel.app');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    req.headers.origin || "https://gotham-ai-two.vercel.app",
+  );
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, PATCH, DELETE, OPTIONS",
+  );
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Content-Type, Authorization, X-Requested-With",
+  );
 
   // Send error response
   res.status(error.statusCode || 500).json({
     success: false,
-    error: error.message || 'Server Error',
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack }),
+    error: error.message || "Server Error",
+    ...(process.env.NODE_ENV === "development" && { stack: err.stack }),
   });
 };
 

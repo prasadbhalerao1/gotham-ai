@@ -67,21 +67,21 @@ const EventsPage = () => {
         description="Discover upcoming AI workshops, seminars, and networking events at Gotham AI."
         canonical="https://gotham-ai.vercel.app/events"
       />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center mb-12"
+          className="mb-12 text-center"
         >
-          <h1 className="special-font text-5xl sm:text-6xl md:text-7xl font-black text-gray-900 mb-4">
+          <h1 className="special-font mb-4 text-5xl font-black text-gray-900 sm:text-6xl md:text-7xl">
             All{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-600">
+            <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
               Events
             </span>
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="mx-auto max-w-3xl text-xl text-gray-600">
             Discover all our exciting events, workshops, and gatherings. Join
             the Gotham AI community to learn, innovate, and shape the future.
           </p>
@@ -92,27 +92,27 @@ const EventsPage = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.6 }}
-          className="bg-white rounded-2xl shadow-xl p-6 mb-12"
+          className="mb-12 rounded-2xl bg-white p-6 shadow-xl"
         >
-          <div className="flex flex-col md:flex-row gap-4">
+          <div className="flex flex-col gap-4 md:flex-row">
             {/* Search Input */}
-            <div className="flex-1 relative">
-              <IoSearchOutline className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <div className="relative flex-1">
+              <IoSearchOutline className="absolute left-4 top-1/2 size-5 -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
                 placeholder="Search events..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none transition-colors"
+                className="w-full rounded-xl border-2 border-gray-200 py-3 pl-12 pr-4 transition-colors focus:border-blue-500 focus:outline-none"
               />
             </div>
 
             {/* Filter Button */}
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl hover:from-blue-700 hover:to-cyan-700 transition-all duration-300 font-semibold"
+              className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 px-6 py-3 font-semibold text-white transition-all duration-300 hover:from-blue-700 hover:to-cyan-700"
             >
-              <IoFilterOutline className="w-5 h-5" />
+              <IoFilterOutline className="size-5" />
               Filters
             </button>
           </div>
@@ -123,17 +123,17 @@ const EventsPage = () => {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className="mt-6 pt-6 border-t border-gray-200"
+              className="mt-6 border-t border-gray-200 pt-6"
             >
               {/* Category Filter */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <label className="mb-2 block text-sm font-semibold text-gray-700">
                   Category
                 </label>
                 <select
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:outline-none"
+                  className="w-full rounded-lg border-2 border-gray-200 px-4 py-2 focus:border-blue-500 focus:outline-none"
                 >
                   <option value="">All Categories</option>
                   {categories.map((category) => (
@@ -149,18 +149,18 @@ const EventsPage = () => {
 
         {/* Loading State */}
         {isLoading && (
-          <div className="text-center py-20">
-            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-600 mx-auto mb-4"></div>
-            <p className="text-gray-600 text-lg">Loading events...</p>
+          <div className="py-20 text-center">
+            <div className="mx-auto mb-4 size-16 animate-spin rounded-full border-y-4 border-blue-600"></div>
+            <p className="text-lg text-gray-600">Loading events...</p>
           </div>
         )}
 
         {/* Error State */}
         {error && !isLoading && (
-          <div className="text-center py-20">
+          <div className="py-20 text-center">
             <div className="mb-6">
               <svg
-                className="w-20 h-20 mx-auto text-red-500"
+                className="mx-auto size-20 text-red-500"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -173,13 +173,13 @@ const EventsPage = () => {
                 />
               </svg>
             </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">
+            <h3 className="mb-2 text-2xl font-bold text-gray-900">
               Failed to Load Events
             </h3>
-            <p className="text-gray-600 mb-6">{error.message}</p>
+            <p className="mb-6 text-gray-600">{error.message}</p>
             <button
               onClick={() => window.location.reload()}
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="rounded-lg bg-blue-600 px-6 py-3 text-white transition-colors hover:bg-blue-700"
             >
               Retry
             </button>
@@ -189,7 +189,7 @@ const EventsPage = () => {
         {/* Events Grid */}
         {!isLoading && !error && (
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+            className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3"
             variants={{
               hidden: { opacity: 0 },
               visible: {
@@ -239,7 +239,7 @@ const EventsPage = () => {
                       transition: { duration: 0.3, ease: "easeInOut" },
                     },
                   }}
-                  className="group relative bg-white/90 backdrop-blur rounded-3xl border border-white/50 shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden"
+                  className="group relative overflow-hidden rounded-3xl border border-white/50 bg-white/90 shadow-lg backdrop-blur transition-all duration-300 hover:shadow-2xl"
                   style={{ transformStyle: "preserve-3d", perspective: 1000 }}
                   whileHover={{
                     y: -12,
@@ -254,19 +254,19 @@ const EventsPage = () => {
                 >
                   {/* Event Image */}
                   <div className="relative h-56 overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-br from-blue-900/40 to-cyan-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-blue-900/40 to-cyan-500/20 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
                     <img
                       src={event.image}
                       alt={event.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      className="size-full object-cover transition-transform duration-500 group-hover:scale-110"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
 
                     {/* Category Badge */}
                     {event.category && (
-                      <div className="absolute top-4 right-4">
+                      <div className="absolute right-4 top-4">
                         <span
-                          className={`${getCategoryColor(event.category)} text-white px-3 py-1 rounded-full text-xs font-semibold`}
+                          className={`${getCategoryColor(event.category)} rounded-full px-3 py-1 text-xs font-semibold text-white`}
                         >
                           {event.category}
                         </span>
@@ -275,8 +275,8 @@ const EventsPage = () => {
 
                     {/* Attendees */}
                     {event.attendees && (
-                      <div className="absolute bottom-4 right-4 flex items-center space-x-1 text-white text-sm bg-black/30 backdrop-blur px-3 py-1 rounded-full">
-                        <IoPeopleOutline className="w-4 h-4" />
+                      <div className="absolute bottom-4 right-4 flex items-center space-x-1 rounded-full bg-black/30 px-3 py-1 text-sm text-white backdrop-blur">
+                        <IoPeopleOutline className="size-4" />
                         <span>{event.attendees}</span>
                       </div>
                     )}
@@ -284,34 +284,34 @@ const EventsPage = () => {
 
                   {/* Content */}
                   <div className="p-6">
-                    <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
+                    <h3 className="mb-3 text-xl font-bold text-gray-900 transition-colors group-hover:text-blue-600">
                       {event.title}
                     </h3>
 
-                    <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                    <p className="mb-4 line-clamp-2 text-sm text-gray-600">
                       {event.description}
                     </p>
 
-                    <div className="space-y-2 mb-4">
+                    <div className="mb-4 space-y-2">
                       <div className="flex items-center space-x-2 text-sm text-gray-600">
-                        <IoCalendarOutline className="w-4 h-4 text-blue-500" />
+                        <IoCalendarOutline className="size-4 text-blue-500" />
                         <span>{event.dateDisplay}</span>
                       </div>
                       {event.time && (
                         <div className="flex items-center space-x-2 text-sm text-gray-600">
-                          <IoTimeOutline className="w-4 h-4 text-cyan-500" />
+                          <IoTimeOutline className="size-4 text-cyan-500" />
                           <span>{event.time}</span>
                         </div>
                       )}
                       <div className="flex items-center space-x-2 text-sm text-gray-600">
-                        <IoLocationOutline className="w-4 h-4 text-green-500" />
+                        <IoLocationOutline className="size-4 text-green-500" />
                         <span>{event.location}</span>
                       </div>
                     </div>
 
                     <Link
                       to={`/events/${event.slug}`}
-                      className="block w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 text-center"
+                      className="block w-full rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 px-4 py-3 text-center font-semibold text-white transition-all duration-300 hover:from-blue-700 hover:to-cyan-700"
                     >
                       Learn More
                     </Link>
@@ -327,11 +327,11 @@ const EventsPage = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-center py-20"
+            className="py-20 text-center"
           >
             <div className="mb-6">
               <svg
-                className="w-20 h-20 mx-auto text-gray-400"
+                className="mx-auto size-20 text-gray-400"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -344,10 +344,10 @@ const EventsPage = () => {
                 />
               </svg>
             </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">
+            <h3 className="mb-2 text-2xl font-bold text-gray-900">
               No Events Found
             </h3>
-            <p className="text-gray-600 mb-6">
+            <p className="mb-6 text-gray-600">
               Try adjusting your search or filters
             </p>
             <button
@@ -355,7 +355,7 @@ const EventsPage = () => {
                 setSearchQuery("");
                 setSelectedCategory("");
               }}
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold"
+              className="rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white transition-colors hover:bg-blue-700"
             >
               Clear Filters
             </button>
@@ -363,13 +363,13 @@ const EventsPage = () => {
         )}
 
         {/* Back to Home */}
-        <div className="text-center mt-16">
+        <div className="mt-16 text-center">
           <Link
             to="/"
-            className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold transition-colors"
+            className="inline-flex items-center gap-2 font-semibold text-blue-600 transition-colors hover:text-blue-700"
           >
             <svg
-              className="w-5 h-5"
+              className="size-5"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"

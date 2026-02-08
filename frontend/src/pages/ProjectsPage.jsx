@@ -48,23 +48,23 @@ const ProjectsPage = () => {
         description="Explore strategic AI projects and collaborations at Gotham AI Labs."
         canonical="https://gotham-ai.vercel.app/projects"
       />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-white">
+      <div className="mx-auto max-w-7xl px-4 text-white sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-14"
+          className="mb-14 text-center"
         >
-          <p className="uppercase tracking-[0.4em] text-blue-300 text-xs sm:text-sm mb-3">
+          <p className="mb-3 text-xs uppercase tracking-[0.4em] text-blue-300 sm:text-sm">
             Gotham AI Labs
           </p>
-          <h1 className="special-font text-4xl sm:text-5xl md:text-6xl font-black mb-5">
+          <h1 className="special-font mb-5 text-4xl font-black sm:text-5xl md:text-6xl">
             Strategic{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-500">
+            <span className="bg-gradient-to-r from-cyan-300 to-blue-500 bg-clip-text text-transparent">
               Projects
             </span>
           </h1>
-          <p className="text-slate-300 text-lg max-w-3xl mx-auto">
+          <p className="mx-auto max-w-3xl text-lg text-slate-300">
             Explore the flagship collaborations we are building with industry,
             defense, and community partners across India.
           </p>
@@ -74,36 +74,36 @@ const ProjectsPage = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1, duration: 0.5 }}
-          className="bg-white/5 border border-white/10 rounded-3xl p-6 backdrop-blur"
+          className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur"
         >
           <div className="relative">
-            <IoSearchOutline className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+            <IoSearchOutline className="absolute left-5 top-1/2 size-5 -translate-y-1/2 text-slate-400" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search projects, partners, or statuses"
-              className="w-full bg-transparent border border-white/10 rounded-2xl py-3 pl-12 pr-4 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-400"
+              className="w-full rounded-2xl border border-white/10 bg-transparent py-3 pl-12 pr-4 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-400"
             />
           </div>
         </motion.div>
 
         {isLoading && (
-          <div className="text-center py-24">
-            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-cyan-400 mx-auto mb-4"></div>
-            <p className="text-slate-300 text-lg">
+          <div className="py-24 text-center">
+            <div className="mx-auto mb-4 size-16 animate-spin rounded-full border-y-4 border-cyan-400"></div>
+            <p className="text-lg text-slate-300">
               Fetching project portfolio...
             </p>
           </div>
         )}
 
         {error && !isLoading && (
-          <div className="text-center py-24">
-            <h3 className="text-2xl font-bold mb-3">Unable to load projects</h3>
-            <p className="text-slate-400 mb-6">{error.message}</p>
+          <div className="py-24 text-center">
+            <h3 className="mb-3 text-2xl font-bold">Unable to load projects</h3>
+            <p className="mb-6 text-slate-400">{error.message}</p>
             <button
               onClick={() => window.location.reload()}
-              className="px-6 py-3 rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-500 font-semibold"
+              className="rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-500 px-6 py-3 font-semibold"
             >
               Retry
             </button>
@@ -112,7 +112,7 @@ const ProjectsPage = () => {
 
         {!isLoading && !error && (
           <motion.div
-            className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8"
+            className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-2"
             initial="hidden"
             animate="visible"
             variants={{
@@ -136,41 +136,41 @@ const ProjectsPage = () => {
                     },
                   }}
                   whileHover={{ y: -6 }}
-                  className="relative overflow-hidden rounded-2xl bg-slate-800/50 border border-slate-700/50 p-8 hover:border-cyan-500/30 transition-colors duration-300"
+                  className="relative overflow-hidden rounded-2xl border border-slate-700/50 bg-slate-800/50 p-8 transition-colors duration-300 hover:border-cyan-500/30"
                 >
                   {/* Subtle top accent line */}
-                  <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" />
+                  <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" />
 
-                  <div className="relative z-10 flex items-center justify-between flex-wrap gap-3 mb-6">
-                    <span className="inline-flex items-center gap-2 text-sm text-cyan-200 font-semibold">
-                      <IoBriefcaseOutline className="w-5 h-5" />
+                  <div className="relative z-10 mb-6 flex flex-wrap items-center justify-between gap-3">
+                    <span className="inline-flex items-center gap-2 text-sm font-semibold text-cyan-200">
+                      <IoBriefcaseOutline className="size-5" />
                       {project.industryPartner}
                     </span>
                     <span
-                      className={`text-xs font-semibold px-3 py-1 rounded-full ${statusStyles[project.status] || "bg-slate-100 text-slate-700"}`}
+                      className={`rounded-full px-3 py-1 text-xs font-semibold ${statusStyles[project.status] || "bg-slate-100 text-slate-700"}`}
                     >
                       {project.status}
                     </span>
                   </div>
 
-                  <h3 className="text-2xl font-bold text-white mb-4">
+                  <h3 className="mb-4 text-2xl font-bold text-white">
                     {project.title}
                   </h3>
-                  <p className="text-slate-300 mb-6 min-h-[72px]">
+                  <p className="mb-6 min-h-[72px] text-slate-300">
                     {project.shortDescription}
                   </p>
 
-                  <div className="flex items-center gap-3 text-sm text-slate-400 mb-8">
-                    <IoPeopleOutline className="w-5 h-5 text-cyan-300" />
+                  <div className="mb-8 flex items-center gap-3 text-sm text-slate-400">
+                    <IoPeopleOutline className="size-5 text-cyan-300" />
                     <span>Gotham AI – Versanix Community</span>
                   </div>
 
                   <Link
                     to={`/projects/${project.slug}`}
-                    className="relative inline-flex w-full items-center justify-between px-5 py-3 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 font-semibold text-white hover:from-cyan-400 hover:to-blue-500 transition-all"
+                    className="relative inline-flex w-full items-center justify-between rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 px-5 py-3 font-semibold text-white transition-all hover:from-cyan-400 hover:to-blue-500"
                   >
                     Learn More
-                    <IoChevronForward className="w-5 h-5" />
+                    <IoChevronForward className="size-5" />
                   </Link>
                 </motion.article>
               ))}
@@ -179,16 +179,16 @@ const ProjectsPage = () => {
         )}
 
         {!isLoading && !error && filteredProjects.length === 0 && (
-          <div className="text-center py-24">
-            <h3 className="text-2xl font-bold mb-4">
+          <div className="py-24 text-center">
+            <h3 className="mb-4 text-2xl font-bold">
               No projects match that search yet.
             </h3>
-            <p className="text-slate-400 mb-6">
+            <p className="mb-6 text-slate-400">
               Try a different keyword or partner.
             </p>
             <button
               onClick={() => setSearchQuery("")}
-              className="px-6 py-3 rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-500 font-semibold"
+              className="rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-500 px-6 py-3 font-semibold"
             >
               Clear Search
             </button>

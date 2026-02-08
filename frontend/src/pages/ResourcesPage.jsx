@@ -31,17 +31,17 @@ const ResourcesPage = () => {
   const getTypeIcon = (type) => {
     switch (type) {
       case "article":
-        return <IoDocumentTextOutline className="w-5 h-5" />;
+        return <IoDocumentTextOutline className="size-5" />;
       case "tutorial":
-        return <IoCodeSlashOutline className="w-5 h-5" />;
+        return <IoCodeSlashOutline className="size-5" />;
       case "video":
-        return <IoVideocamOutline className="w-5 h-5" />;
+        return <IoVideocamOutline className="size-5" />;
       case "book":
-        return <IoBookOutline className="w-5 h-5" />;
+        return <IoBookOutline className="size-5" />;
       case "course":
-        return <IoTrophyOutline className="w-5 h-5" />;
+        return <IoTrophyOutline className="size-5" />;
       default:
-        return <IoDocumentTextOutline className="w-5 h-5" />;
+        return <IoDocumentTextOutline className="size-5" />;
     }
   };
 
@@ -65,24 +65,24 @@ const ResourcesPage = () => {
         description="Access curated AI benchmarks, datasets, and learning materials."
         canonical="https://gotham-ai.vercel.app/resources"
       />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-14"
+          className="mb-14 text-center"
         >
-          <p className="uppercase tracking-[0.4em] text-blue-600 text-xs sm:text-sm mb-3">
+          <p className="mb-3 text-xs uppercase tracking-[0.4em] text-blue-600 sm:text-sm">
             Gotham AI Labs
           </p>
-          <h1 className="special-font text-4xl sm:text-5xl md:text-6xl font-black text-gray-900 mb-5">
+          <h1 className="special-font mb-5 text-4xl font-black text-gray-900 sm:text-5xl md:text-6xl">
             AI{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-600">
+            <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
               Resources
             </span>
           </h1>
-          <p className="text-gray-600 text-lg max-w-3xl mx-auto">
+          <p className="mx-auto max-w-3xl text-lg text-gray-600">
             Curated collection of AI/ML resources, tutorials, courses, and study
             materials to accelerate your learning journey
           </p>
@@ -93,34 +93,34 @@ const ResourcesPage = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1, duration: 0.5 }}
-          className="bg-white/60 border border-gray-200 rounded-3xl p-6 backdrop-blur mb-12"
+          className="mb-12 rounded-3xl border border-gray-200 bg-white/60 p-6 backdrop-blur"
         >
           <div className="relative">
-            <IoSearchOutline className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <IoSearchOutline className="absolute left-5 top-1/2 size-5 -translate-y-1/2 text-gray-400" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search resources, topics, or categories..."
-              className="w-full bg-white border border-gray-200 rounded-2xl py-3 pl-12 pr-4 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-2xl border border-gray-200 bg-white py-3 pl-12 pr-4 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
         </motion.div>
 
         {/* Loading State */}
         {isLoading && (
-          <div className="text-center py-20">
-            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-600 mx-auto mb-4"></div>
-            <p className="text-gray-600 text-lg">Loading resources...</p>
+          <div className="py-20 text-center">
+            <div className="mx-auto mb-4 size-16 animate-spin rounded-full border-y-4 border-blue-600"></div>
+            <p className="text-lg text-gray-600">Loading resources...</p>
           </div>
         )}
 
         {/* Error State */}
         {error && !isLoading && (
-          <div className="text-center py-20">
+          <div className="py-20 text-center">
             <div className="mb-6">
               <svg
-                className="w-20 h-20 mx-auto text-red-500"
+                className="mx-auto size-20 text-red-500"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -133,13 +133,13 @@ const ResourcesPage = () => {
                 />
               </svg>
             </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">
+            <h3 className="mb-2 text-2xl font-bold text-gray-900">
               Failed to Load Resources
             </h3>
-            <p className="text-gray-600 mb-6">{error.message}</p>
+            <p className="mb-6 text-gray-600">{error.message}</p>
             <button
               onClick={() => window.location.reload()}
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="rounded-lg bg-blue-600 px-6 py-3 text-white transition-colors hover:bg-blue-700"
             >
               Retry
             </button>
@@ -149,7 +149,7 @@ const ResourcesPage = () => {
         {/* Resources Grid */}
         {!isLoading && !error && (
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 gap-8"
+            className="grid grid-cols-1 gap-8 md:grid-cols-2"
             initial="hidden"
             animate="visible"
             variants={{
@@ -173,43 +173,43 @@ const ResourcesPage = () => {
                     },
                   }}
                   whileHover={{ y: -6 }}
-                  className="relative overflow-hidden rounded-2xl bg-white border border-gray-200 p-8 hover:border-blue-400 transition-colors duration-300"
+                  className="relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-8 transition-colors duration-300 hover:border-blue-400"
                 >
                   {/* Subtle top accent line */}
-                  <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-500/50 to-transparent" />
+                  <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-blue-500/50 to-transparent" />
 
-                  <div className="relative z-10 flex items-center justify-between flex-wrap gap-3 mb-6">
-                    <span className="inline-flex items-center gap-2 text-sm text-blue-600 font-semibold">
+                  <div className="relative z-10 mb-6 flex flex-wrap items-center justify-between gap-3">
+                    <span className="inline-flex items-center gap-2 text-sm font-semibold text-blue-600">
                       {getTypeIcon(resource.type)}
                       {resource.type}
                     </span>
                     <span
-                      className={`text-xs font-semibold px-3 py-1 rounded-full ${getDifficultyColor(resource.difficulty)}`}
+                      className={`rounded-full px-3 py-1 text-xs font-semibold ${getDifficultyColor(resource.difficulty)}`}
                     >
                       {resource.difficulty}
                     </span>
                   </div>
 
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                  <h3 className="mb-4 text-2xl font-bold text-gray-900">
                     {resource.title}
                   </h3>
-                  <p className="text-gray-600 mb-6 min-h-[72px]">
+                  <p className="mb-6 min-h-[72px] text-gray-600">
                     {resource.description}
                   </p>
 
                   {resource.author && (
-                    <div className="flex items-center gap-3 text-sm text-gray-500 mb-8">
-                      <IoDocumentTextOutline className="w-5 h-5 text-blue-500" />
+                    <div className="mb-8 flex items-center gap-3 text-sm text-gray-500">
+                      <IoDocumentTextOutline className="size-5 text-blue-500" />
                       <span>By {resource.author}</span>
                     </div>
                   )}
 
                   <Link
                     to={`/resources/${resource.slug}`}
-                    className="relative inline-flex w-full items-center justify-between px-5 py-3 rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-600 font-semibold text-white hover:from-blue-500 hover:to-cyan-500 transition-all"
+                    className="relative inline-flex w-full items-center justify-between rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-600 px-5 py-3 font-semibold text-white transition-all hover:from-blue-500 hover:to-cyan-500"
                   >
                     Learn More
-                    <IoArrowForward className="w-5 h-5" />
+                    <IoArrowForward className="size-5" />
                   </Link>
                 </motion.article>
               ))}
@@ -222,18 +222,18 @@ const ResourcesPage = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-center py-20"
+            className="py-20 text-center"
           >
-            <div className="text-6xl mb-4">🔍</div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">
+            <div className="mb-4 text-6xl">🔍</div>
+            <h3 className="mb-2 text-2xl font-bold text-gray-900">
               No Resources Found
             </h3>
-            <p className="text-gray-600 mb-6">
+            <p className="mb-6 text-gray-600">
               Try adjusting your search or filters
             </p>
             <button
               onClick={() => setSearchQuery("")}
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="rounded-lg bg-blue-600 px-6 py-3 text-white transition-colors hover:bg-blue-700"
             >
               Clear Search
             </button>

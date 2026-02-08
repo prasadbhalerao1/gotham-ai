@@ -1,11 +1,3 @@
-/*
- * KEY CHANGES:
- * 1. Fixed countdown timer bug - now uses date from currentEvent.date instead of hardcoded value
- * 2. Integrated date-fns library for reliable date calculations
- * 3. Imports event data from centralized data file
- * 4. Improved animation easing functions for smoother transitions
- */
-
 import { useState, useEffect } from "react";
 import { IoClose } from "react-icons/io5";
 import {
@@ -16,12 +8,22 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import gsap from "gsap";
-import { differenceInDays, differenceInHours, differenceInMinutes, differenceInSeconds, parseISO } from "date-fns";
+import {
+  differenceInDays,
+  differenceInHours,
+  differenceInMinutes,
+  differenceInSeconds,
+  parseISO,
+} from "date-fns";
 import eventService from "../services/eventService";
+
+let hasSeenAnimation = false;
+let isNotificationClosed = false;
 
 const EventNotification = () => {
   const navigate = useNavigate();
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(!isNotificationClosed);
+
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -29,9 +31,8 @@ const EventNotification = () => {
     seconds: 0,
   });
 
-  // Fetch events from API
   const { data } = useQuery({
-    queryKey: ['events'],
+    queryKey: ["events"],
     queryFn: () => eventService.getAllEvents(),
   });
 
@@ -63,11 +64,25 @@ const EventNotification = () => {
 
   useEffect(() => {
     if (isVisible) {
-      gsap.fromTo(
-        ".event-notification",
-        { y: -100, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1, ease: "expo.out" }
-      );
+      if (hasSeenAnimation) {
+        // If already seen in this session (navigated back), show immediately without animation
+        gsap.set(".event-notification", { y: 0, opacity: 1 });
+      } else {
+        // If first time (or refresh), animate and set flag
+        gsap.fromTo(
+          ".event-notification",
+          { y: -100, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 1,
+            ease: "expo.out",
+            onComplete: () => {
+              hasSeenAnimation = true;
+            },
+          },
+        );
+      }
     }
   }, [isVisible]);
 
@@ -77,121 +92,139 @@ const EventNotification = () => {
       opacity: 0,
       duration: 0.6,
       ease: "power2.in",
-      onComplete: () => setIsVisible(false),
+      onComplete: () => {
+        setIsVisible(false);
+        isNotificationClosed = true;
+      },
     });
   };
 
-  // Don't show if no event data or not visible
   if (!isVisible || !currentEvent) return null;
 
   return (
-    <div className="event-notification fixed top-20 left-0 right-0 z-40 bg-gradient-to-r from-blue-900/95 via-purple-900/95 to-blue-900/95 backdrop-blur-md border-b border-blue-500/30 shadow-2xl">
-      <div className="max-w-7xl mx-auto px-4 py-3">
-        <div className="flex items-center justify-between">
+    <div
+      className="event-notification fixed inset-x-2 top-[4.5rem] z-40 rounded-xl border border-white/20 bg-black/75 backdrop-blur-xl sm:inset-x-4 sm:top-24"
+      style={{
+        boxShadow:
+          "0 12px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 0 30px rgba(59, 130, 246, 0.1)",
+      }}
+    >
+      <div className="relative mx-auto max-w-7xl px-3 py-3 sm:px-4 sm:py-3">
+        <button
+          onClick={handleClose}
+          className="absolute right-3 top-3 text-gray-400 sm:hidden"
+        >
+          <IoClose className="size-5" />
+        </button>
+
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center space-x-4">
-            <div className="hidden sm:block relative">
+            <div className="relative hidden sm:block">
               <img
                 src={currentEvent.image}
                 alt="Current Event"
-                className="w-12 h-12 rounded-lg object-cover border-2 border-blue-400/50"
+                className="size-12 rounded-lg border-2 border-blue-400/50 object-cover"
               />
             </div>
 
-            <div className="flex-1">
-              <div className="flex items-center space-x-2 mb-1">
+            <div className="flex-1 pr-6 sm:pr-0">
+              <h3 className="mb-1 text-sm font-bold text-white sm:mb-1 sm:text-lg sm:font-semibold">
+                {currentEvent.title}
+              </h3>
+
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs sm:text-sm">
                 <div className="flex items-center space-x-1 text-yellow-300">
-                  <IoCalendarOutline className="w-4 h-4" />
-                  <span className="text-sm font-medium">
+                  <IoCalendarOutline className="size-3 sm:size-4" />
+                  <span className="font-medium">
                     {currentEvent.dateDisplay}
                   </span>
                 </div>
                 <div className="flex items-center space-x-1 text-blue-300">
-                  <IoTimeOutline className="w-4 h-4" />
-                  <span className="text-sm">{currentEvent.time}</span>
+                  <IoTimeOutline className="size-3 sm:size-4" />
+                  <span>{currentEvent.time}</span>
                 </div>
                 <div className="flex items-center space-x-1 text-green-300">
-                  <IoLocationOutline className="w-4 h-4" />
-                  <span className="text-sm">{currentEvent.location}</span>
+                  <IoLocationOutline className="size-3 sm:size-4" />
+                  <span>{currentEvent.location}</span>
                 </div>
               </div>
 
-              <h3 className="text-white font-semibold text-lg mb-1">
-                {currentEvent.title}
-              </h3>
-
-              <p className="text-gray-300 text-sm max-w-2xl">
+              <p className="hidden max-w-2xl text-sm text-gray-300 sm:mt-1 sm:block">
                 {currentEvent.description}
               </p>
             </div>
           </div>
 
-          <div className="hidden md:flex items-center space-x-3 mr-4">
+          <div className="mr-4 hidden items-center space-x-3 md:flex">
             <div className="text-center">
-              <div className="countdown-item bg-blue-600/50 rounded-lg px-3 py-2 min-w-[60px]">
-                <div className="text-white font-bold text-lg">
+              <div className="countdown-item min-w-[60px] rounded-lg bg-blue-600/50 px-3 py-2">
+                <div className="text-lg font-bold text-white">
                   {timeLeft.days}
                 </div>
-                <div className="text-blue-200 text-xs">Days</div>
+                <div className="text-xs text-blue-200">Days</div>
               </div>
             </div>
             <div className="text-center">
-              <div className="countdown-item bg-blue-600/50 rounded-lg px-3 py-2 min-w-[60px]">
-                <div className="text-white font-bold text-lg">
+              <div className="countdown-item min-w-[60px] rounded-lg bg-blue-600/50 px-3 py-2">
+                <div className="text-lg font-bold text-white">
                   {timeLeft.hours}
                 </div>
-                <div className="text-blue-200 text-xs">Hours</div>
+                <div className="text-xs text-blue-200">Hours</div>
               </div>
             </div>
             <div className="text-center">
-              <div className="countdown-item bg-green-600/50 rounded-lg px-3 py-2 min-w-[60px]">
-                <div className="text-white font-bold text-lg">
+              <div className="countdown-item min-w-[60px] rounded-lg bg-green-600/50 px-3 py-2">
+                <div className="text-lg font-bold text-white">
                   {timeLeft.minutes}
                 </div>
-                <div className="text-green-200 text-xs">Mins</div>
+                <div className="text-xs text-green-200">Mins</div>
               </div>
             </div>
           </div>
 
-          <div className="flex items-center space-x-3">
+          <div className="hidden items-center space-x-3 sm:flex">
             <button
               onClick={() => navigate(`/events/${currentEvent.slug}`)}
-              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg transition-all duration-200 text-sm hover:scale-105"
+              className="rounded-lg bg-blue-500 px-4 py-2 text-sm font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-blue-600"
             >
               Learn More
             </button>
             <button
               onClick={handleClose}
-              className="text-gray-400 hover:text-white transition-colors duration-200 p-1 hover:scale-110"
+              className="p-1 text-gray-400 transition-colors duration-200 hover:scale-110 hover:text-white"
             >
-              <IoClose className="w-5 h-5" />
+              <IoClose className="size-5" />
             </button>
           </div>
-        </div>
 
-        <div className="md:hidden mt-3 flex justify-center space-x-2">
-          <div className="text-center">
-            <div className="countdown-item bg-blue-600/50 rounded px-2 py-1">
-              <div className="text-white font-bold text-sm">
-                {timeLeft.days}
+          <div className="mt-3 flex items-center justify-between gap-4 sm:hidden">
+            <div className="flex flex-1 justify-start space-x-2">
+              <div className="min-w-[40px] rounded bg-blue-900/60 px-2 py-1 text-center backdrop-blur-sm">
+                <span className="block text-sm font-bold text-white">
+                  {timeLeft.days}
+                </span>
+                <span className="block text-[8px] text-blue-200">Days</span>
               </div>
-              <div className="text-blue-200 text-xs">Days</div>
-            </div>
-          </div>
-          <div className="text-center">
-            <div className="countdown-item bg-blue-600/50 rounded px-2 py-1">
-              <div className="text-white font-bold text-sm">
-                {timeLeft.hours}
+              <div className="min-w-[40px] rounded bg-blue-900/60 px-2 py-1 text-center backdrop-blur-sm">
+                <span className="block text-sm font-bold text-white">
+                  {timeLeft.hours}
+                </span>
+                <span className="block text-[8px] text-blue-200">Hrs</span>
               </div>
-              <div className="text-blue-200 text-xs">Hours</div>
-            </div>
-          </div>
-          <div className="text-center">
-            <div className="countdown-item bg-green-600/50 rounded px-2 py-1">
-              <div className="text-white font-bold text-sm">
-                {timeLeft.minutes}
+              <div className="min-w-[40px] rounded bg-green-900/60 px-2 py-1 text-center backdrop-blur-sm">
+                <span className="block text-sm font-bold text-white">
+                  {timeLeft.minutes}
+                </span>
+                <span className="block text-[8px] text-green-200">Mins</span>
               </div>
-              <div className="text-green-200 text-xs">Mins</div>
             </div>
+
+            <button
+              onClick={() => navigate(`/events/${currentEvent.slug}`)}
+              className="shrink-0 rounded-full bg-blue-600 px-4 py-1.5 text-xs font-bold text-white shadow-lg transition-transform hover:bg-blue-500 active:scale-95"
+            >
+              Learn More
+            </button>
           </div>
         </div>
       </div>

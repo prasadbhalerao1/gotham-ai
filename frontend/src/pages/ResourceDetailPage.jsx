@@ -21,10 +21,10 @@ const ResourceDetailPage = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-cyan-50 to-teal-50">
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 via-cyan-50 to-teal-50">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 text-lg">Loading resource...</p>
+          <div className="mx-auto mb-4 size-16 animate-spin rounded-full border-y-4 border-blue-600"></div>
+          <p className="text-lg text-gray-600">Loading resource...</p>
         </div>
       </div>
     );
@@ -32,17 +32,17 @@ const ResourceDetailPage = () => {
 
   if (error || !resource) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-cyan-50 to-teal-50">
-        <div className="text-center px-4">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 via-cyan-50 to-teal-50">
+        <div className="px-4 text-center">
+          <h2 className="mb-4 text-3xl font-bold text-gray-900">
             Resource Not Found
           </h2>
-          <p className="text-gray-600 mb-8">
-            The resource you're looking for doesn't exist.
+          <p className="mb-8 text-gray-600">
+            The resource you&apos;re looking for doesn&apos;t exist.
           </p>
           <Link
             to="/resources"
-            className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+            className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-white transition-colors hover:bg-blue-700"
           >
             <IoArrowBack /> Back to Resources
           </Link>
@@ -66,7 +66,7 @@ const ResourceDetailPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-teal-50 py-24">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
         {/* Back Button */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
@@ -76,9 +76,9 @@ const ResourceDetailPage = () => {
         >
           <Link
             to="/resources"
-            className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold transition-colors"
+            className="inline-flex items-center gap-2 font-semibold text-blue-600 transition-colors hover:text-blue-700"
           >
-            <IoArrowBack className="w-5 h-5" /> Back to Resources
+            <IoArrowBack className="size-5" /> Back to Resources
           </Link>
         </motion.div>
 
@@ -87,31 +87,31 @@ const ResourceDetailPage = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="bg-white rounded-3xl shadow-2xl overflow-hidden"
+          className="overflow-hidden rounded-3xl bg-white shadow-2xl"
         >
           {/* Header */}
-          <div className="relative h-80 bg-gradient-to-br from-blue-600 via-cyan-600 to-teal-600 p-8 flex flex-col justify-end">
+          <div className="relative flex h-80 flex-col justify-end bg-gradient-to-br from-blue-600 via-cyan-600 to-teal-600 p-8">
             <div className="relative z-10">
-              <div className="flex items-center gap-3 mb-4">
-                <span className="text-xs font-semibold text-white/90 uppercase tracking-wide bg-white/20 px-3 py-1 rounded-full backdrop-blur-sm">
+              <div className="mb-4 flex items-center gap-3">
+                <span className="rounded-full bg-white/20 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white/90 backdrop-blur-sm">
                   {resource.category}
                 </span>
                 <span
-                  className={`text-xs font-semibold px-3 py-1 rounded-full ${getDifficultyColor(resource.difficulty)}`}
+                  className={`rounded-full px-3 py-1 text-xs font-semibold ${getDifficultyColor(resource.difficulty)}`}
                 >
                   {resource.difficulty}
                 </span>
-                <span className="text-xs font-semibold text-white/90 uppercase tracking-wide bg-white/20 px-3 py-1 rounded-full backdrop-blur-sm">
+                <span className="rounded-full bg-white/20 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white/90 backdrop-blur-sm">
                   {resource.type}
                 </span>
               </div>
 
-              <h1 className="text-4xl sm:text-5xl font-black text-white mb-4">
+              <h1 className="mb-4 text-4xl font-black text-white sm:text-5xl">
                 {resource.title}
               </h1>
 
               {resource.author && (
-                <p className="text-white/90 text-lg">
+                <p className="text-lg text-white/90">
                   By <span className="font-semibold">{resource.author}</span>
                 </p>
               )}
@@ -120,15 +120,15 @@ const ResourceDetailPage = () => {
 
           {/* Action Bar */}
           {resource.url && (
-            <div className="bg-gray-50 px-8 py-4 flex items-center justify-end border-b border-gray-200">
+            <div className="flex items-center justify-end border-b border-gray-200 bg-gray-50 px-8 py-4">
               <a
                 href={resource.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold px-6 py-2 rounded-lg transition-all duration-300"
+                className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600 px-6 py-2 font-semibold text-white transition-all duration-300 hover:from-blue-700 hover:to-cyan-700"
               >
                 Access Resource
-                <IoOpenOutline className="w-5 h-5" />
+                <IoOpenOutline className="size-5" />
               </a>
             </div>
           )}
@@ -137,10 +137,10 @@ const ResourceDetailPage = () => {
           <div className="p-8">
             {/* Description */}
             <div className="mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="mb-4 text-2xl font-bold text-gray-900">
                 About This Resource
               </h2>
-              <p className="text-gray-700 text-lg leading-relaxed">
+              <p className="text-lg leading-relaxed text-gray-700">
                 {resource.description}
               </p>
             </div>
@@ -148,7 +148,7 @@ const ResourceDetailPage = () => {
             {/* Detailed Content */}
             {resource.content && (
               <div className="mb-8">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                <h2 className="mb-4 text-2xl font-bold text-gray-900">
                   Details
                 </h2>
                 <div
@@ -160,21 +160,21 @@ const ResourceDetailPage = () => {
 
             {/* CTA */}
             {resource.url && (
-              <div className="bg-gradient-to-r from-blue-100 to-cyan-100 rounded-2xl p-8 text-center">
-                <h3 className="text-2xl font-bold text-gray-900 mb-3">
+              <div className="rounded-2xl bg-gradient-to-r from-blue-100 to-cyan-100 p-8 text-center">
+                <h3 className="mb-3 text-2xl font-bold text-gray-900">
                   Ready to Learn?
                 </h3>
-                <p className="text-gray-700 mb-6">
+                <p className="mb-6 text-gray-700">
                   Access this resource and start your learning journey today!
                 </p>
                 <a
                   href={resource.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-bold px-8 py-4 rounded-xl text-lg transition-all duration-300 transform hover:scale-105"
+                  className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 px-8 py-4 text-lg font-bold text-white transition-all duration-300 hover:scale-105 hover:from-blue-700 hover:to-cyan-700"
                 >
                   Get Started Now
-                  <IoOpenOutline className="w-6 h-6" />
+                  <IoOpenOutline className="size-6" />
                 </a>
               </div>
             )}

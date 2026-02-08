@@ -22,10 +22,10 @@ const Hero = () => {
   // Smooth spring animation for mouse movement with different speeds for layered parallax
   const smoothMouseX = useSpring(mouseX, { damping: 50, stiffness: 200 });
   const smoothMouseY = useSpring(mouseY, { damping: 50, stiffness: 200 });
-  
+
   const smoothMouseX2 = useSpring(mouseX, { damping: 40, stiffness: 150 });
   const smoothMouseY2 = useSpring(mouseY, { damping: 40, stiffness: 150 });
-  
+
   const smoothMouseX3 = useSpring(mouseX, { damping: 60, stiffness: 250 });
   const smoothMouseY3 = useSpring(mouseY, { damping: 60, stiffness: 250 });
 
@@ -42,22 +42,22 @@ const Hero = () => {
   useEffect(() => {
     const handleMouseMove = (e) => {
       if (!heroRef.current) return;
-      
+
       const rect = heroRef.current.getBoundingClientRect();
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
-      
+
       // Calculate mouse position relative to center (-1 to 1)
       const x = (e.clientX - rect.left - centerX) / centerX;
       const y = (e.clientY - rect.top - centerY) / centerY;
-      
+
       // Update motion values (multiply for desired parallax strength)
       mouseX.set(x * 20);
       mouseY.set(y * 20);
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [mouseX, mouseY]);
 
   useEffect(() => {
@@ -75,24 +75,34 @@ const Hero = () => {
       incomingVideo.play(); // Starts playing while invisible
 
       // --- Step 1 & 3: The Outgoing Video Fades & The Videos Crossfade ---
-      gsap.timeline({
-        onComplete: () => {
-          // --- Step 4: The Cycle Repeats ---
-          // The roles are flipped for the next transition
-          setIsFlipped((prev) => !prev);
-          incomingVideo.removeEventListener("canplaythrough", handleCanPlayThrough);
-        },
-      })
-      .to(outgoingVideo, { // Video A fades out
-        opacity: 0,
-        duration: 2.0,
-        ease: "none",
-      })
-      .to(incomingVideo, { // Video B fades in
-        opacity: 1,
-        duration: 2.0,
-        ease: "none",
-      }, "<"); // "<" ensures they happen at the same time
+      gsap
+        .timeline({
+          onComplete: () => {
+            // --- Step 4: The Cycle Repeats ---
+            // The roles are flipped for the next transition
+            setIsFlipped((prev) => !prev);
+            incomingVideo.removeEventListener(
+              "canplaythrough",
+              handleCanPlayThrough,
+            );
+          },
+        })
+        .to(outgoingVideo, {
+          // Video A fades out
+          opacity: 0,
+          duration: 2.0,
+          ease: "none",
+        })
+        .to(
+          incomingVideo,
+          {
+            // Video B fades in
+            opacity: 1,
+            duration: 2.0,
+            ease: "none",
+          },
+          "<",
+        ); // "<" ensures they happen at the same time
     };
 
     incomingVideo.addEventListener("canplaythrough", handleCanPlayThrough);
@@ -106,7 +116,7 @@ const Hero = () => {
     <div ref={heroRef} className="relative h-dvh w-screen overflow-x-hidden">
       {loading && <Loading />}
 
-      <div className="relative z-10 h-dvh w-screen overflow-hidden rounded-lg bg-black">
+      <div className="relative z-10 h-dvh w-screen overflow-hidden bg-black">
         <video
           ref={videoRef1}
           src="videos/hero-1.mp4"
@@ -127,13 +137,13 @@ const Hero = () => {
           className="absolute left-0 top-0 size-full object-cover object-center opacity-0"
         />
 
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/40 z-10" />
+        <div className="absolute inset-0 z-10 bg-gradient-to-b from-transparent via-transparent to-black/40" />
 
         <div className="absolute left-0 top-0 z-40 size-full">
-          <div className="mt-24 sm:mt-32 px-4 sm:px-5 md:px-10">
+          <div className="mt-24 px-4 sm:mt-32 sm:px-5 md:px-10">
             {/* Title with parallax effect */}
-            <motion.h1 
-              className="special-font hero-heading text-blue-100 mb-4 sm:mb-6"
+            <motion.h1
+              className="special-font hero-heading mb-4 text-blue-100 sm:mb-6"
               style={{
                 x: smoothMouseX,
                 y: smoothMouseY,
@@ -143,8 +153,8 @@ const Hero = () => {
             </motion.h1>
 
             {/* Subtitle with stronger parallax effect */}
-            <motion.p 
-              className="mb-6 sm:mb-8 max-w-xs sm:max-w-sm md:max-w-64 font-robert-regular text-blue-100 text-sm sm:text-base leading-relaxed"
+            <motion.p
+              className="mb-6 max-w-xs font-robert-regular text-sm leading-relaxed text-blue-100 sm:mb-8 sm:max-w-sm sm:text-base md:max-w-64"
               style={{
                 x: smoothMouseX2,
                 y: smoothMouseY2,
@@ -163,7 +173,10 @@ const Hero = () => {
               <Button
                 id="join-us"
                 title="JOIN US"
-                onClick={() => (window.location.href = "https://docs.google.com/forms/d/e/1FAIpQLSc3ns7PZxGni5YExgTcGIsX-f_95syZ5__7tKeA9Wt4YKLMBw/viewform")}
+                onClick={() =>
+                  (window.location.href =
+                    "https://docs.google.com/forms/d/e/1FAIpQLSc3ns7PZxGni5YExgTcGIsX-f_95syZ5__7tKeA9Wt4YKLMBw/viewform")
+                }
                 leftIcon={<TiLocationArrow />}
                 containerClass="bg-yellow-300 flex-center gap-1 text-sm sm:text-base px-6 sm:px-7 py-2 sm:py-3"
               />

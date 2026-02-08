@@ -4,7 +4,6 @@ import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import {
   IoArrowBack,
-  IoBriefcaseOutline,
   IoBusinessOutline,
   IoLinkOutline,
   IoRibbonOutline,
@@ -15,13 +14,6 @@ import projectService from "../services/projectService";
 import ImageGallery from "react-image-gallery";
 import "react-image-gallery/styles/css/image-gallery.css";
 import "../styles/gallery.css";
-
-const statusBadge = {
-  "In Progress": "bg-green-100 text-green-700",
-  "Documentation Phase": "bg-yellow-50 text-yellow-700",
-  Completed: "bg-blue-100 text-blue-700",
-  "On Hold": "bg-gray-100 text-gray-600",
-};
 
 const ProjectDetailPage = () => {
   const { slug } = useParams();
@@ -47,9 +39,9 @@ const ProjectDetailPage = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950">
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950">
         <div className="text-center text-white">
-          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-cyan-400 mx-auto mb-4"></div>
+          <div className="mx-auto mb-4 size-16 animate-spin rounded-full border-y-4 border-cyan-400"></div>
           <p className="text-lg">Loading project intelligence...</p>
         </div>
       </div>
@@ -58,17 +50,17 @@ const ProjectDetailPage = () => {
 
   if (error || !project) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 px-4 text-center text-white">
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 px-4 text-center text-white">
         <div>
-          <h2 className="text-3xl font-bold mb-4">Project not found</h2>
-          <p className="text-slate-300 mb-6">
+          <h2 className="mb-4 text-3xl font-bold">Project not found</h2>
+          <p className="mb-6 text-slate-300">
             {error ? error.message : "The requested project is unavailable."}
           </p>
           <Link
             to="/projects"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-500 font-semibold"
+            className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-500 px-6 py-3 font-semibold"
           >
-            <IoArrowBack className="w-5 h-5" /> Back to Projects
+            <IoArrowBack className="size-5" /> Back to Projects
           </Link>
         </div>
       </div>
@@ -83,7 +75,7 @@ const ProjectDetailPage = () => {
   if (project.disableDetail) {
     return (
       <section className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 py-24 text-white">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -92,29 +84,29 @@ const ProjectDetailPage = () => {
           >
             <Link
               to="/projects"
-              className="inline-flex items-center gap-2 text-slate-300 hover:text-white transition-colors font-semibold"
+              className="inline-flex items-center gap-2 font-semibold text-slate-300 transition-colors hover:text-white"
             >
-              <IoArrowBack className="w-5 h-5" /> Back to Projects
+              <IoArrowBack className="size-5" /> Back to Projects
             </Link>
           </motion.div>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="bg-white/10 border border-white/10 rounded-3xl shadow-2xl overflow-hidden"
+            className="overflow-hidden rounded-3xl border border-white/10 bg-white/10 shadow-2xl"
           >
-            <div className="p-8 space-y-6">
+            <div className="space-y-6 p-8">
               <div>
-                <p className="uppercase tracking-[0.4em] text-cyan-300 text-xs mb-3">
+                <p className="mb-3 text-xs uppercase tracking-[0.4em] text-cyan-300">
                   Spotlight
                 </p>
-                <h1 className="special-font text-4xl font-black mb-2">
+                <h1 className="special-font mb-2 text-4xl font-black">
                   {project.title}
                 </h1>
                 <p className="text-slate-200">{project.shortDescription}</p>
               </div>
               {galleryItems.length > 0 && (
-                <div className="rounded-2xl overflow-hidden bg-white/5 p-4">
+                <div className="overflow-hidden rounded-2xl bg-white/5 p-4">
                   <div className="gallery-container">
                     <ImageGallery
                       items={galleryItems}
@@ -137,30 +129,30 @@ const ProjectDetailPage = () => {
                   </div>
                 </div>
               )}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="bg-white/5 rounded-2xl p-4">
-                  <p className="text-xs uppercase tracking-wide text-cyan-200 font-semibold mb-1">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div className="rounded-2xl bg-white/5 p-4">
+                  <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-cyan-200">
                     Industry Partner
                   </p>
                   <p className="text-xl font-bold">{project.industryPartner}</p>
                 </div>
-                <div className="bg-white/5 rounded-2xl p-4">
-                  <p className="text-xs uppercase tracking-wide text-cyan-200 font-semibold mb-1">
+                <div className="rounded-2xl bg-white/5 p-4">
+                  <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-cyan-200">
                     Status
                   </p>
                   <p className="text-xl font-bold">{project.status}</p>
                 </div>
               </div>
               {project.keyCapabilities && (
-                <div className="bg-white/5 rounded-2xl p-6">
-                  <h2 className="text-2xl font-bold mb-4">Key Capabilities</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="rounded-2xl bg-white/5 p-6">
+                  <h2 className="mb-4 text-2xl font-bold">Key Capabilities</h2>
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                     {project.keyCapabilities.map((capability, index) => (
                       <div
                         key={index}
                         className="flex items-start gap-3 text-slate-200"
                       >
-                        <span className="mt-1 h-2 w-2 rounded-full bg-cyan-400"></span>
+                        <span className="mt-1 size-2 rounded-full bg-cyan-400"></span>
                         {capability}
                       </div>
                     ))}
@@ -176,7 +168,7 @@ const ProjectDetailPage = () => {
 
   return (
     <section className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 py-24 text-white">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -185,9 +177,9 @@ const ProjectDetailPage = () => {
         >
           <Link
             to="/projects"
-            className="inline-flex items-center gap-2 text-slate-300 hover:text-white transition-colors font-semibold"
+            className="inline-flex items-center gap-2 font-semibold text-slate-300 transition-colors hover:text-white"
           >
-            <IoArrowBack className="w-5 h-5" /> Back to Projects
+            <IoArrowBack className="size-5" /> Back to Projects
           </Link>
         </motion.div>
 
@@ -195,74 +187,74 @@ const ProjectDetailPage = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="bg-white/5 border border-white/10 rounded-3xl overflow-hidden shadow-[0_35px_80px_-35px_rgba(15,23,42,0.9)]"
+          className="overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-[0_35px_80px_-35px_rgba(15,23,42,0.9)]"
         >
           <div className="relative h-80 bg-gradient-to-br from-blue-900 to-slate-900">
             {project.heroImage && (
               <img
                 src={project.heroImage}
                 alt={project.title}
-                className="absolute inset-0 w-full h-full object-cover opacity-50"
+                className="absolute inset-0 size-full object-cover opacity-50"
               />
             )}
             <div className="absolute inset-0 bg-gradient-to-tr from-slate-950 via-slate-900/80 to-transparent"></div>
 
-            <div className="relative z-10 p-8 sm:p-12 flex flex-col justify-end h-full">
-              <h1 className="special-font text-4xl sm:text-5xl md:text-6xl font-black mb-3">
+            <div className="relative z-10 flex h-full flex-col justify-end p-8 sm:p-12">
+              <h1 className="special-font mb-3 text-4xl font-black sm:text-5xl md:text-6xl">
                 {project.title}
               </h1>
-              <p className="text-slate-200 text-lg max-w-3xl">
+              <p className="max-w-3xl text-lg text-slate-200">
                 {project.shortDescription}
               </p>
             </div>
           </div>
 
           <div className="p-8 sm:p-12">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-              <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
-                <div className="flex items-center gap-3 mb-2 text-cyan-300 font-semibold">
-                  <IoBusinessOutline className="w-5 h-5" />
+            <div className="mb-12 grid grid-cols-1 gap-6 md:grid-cols-3">
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+                <div className="mb-2 flex items-center gap-3 font-semibold text-cyan-300">
+                  <IoBusinessOutline className="size-5" />
                   Industry Partner
                 </div>
-                <p className="text-white text-lg font-bold">
+                <p className="text-lg font-bold text-white">
                   {project.industryPartner}
                 </p>
               </div>
-              <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
-                <div className="flex items-center gap-3 mb-2 text-cyan-300 font-semibold">
-                  <IoRibbonOutline className="w-5 h-5" />
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+                <div className="mb-2 flex items-center gap-3 font-semibold text-cyan-300">
+                  <IoRibbonOutline className="size-5" />
                   Source
                 </div>
-                <p className="text-white text-lg font-bold">
+                <p className="text-lg font-bold text-white">
                   {project.source}
                   {project.sourceLink && (
                     <a
                       href={project.sourceLink}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center gap-1 text-cyan-300 text-sm font-semibold ml-2 underline"
+                      className="ml-2 inline-flex items-center gap-1 text-sm font-semibold text-cyan-300 underline"
                     >
                       <IoLinkOutline /> Visit
                     </a>
                   )}
                 </p>
               </div>
-              <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
-                <div className="flex items-center gap-3 mb-2 text-cyan-300 font-semibold">
-                  <IoPeopleOutline className="w-5 h-5" />
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+                <div className="mb-2 flex items-center gap-3 font-semibold text-cyan-300">
+                  <IoPeopleOutline className="size-5" />
                   Gotham AI Team
                 </div>
-                <p className="text-white text-lg font-bold">
+                <p className="text-lg font-bold text-white">
                   Versanix Community
                 </p>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-              <div className="lg:col-span-2 space-y-8">
-                <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
-                  <h2 className="text-3xl font-bold mb-4">Overview</h2>
-                  <div className="space-y-4 text-slate-200 leading-relaxed">
+            <div className="grid grid-cols-1 gap-10 lg:grid-cols-3">
+              <div className="space-y-8 lg:col-span-2">
+                <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
+                  <h2 className="mb-4 text-3xl font-bold">Overview</h2>
+                  <div className="space-y-4 leading-relaxed text-slate-200">
                     {overviewParagraphs.map((paragraph, index) => (
                       <p key={index}>{paragraph}</p>
                     ))}
@@ -270,8 +262,8 @@ const ProjectDetailPage = () => {
                 </div>
 
                 {galleryItems.length > 0 && (
-                  <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
-                    <h2 className="text-3xl font-bold mb-6">Project Gallery</h2>
+                  <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
+                    <h2 className="mb-6 text-3xl font-bold">Project Gallery</h2>
                     <div className="gallery-container">
                       <ImageGallery
                         items={galleryItems}
@@ -296,17 +288,17 @@ const ProjectDetailPage = () => {
                 )}
 
                 {project.keyCapabilities?.length > 0 && (
-                  <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
-                    <h2 className="text-3xl font-bold mb-6">
+                  <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
+                    <h2 className="mb-6 text-3xl font-bold">
                       Key Capabilities
                     </h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                       {project.keyCapabilities.map((capability, index) => (
                         <div
                           key={index}
-                          className="flex items-start gap-3 bg-white/5 border border-white/10 rounded-2xl p-4"
+                          className="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/5 p-4"
                         >
-                          <IoCheckmarkCircleOutline className="w-6 h-6 text-cyan-300 flex-shrink-0 mt-1" />
+                          <IoCheckmarkCircleOutline className="mt-1 size-6 shrink-0 text-cyan-300" />
                           <p className="text-slate-200">{capability}</p>
                         </div>
                       ))}
@@ -317,18 +309,18 @@ const ProjectDetailPage = () => {
 
               <div className="space-y-8">
                 {project.projectTeam?.length > 0 && (
-                  <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
-                    <h3 className="text-2xl font-bold mb-5">Project Team</h3>
+                  <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
+                    <h3 className="mb-5 text-2xl font-bold">Project Team</h3>
                     <div className="space-y-4">
                       {project.projectTeam.map((member, index) => (
                         <div
                           key={index}
-                          className="bg-white/5 border border-white/5 rounded-2xl p-4"
+                          className="rounded-2xl border border-white/5 bg-white/5 p-4"
                         >
-                          <p className="text-white font-semibold">
+                          <p className="font-semibold text-white">
                             {member.name}
                           </p>
-                          <p className="text-cyan-300 text-sm">{member.role}</p>
+                          <p className="text-sm text-cyan-300">{member.role}</p>
                         </div>
                       ))}
                     </div>

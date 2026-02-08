@@ -26,11 +26,11 @@ class ErrorBoundary extends Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen flex items-center justify-center bg-black px-4">
-          <div className="max-w-2xl w-full bg-gradient-to-br from-blue-900/20 to-purple-900/20 backdrop-blur-lg border border-white/10 rounded-2xl p-8 text-center">
+        <div className="flex min-h-screen items-center justify-center bg-black px-4">
+          <div className="w-full max-w-2xl rounded-2xl border border-white/10 bg-gradient-to-br from-blue-900/20 to-purple-900/20 p-8 text-center backdrop-blur-lg">
             <div className="mb-6">
               <svg
-                className="w-20 h-20 mx-auto text-red-500"
+                className="mx-auto size-20 text-red-500"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -44,25 +44,25 @@ class ErrorBoundary extends Component {
               </svg>
             </div>
             
-            <h1 className="text-3xl font-bold text-white mb-4">
+            <h1 className="mb-4 text-3xl font-bold text-white">
               Oops! Something went wrong
             </h1>
             
-            <p className="text-blue-100/80 mb-6">
+            <p className="mb-6 text-blue-100/80">
               We're sorry for the inconvenience. The application encountered an unexpected error.
             </p>
 
             {process.env.NODE_ENV === 'development' && this.state.error && (
               <details className="mb-6 text-left">
-                <summary className="cursor-pointer text-yellow-400 hover:text-yellow-300 mb-2">
+                <summary className="mb-2 cursor-pointer text-yellow-400 hover:text-yellow-300">
                   Error Details (Development Only)
                 </summary>
-                <div className="bg-black/50 rounded-lg p-4 overflow-auto max-h-64">
-                  <p className="text-red-400 font-mono text-sm mb-2">
+                <div className="max-h-64 overflow-auto rounded-lg bg-black/50 p-4">
+                  <p className="mb-2 font-mono text-sm text-red-400">
                     {this.state.error.toString()}
                   </p>
                   {this.state.errorInfo && (
-                    <pre className="text-gray-400 font-mono text-xs">
+                    <pre className="font-mono text-xs text-gray-400">
                       {this.state.errorInfo.componentStack}
                     </pre>
                   )}
@@ -70,17 +70,17 @@ class ErrorBoundary extends Component {
               </details>
             )}
 
-            <div className="flex gap-4 justify-center">
+            <div className="flex justify-center gap-4">
               <button
                 onClick={() => window.location.href = '/'}
-                className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg font-semibold hover:from-blue-600 hover:to-purple-600 transition-all duration-300"
+                className="rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 px-6 py-3 font-semibold text-white transition-all duration-300 hover:from-blue-600 hover:to-purple-600"
               >
                 Go to Homepage
               </button>
               
               <button
                 onClick={() => window.location.reload()}
-                className="px-6 py-3 bg-white/10 text-white rounded-lg font-semibold hover:bg-white/20 transition-all duration-300"
+                className="rounded-lg bg-white/10 px-6 py-3 font-semibold text-white transition-all duration-300 hover:bg-white/20"
               >
                 Reload Page
               </button>

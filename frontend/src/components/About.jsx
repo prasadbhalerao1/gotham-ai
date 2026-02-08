@@ -1,11 +1,3 @@
-/*
- * KEY CHANGES:
- * 1. Enhanced entrance animations with professional easing functions (expo.out)
- * 2. Improved scroll-triggered animations for smooth transitions
- * 3. Added subtle fade and scale effects for visual polish
- * 4. Refined timing for more natural user experience
- */
-
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/all";
@@ -20,6 +12,7 @@ const About = () => {
   const subtextRef = useRef(null);
 
   useGSAP(() => {
+    // Text entrance animations (work on all devices)
     gsap.fromTo(
       headerRef.current,
       { y: 50, opacity: 0 },
@@ -33,7 +26,7 @@ const About = () => {
           start: "top 80%",
           toggleActions: "play none none reverse",
         },
-      }
+      },
     );
 
     gsap.fromTo(
@@ -50,9 +43,10 @@ const About = () => {
           start: "top 80%",
           toggleActions: "play none none reverse",
         },
-      }
+      },
     );
 
+    // Same animation for all devices - pin animation with clip expansion
     const clipAnimation = gsap.timeline({
       scrollTrigger: {
         trigger: "#clip",
@@ -68,14 +62,17 @@ const About = () => {
       width: "100vw",
       height: "100vh",
       borderRadius: 0,
-      ease: "power2.inOut",
+      ease: "power1.inOut", // Smoother ease for mobile
     });
   });
 
   return (
     <div id="about" className="min-h-screen w-screen">
-      <div ref={headerRef} className="relative mb-8 mt-20 sm:mt-36 flex flex-col items-center gap-5 px-4">
-        <p className="font-general text-sm uppercase md:text-[10px] text-center tracking-wider text-gray-600">
+      <div
+        ref={headerRef}
+        className="relative mb-8 mt-20 flex flex-col items-center gap-5 px-4 sm:mt-36"
+      >
+        <p className="text-center font-general text-sm uppercase tracking-wider text-gray-600 md:text-[10px]">
           Welcome to Gotham AI
         </p>
 
@@ -85,13 +82,15 @@ const About = () => {
         />
 
         <div ref={subtextRef} className="about-subtext">
-          <p className="text-center font-semibold text-gray-900">The Era of Intelligence begins — your journey into AI starts here</p>
-          <p className="text-gray-600 text-center">
+          <p className="text-center font-semibold text-gray-900">
+            The Era of Intelligence begins — your journey into AI starts here
+          </p>
+          <p className="text-center text-gray-600">
             Gotham AI unites learners, creators, and innovators to explore the
             world of artificial intelligence, building skills, projects, and the
             future together.
           </p>
-          <p className="text-gray-500 text-center text-sm mt-4 italic">
+          <p className="mt-4 text-center text-sm italic text-gray-500">
             in collaboration with Versanix Technologies
           </p>
         </div>

@@ -1,10 +1,3 @@
-/*
- * KEY CHANGES:
- * 1. (Applied Fix) Added a smooth fade-and-slide animation to the mobile menu using GSAP.
- * 2. The menu panel is no longer conditionally rendered, allowing it to be animated.
- * 3. Used the `useGSAP` hook for clean, modern animation logic.
- */
-
 import clsx from "clsx";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -18,7 +11,7 @@ const navItems = ["Event", "Projects", "About", "Contact"];
 const NavBar = () => {
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
   const [isIndicatorActive, setIsIndicatorActive] = useState(false);
-  const [activeSection, setActiveSection] = useState('home');
+  const [activeSection, setActiveSection] = useState("home");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const location = useLocation();
@@ -28,46 +21,54 @@ const NavBar = () => {
   const menuPanelRef = useRef(null); // Ref for the mobile menu panel
 
   const { ref: heroRef, inView: heroInView } = useInView({ threshold: 0.3 });
-  const { ref: eventsRef, inView: eventsInView } = useInView({ threshold: 0.3 });
+  const { ref: eventsRef, inView: eventsInView } = useInView({
+    threshold: 0.3,
+  });
   const { ref: aboutRef, inView: aboutInView } = useInView({ threshold: 0.3 });
-  const { ref: contactRef, inView: contactInView } = useInView({ threshold: 0.3 });
+  const { ref: contactRef, inView: contactInView } = useInView({
+    threshold: 0.3,
+  });
 
   // GSAP animation for the mobile menu
   useGSAP(() => {
-    gsap.set(menuPanelRef.current, { y: -20, opacity: 0, pointerEvents: 'none' });
+    gsap.set(menuPanelRef.current, {
+      y: -20,
+      opacity: 0,
+      pointerEvents: "none",
+    });
 
     if (isMenuOpen) {
       gsap.to(menuPanelRef.current, {
         y: 0,
         opacity: 1,
         duration: 0.5,
-        ease: 'expo.out',
-        pointerEvents: 'auto',
+        ease: "expo.out",
+        pointerEvents: "auto",
       });
     } else {
       gsap.to(menuPanelRef.current, {
         y: -20,
         opacity: 0,
         duration: 0.4,
-        ease: 'power2.in',
-        pointerEvents: 'none',
+        ease: "power2.in",
+        pointerEvents: "none",
       });
     }
   }, [isMenuOpen]);
 
   useEffect(() => {
-    if (contactInView) setActiveSection('contact');
-    else if (aboutInView) setActiveSection('about');
-    else if (eventsInView) setActiveSection('events');
-    else if (heroInView) setActiveSection('home');
+    if (contactInView) setActiveSection("contact");
+    else if (aboutInView) setActiveSection("about");
+    else if (eventsInView) setActiveSection("events");
+    else if (heroInView) setActiveSection("home");
   }, [heroInView, eventsInView, aboutInView, contactInView]);
 
   useEffect(() => {
     const sections = {
-      hero: document.querySelector('.hero-section-marker'),
-      events: document.getElementById('events'),
-      about: document.getElementById('about'),
-      contact: document.getElementById('contact'),
+      hero: document.querySelector(".hero-section-marker"),
+      events: document.getElementById("events"),
+      about: document.getElementById("about"),
+      contact: document.getElementById("contact"),
     };
     if (sections.hero) heroRef(sections.hero);
     if (sections.events) eventsRef(sections.events);
@@ -78,19 +79,25 @@ const NavBar = () => {
   useEffect(() => {
     if (!navContainerRef.current) return;
     const classList = navContainerRef.current.classList;
-    classList.remove("home-nav", "floating-nav", "events-nav", "about-nav", "contact-nav");
-    if (activeSection === 'home') classList.add("home-nav");
+    classList.remove(
+      "home-nav",
+      "floating-nav",
+      "events-nav",
+      "about-nav",
+      "contact-nav",
+    );
+    if (activeSection === "home") classList.add("home-nav");
     else {
       classList.add("floating-nav");
-      if (activeSection === 'events') classList.add("events-nav");
-      else if (activeSection === 'about') classList.add("about-nav");
-      else if (activeSection === 'contact') classList.add("contact-nav");
+      if (activeSection === "events") classList.add("events-nav");
+      else if (activeSection === "about") classList.add("about-nav");
+      else if (activeSection === "contact") classList.add("contact-nav");
     }
   }, [activeSection]);
 
   const toggleAudioIndicator = () => {
-    setIsAudioPlaying(prev => !prev);
-    setIsIndicatorActive(prev => !prev);
+    setIsAudioPlaying((prev) => !prev);
+    setIsIndicatorActive((prev) => !prev);
   };
 
   useEffect(() => {
@@ -102,61 +109,67 @@ const NavBar = () => {
     gsap.fromTo(
       navContainerRef.current,
       { y: -20, opacity: 0, filter: "blur(4px)" },
-      { y: 0, opacity: 1, filter: "blur(0px)", duration: 0.8, ease: "expo.out" }
+      {
+        y: 0,
+        opacity: 1,
+        filter: "blur(0px)",
+        duration: 0.8,
+        ease: "expo.out",
+      },
     );
   }, []);
 
   const handleLinkClick = (e, item) => {
     e.preventDefault();
     setIsMenuOpen(false);
-    
+
     if (item === "Event") {
-      window.location.href = '/events';
+      window.location.href = "/events";
       return;
     }
-    
+
     if (item === "Projects") {
-      window.location.href = '/projects';
+      window.location.href = "/projects";
       return;
     }
-    
+
     // For other items (About, Contact), scroll to section
     let elementId = item.toLowerCase();
-    
+
     // If not on home page, navigate to home first
-    if (location.pathname !== '/') {
+    if (location.pathname !== "/") {
       window.location.href = `/#${elementId}`;
       return;
     }
-    
+
     const element = document.getElementById(elementId);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      element.scrollIntoView({ behavior: "smooth" });
     }
   };
 
   return (
     <div
       ref={navContainerRef}
-      className="fixed inset-x-2 sm:inset-x-4 top-2 sm:top-4 z-50 h-14 sm:h-16 border-none transition-all duration-700 ease-out rounded-xl will-change-transform nav-3d"
+      className="nav-3d fixed inset-x-2 top-2 z-50 h-14 rounded-xl border-none transition-all duration-700 ease-out will-change-transform sm:inset-x-4 sm:top-4 sm:h-16"
     >
-      <header className="relative w-full h-full flex items-center justify-between px-3 sm:px-4">
+      <header className="relative flex size-full items-center justify-between px-3 sm:px-4">
         <div className="flex items-center">
           <Link
             to="/"
             onClick={() => {
-              window.scrollTo({ top: 0, behavior: 'smooth' });
+              window.scrollTo({ top: 0, behavior: "smooth" });
               setIsMenuOpen(false);
             }}
             aria-label="Gotham AI Home"
-            className="focus:outline-none focus:ring-2 focus:ring-yellow-300/50 rounded-lg p-1"
+            className="rounded-lg p-1 focus:outline-none focus:ring-2 focus:ring-yellow-300/50"
           >
-            <img 
-              src="/img/logo.png" 
-              alt="Gotham AI Logo" 
-              width="40" 
-              height="40" 
-              className="w-8 sm:w-10 h-auto cursor-pointer hover:scale-110 transition-transform duration-300" 
+            <img
+              src="/img/logo.jpg"
+              alt="Gotham AI Logo"
+              width="40"
+              height="40"
+              className="h-auto w-8 cursor-pointer transition-transform duration-300 hover:scale-110 sm:w-10"
             />
           </Link>
         </div>
@@ -169,17 +182,19 @@ const NavBar = () => {
                 item === "Event"
                   ? "/events"
                   : item === "Projects"
-                  ? "/projects"
-                  : `/#${item.toLowerCase()}`;
-              const isActive = (item === "Event" && location.pathname.startsWith("/events")) ||
-                             (item === "Projects" && location.pathname.startsWith("/projects")) ||
-                             (item === "About" && activeSection === "about") ||
-                             (item === "Contact" && activeSection === "contact");
+                    ? "/projects"
+                    : `/#${item.toLowerCase()}`;
+              const isActive =
+                (item === "Event" && location.pathname.startsWith("/events")) ||
+                (item === "Projects" &&
+                  location.pathname.startsWith("/projects")) ||
+                (item === "About" && activeSection === "about") ||
+                (item === "Contact" && activeSection === "contact");
               return (
                 <a
                   key={item}
                   href={href}
-                  className={`nav-hover-btn nav-item-enhanced nav-link-3d focus:outline-none focus:ring-2 focus:ring-yellow-300/50 rounded px-2 py-1 transition-all duration-300 ${isActive ? 'text-yellow-300 font-extrabold scale-110' : 'text-blue-50/90 font-semibold'}`}
+                  className={`nav-hover-btn nav-item-enhanced nav-link-3d rounded px-2 py-1 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-yellow-300/50 ${isActive ? "scale-110 font-extrabold text-yellow-300" : "font-semibold text-blue-50/90"}`}
                   onClick={(e) => handleLinkClick(e, item)}
                 >
                   {item}
@@ -191,25 +206,42 @@ const NavBar = () => {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="sm:hidden flex items-center justify-center w-8 h-8 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-300/50"
+            className="flex size-8 items-center justify-center rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-300/50 sm:hidden"
             aria-label="Toggle mobile menu"
           >
-            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m4 6H4" />
+            <svg
+              className="size-5 text-white"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 6h16M4 12h16m4 6H4"
+              />
             </svg>
           </button>
 
           <button
             onClick={toggleAudioIndicator}
-            className="ml-3 sm:ml-10 flex items-center space-x-0.5 focus:outline-none focus:ring-2 focus:ring-yellow-300/50 rounded p-1 hover:scale-110 transition-transform duration-300"
-            aria-label={`${isAudioPlaying ? 'Pause' : 'Play'} background music`}
+            className="ml-3 flex items-center space-x-0.5 rounded p-1 transition-transform duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-yellow-300/50 sm:ml-10"
+            aria-label={`${isAudioPlaying ? "Pause" : "Play"} background music`}
             role="button"
           >
-            <audio ref={audioElementRef} className="hidden" src="/audio/loop.mp3" loop />
+            <audio
+              ref={audioElementRef}
+              className="hidden"
+              src="/audio/loop.mp3"
+              loop
+            />
             {[1, 2, 3, 4].map((bar) => (
               <div
                 key={bar}
-                className={clsx("indicator-line", { active: isIndicatorActive })}
+                className={clsx("indicator-line", {
+                  active: isIndicatorActive,
+                })}
                 style={{ animationDelay: `${bar * 0.1}s` }}
               />
             ))}
@@ -220,7 +252,7 @@ const NavBar = () => {
       {/* Mobile Menu Panel (Now Animated) */}
       <div
         ref={menuPanelRef}
-        className="sm:hidden absolute top-[64px] left-0 right-0 mx-2 p-4 rounded-lg bg-black/80 backdrop-blur-lg border border-white/10"
+        className="absolute inset-x-0 top-[64px] mx-2 rounded-lg border border-white/10 bg-black/80 p-4 backdrop-blur-lg sm:hidden"
         onClick={(e) => e.stopPropagation()}
       >
         <nav>
@@ -230,25 +262,28 @@ const NavBar = () => {
                 item === "Event"
                   ? "/events"
                   : item === "Projects"
-                  ? "/projects"
-                  : `#${item.toLowerCase()}`;
+                    ? "/projects"
+                    : `#${item.toLowerCase()}`;
               return (
-              <li key={item}>
-                <a
-                  href={href}
-                  className="text-blue-50/90 hover:text-yellow-300 text-lg font-semibold py-2"
-                  onClick={(e) => handleLinkClick(e, item)}
-                >
-                  {item}
-                </a>
-              </li>
+                <li key={item}>
+                  <a
+                    href={href}
+                    className="py-2 text-lg font-semibold text-blue-50/90 hover:text-yellow-300"
+                    onClick={(e) => handleLinkClick(e, item)}
+                  >
+                    {item}
+                  </a>
+                </li>
               );
             })}
           </ul>
         </nav>
       </div>
 
-      <ContactModal isOpen={isContactModalOpen} onClose={() => setIsContactModalOpen(false)} />
+      <ContactModal
+        isOpen={isContactModalOpen}
+        onClose={() => setIsContactModalOpen(false)}
+      />
     </div>
   );
 };

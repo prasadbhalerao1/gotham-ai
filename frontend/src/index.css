@@ -516,7 +516,13 @@ body {
 }
 
 .event-notification {
-  animation: slideDown 0.8s ease-out;
+  /* Animation handled by GSAP in EventNotification.jsx - no CSS animation to prevent double animation on mobile */
+  opacity: 1; /* Prevent empty ruleset lint */
+}
+
+/* Mobile containment moved to base class with GSAP compatibility */
+.about-image {
+  @apply absolute left-1/2 top-0 z-10 h-[50vh] sm:h-[60vh] w-72 sm:w-96 origin-center -translate-x-1/2 overflow-hidden rounded-3xl md:z-20 md:w-[30vw];
 }
 
 @keyframes slideDown {
