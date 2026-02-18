@@ -15,11 +15,6 @@ const HomePage = () => {
   const lenisRef = useRef(null);
 
   useEffect(() => {
-    const isTouchOnly = window.matchMedia("(hover: none)").matches;
-    if (isTouchOnly) {
-      return;
-    }
-
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -39,7 +34,14 @@ const HomePage = () => {
 
     gsap.ticker.lagSmoothing(0);
 
+    // Fallback: ensure ScrollTrigger ALWAYS gets native scroll events too.
+    // On touch devices with smoothTouch:false, Lenis may not emit scroll events,
+    // but native scroll still happens. This guarantees ScrollTrigger stays in sync.
+    const onNativeScroll = () => ScrollTrigger.update();
+    window.addEventListener("scroll", onNativeScroll, { passive: true });
+
     return () => {
+      window.removeEventListener("scroll", onNativeScroll);
       gsap.ticker.remove(lenis.raf);
       lenis.destroy();
     };
