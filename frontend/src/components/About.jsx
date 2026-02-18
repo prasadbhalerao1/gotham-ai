@@ -44,28 +44,10 @@ const About = () => {
         },
       },
     );
-
-    const clipAnimation = gsap.timeline({
-      scrollTrigger: {
-        trigger: "#clip",
-        start: "center center",
-        end: "+=800 center",
-        scrub: 0.5,
-        pin: true,
-        pinSpacing: true,
-      },
-    });
-
-    clipAnimation.to(".mask-clip-path", {
-      width: "100vw",
-      height: "100dvh",
-      borderRadius: 0,
-      ease: "power1.inOut",
-    });
   });
 
   return (
-    <div id="about" className="md:min-h-screen w-screen">
+    <div id="about" className="w-screen pb-2">
       <div
         ref={headerRef}
         className="relative mb-8 mt-20 flex flex-col items-center gap-5 px-4 sm:mt-36"
@@ -91,19 +73,6 @@ const About = () => {
           <p className="mt-4 text-center text-sm italic text-gray-500">
             in collaboration with Versanix Technologies
           </p>
-        </div>
-      </div>
-
-      <div
-        className="hidden md:flex h-dvh w-screen items-center justify-center relative"
-        id="clip"
-      >
-        <div className="mask-clip-path about-image">
-          <img
-            src="img/about.webp"
-            alt="Background"
-            className="absolute left-0 top-0 size-full object-cover"
-          />
         </div>
       </div>
     </div>
