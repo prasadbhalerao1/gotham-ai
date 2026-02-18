@@ -46,23 +46,45 @@ const About = () => {
       },
     );
 
-    // Same animation for all devices - pin animation with clip expansion
-    const clipAnimation = gsap.timeline({
-      scrollTrigger: {
-        trigger: "#clip",
-        start: "center center",
-        end: "+=800 center",
-        scrub: 0.5,
-        pin: true,
-        pinSpacing: true,
-      },
+    // Use matchMedia to apply different animations for desktop vs mobile
+    // position: fixed (used by pin) is broken on real mobile browsers with Lenis
+    const mm = gsap.matchMedia();
+
+    // Desktop: full pin + expand animation (works perfectly with position: fixed)
+    mm.add("(hover: hover)", () => {
+      const clipAnimation = gsap.timeline({
+        scrollTrigger: {
+          trigger: "#clip",
+          start: "center center",
+          end: "+=800 center",
+          scrub: 0.5,
+          pin: true,
+          pinSpacing: true,
+        },
+      });
+
+      clipAnimation.to(".mask-clip-path", {
+        width: "100vw",
+        height: "100dvh",
+        borderRadius: 0,
+        ease: "power1.inOut",
+      });
     });
 
-    clipAnimation.to(".mask-clip-path", {
-      width: "100vw",
-      height: "100dvh",
-      borderRadius: 0,
-      ease: "power1.inOut", // Smoother ease for mobile
+    // Mobile (touch): non-pinned scroll expansion (no position: fixed needed)
+    mm.add("(hover: none)", () => {
+      gsap.to(".mask-clip-path", {
+        width: "100vw",
+        height: "100dvh",
+        borderRadius: 0,
+        ease: "none",
+        scrollTrigger: {
+          trigger: "#clip",
+          start: "top 60%",
+          end: "top 10%",
+          scrub: 0.5,
+        },
+      });
     });
   });
 
