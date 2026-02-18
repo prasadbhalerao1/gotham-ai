@@ -55,13 +55,12 @@ const About = () => {
         scrub: 0.5,
         pin: true,
         pinSpacing: true,
-        pinReparent: true,
       },
     });
 
     clipAnimation.to(".mask-clip-path", {
       width: "100vw",
-      height: "100svh",
+      height: "100dvh",
       borderRadius: 0,
       ease: "power1.inOut", // Smoother ease for mobile
     });
@@ -98,7 +97,7 @@ const About = () => {
       </div>
 
       <div
-        className="h-[100svh] w-screen flex items-center justify-center relative"
+        className="h-dvh w-screen flex items-center justify-center relative"
         id="clip"
       >
         <div className="mask-clip-path about-image">

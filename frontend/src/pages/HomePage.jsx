@@ -27,15 +27,20 @@ const HomePage = () => {
 
     lenisRef.current = lenis;
 
-    function raf(time) {
-      lenis.raf(time);
-      ScrollTrigger.update();
-      requestAnimationFrame(raf);
-    }
+    // Official Lenis + GSAP integration pattern:
+    // 1. ScrollTrigger updates ONLY when Lenis detects actual scroll events
+    lenis.on("scroll", ScrollTrigger.update);
 
-    requestAnimationFrame(raf);
+    // 2. Drive Lenis from GSAP's ticker (keeps them perfectly in sync)
+    gsap.ticker.add((time) => {
+      lenis.raf(time * 1000);
+    });
+
+    // 3. Prevent GSAP from compensating for frame drops (causes jank with Lenis)
+    gsap.ticker.lagSmoothing(0);
 
     return () => {
+      gsap.ticker.remove(lenis.raf);
       lenis.destroy();
     };
   }, []);
