@@ -1,10 +1,9 @@
 # 🚀 Gotham AI
 
 **Gotham AI** is a student-driven community dedicated to exploring the transformative world of Artificial Intelligence.  
-We connect learners, developers, and innovators through engaging events, workshops, and projects that foster creativity, collaboration, and technical growth.  
+We connect learners, developers, and innovators through engaging events, workshops, and projects that foster creativity, collaboration, and technical growth.
 
 Our mission is to **empower the next generation of AI enthusiasts** to turn ideas into impact — shaping the intelligent future, together.
-
 
 ## 🌟 Overview
 
@@ -74,6 +73,7 @@ Gotham AI is a comprehensive platform designed to bring together AI enthusiasts,
 ## 💻 Tech Stack
 
 ### Backend
+
 - **Runtime:** Node.js
 - **Framework:** Express.js
 - **Database:** MongoDB Atlas
@@ -84,6 +84,7 @@ Gotham AI is a comprehensive platform designed to bring together AI enthusiasts,
 - **Security:** Helmet, CORS, Rate Limiting
 
 ### Frontend
+
 - **Library:** React 18
 - **Build Tool:** Vite
 - **Routing:** React Router v6
@@ -98,7 +99,6 @@ Gotham AI is a comprehensive platform designed to bring together AI enthusiasts,
 
 ---
 
-
 ## 📁 Project Structure
 
 ```
@@ -107,23 +107,28 @@ Gotham-AI/
 │   ├── config/             # Database configuration
 │   ├── controllers/        # Request handlers
 │   ├── middleware/         # Error handling, validation
-│   ├── models/             # MongoDB schemas
+│   ├── models/             # MongoDB schemas (Contact, Event, Project, Resource)
 │   ├── routes/             # API routes
-│   ├── scripts/            # Database seeding
+│   ├── scripts/            # Database seeding + sample data
 │   ├── utils/              # Email service, logger
 │   ├── server.js           # Main server file
 │   └── package.json
 │
 ├── frontend/               # React + Vite frontend
-│   ├── public/            # Static assets
+│   ├── public/            # Static assets (images, audio)
 │   ├── src/
-│   │   ├── components/    # Reusable components
-│   │   ├── pages/         # Page components
-│   │   ├── services/      # API services
-│   │   ├── config/        # Configuration
-│   │   ├── App.jsx        # Main app
+│   │   ├── components/    # Reusable components (15 files)
+│   │   ├── pages/         # Page components (7 files)
+│   │   ├── services/      # API services (contact, event, project, resource)
+│   │   ├── config/        # Axios configuration
+│   │   ├── App.jsx        # Main app with routing
 │   │   └── main.jsx       # Entry point
 │   └── package.json
+│
+├── docs/                   # Project documentation
+│   ├── ProjectOverview.md # Architecture and tech stack overview
+│   └── content-guide.md   # How to add/update content
+│
 └── README.md              # This file
 ```
 
@@ -139,12 +144,14 @@ Gotham-AI/
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/tarun-karn/Gotham-AI.git
    cd Gotham-AI
    ```
 
 2. **Set up Backend**
+
    ```bash
    cd backend
    npm install
@@ -155,6 +162,7 @@ Gotham-AI/
    ```
 
 3. **Set up Frontend** (in a new terminal)
+
    ```bash
    cd frontend
    npm install
@@ -172,23 +180,27 @@ Gotham-AI/
 ## 🎯 Key Highlights
 
 ### Data-Driven Architecture
+
 - Add content to MongoDB → Appears automatically on website
 - No code changes needed for content updates
 - Easy to maintain and scale
 
 ### Professional Animations
+
 - GSAP for scroll-triggered animations
 - Framer Motion for page transitions
 - Lenis for smooth scrolling
 - Not overwhelming, just perfect
 
 ### Email Integration
+
 - Automatic thank you emails to users
 - Admin notifications for new contacts
 - Beautiful HTML email templates
 - Powered by Nodemailer + Gmail
 
 ### Security & Performance
+
 - Rate limiting on contact form
 - Input validation on both ends
 - CORS protection
@@ -201,28 +213,36 @@ Gotham-AI/
 ## 🚀 Key API Endpoints
 
 ### Contact
-- `POST /api/contact` - Submit contact form
-- `GET /api/contact` - Get all contacts (admin)
+
+- `POST /api/contact` - Submit contact form (rate limited: 10 per 15 min)
 
 ### Events
-- `GET /api/events` - Get all events
+
+- `GET /api/events` - Get all events (with optional filters)
 - `GET /api/events/:slug` - Get event by slug
-- `POST /api/events` - Create event (admin)
-- `PUT /api/events/:id` - Update event (admin)
-- `DELETE /api/events/:id` - Delete event (admin)
+
+### Projects
+
+- `GET /api/projects` - Get all projects (with optional filters)
+- `GET /api/projects/:slug` - Get project by slug
 
 ### Resources
-- `GET /api/resources` - Get all resources (with filters)
+
+- `GET /api/resources` - Get all resources (with filters and pagination)
 - `GET /api/resources/featured` - Get featured resources
 - `GET /api/resources/:slug` - Get resource by slug
-- `POST /api/resources` - Create resource (admin)
+
+### Other
+
+- `GET /` - Server info and endpoint list
+- `GET /health` - Health check (server + database status)
 
 ---
-
 
 ## 🔧 Environment Variables
 
 ### Backend (.env)
+
 ```env
 MONGODB_URI=your_mongodb_connection_string
 PORT=5000
@@ -234,6 +254,7 @@ JWT_SECRET=your_jwt_secret
 ```
 
 ### Frontend (.env)
+
 ```env
 VITE_API_URL=http://localhost:5000/api
 ```
@@ -243,6 +264,7 @@ VITE_API_URL=http://localhost:5000/api
 #### Backend (Vercel)
 
 1. **Push your code to GitHub**
+
    ```bash
    git add .
    git commit -m "Add Vercel deployment config"
@@ -285,6 +307,7 @@ VITE_API_URL=http://localhost:5000/api
    - Redeploy backend if needed
 
 ### Database
+
 - **MongoDB Atlas** (already cloud-based)
 - Configure network access (allow Vercel IPs or 0.0.0.0/0)
 - Set up database users
@@ -293,11 +316,13 @@ VITE_API_URL=http://localhost:5000/api
 ### Alternative Deployment Options
 
 #### Backend
+
 - **Render:** Free tier available, easy setup
 - **Railway:** Great for Node.js apps
 - **Fly.io:** Global edge deployment
 
 #### Frontend
+
 - **Netlify:** Similar to Vercel
 - **Cloudflare Pages:** Fast global CDN
 - **GitHub Pages:** Free static hosting

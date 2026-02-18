@@ -34,16 +34,19 @@ Backend API for the Gotham AI platform built with Node.js, Express, and MongoDB.
 ### Installation
 
 1. Install dependencies:
+
 ```bash
 npm install
 ```
 
 2. Create `.env` file:
+
 ```bash
 cp .env.example .env
 ```
 
 3. Update `.env` with your credentials:
+
 ```env
 # MongoDB Configuration
 MONGODB_URI=your_mongodb_connection_string
@@ -67,11 +70,13 @@ JWT_SECRET=your_jwt_secret_key
 ### Running the Server
 
 Development mode:
+
 ```bash
 npm run dev
 ```
 
 Production mode:
+
 ```bash
 npm start
 ```
@@ -79,6 +84,7 @@ npm start
 ### Seeding the Database
 
 To populate the database with sample events and resources:
+
 ```bash
 npm run seed
 ```
@@ -87,60 +93,69 @@ npm run seed
 
 ### Contact
 
-- `POST /api/contact` - Submit contact form
-- `GET /api/contact` - Get all contacts (admin)
+- `POST /api/contact` - Submit contact form (rate limited, validated)
 
 ### Events
 
-- `GET /api/events` - Get all events
+- `GET /api/events` - Get all events (with optional filters)
 - `GET /api/events/:slug` - Get event by slug
-- `POST /api/events` - Create event (admin)
-- `PUT /api/events/:id` - Update event (admin)
-- `DELETE /api/events/:id` - Delete event (admin)
+
+### Projects
+
+- `GET /api/projects` - Get all projects (with optional filters)
+- `GET /api/projects/:slug` - Get project by slug
 
 ### Resources
 
-- `GET /api/resources` - Get all resources (with filters)
+- `GET /api/resources` - Get all resources (with filters and pagination)
 - `GET /api/resources/featured` - Get featured resources
 - `GET /api/resources/:slug` - Get resource by slug
-- `POST /api/resources` - Create resource (admin)
 
 ### Health Check
 
 - `GET /health` - Server health check
+- `GET /` - Server info and endpoint list
 
 ## Project Structure
 
 ```
 backend/
 ├── config/
-│   └── database.js          # MongoDB connection
+│   └── database.js            # MongoDB connection with caching
 ├── controllers/
-│   ├── contactController.js # Contact form logic
-│   ├── eventController.js   # Event CRUD operations
-│   └── resourceController.js # Resource CRUD operations
+│   ├── contactController.js   # Contact form logic
+│   ├── eventController.js     # Event query operations
+│   ├── projectController.js   # Project query operations
+│   └── resourceController.js  # Resource query operations (with pagination)
 ├── middleware/
-│   ├── errorHandler.js      # Error handling middleware
-│   └── validators.js        # Request validation
+│   ├── errorHandler.js        # Error handling middleware
+│   └── validators.js          # Request validation (Zod)
 ├── models/
-│   ├── Contact.js           # Contact schema
-│   ├── Event.js             # Event schema
-│   └── Resource.js          # Resource schema
+│   ├── Contact.js             # Contact schema
+│   ├── Event.js               # Event schema
+│   ├── Project.js             # Project schema
+│   └── Resource.js            # Resource schema
 ├── routes/
-│   ├── contactRoutes.js     # Contact routes
-│   ├── eventRoutes.js       # Event routes
-│   └── resourceRoutes.js    # Resource routes
+│   ├── contactRoutes.js       # Contact routes (with rate limiting)
+│   ├── eventRoutes.js         # Event routes
+│   ├── projectRoutes.js       # Project routes
+│   └── resourceRoutes.js      # Resource routes
 ├── scripts/
-│   └── seed.js              # Database seeding script
+│   ├── seed.js                # Database seeding script
+│   └── data/
+│       ├── events.js          # Sample event data
+│       ├── projects.js        # Sample project data
+│       └── resources.js       # Sample resource data
 ├── utils/
-│   ├── emailService.js      # Email functionality
-│   └── logger.js            # Winston logger configuration
-├── logs/                    # Log files (auto-generated)
-├── .env.example             # Environment variables template
+│   ├── emailService.js        # Email functionality (Gmail)
+│   └── logger.js              # Winston logger configuration
+├── logs/                      # Log files (auto-generated, dev only)
+├── .env.example               # Environment variables template
 ├── .gitignore
 ├── package.json
 ├── README.md
-└── server.js                # Main application file
+├── vercel.json                # Vercel deployment configuration
+└── server.js                  # Main application file
 ```
 
 ## Email Configuration
@@ -156,15 +171,15 @@ backend/
 
 ## Environment Variables
 
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `MONGODB_URI` | MongoDB connection string | `mongodb+srv://...` |
-| `PORT` | Server port | `5000` |
-| `NODE_ENV` | Environment mode | `development` or `production` |
-| `FRONTEND_ORIGIN` | Frontend URL for CORS | `http://localhost:5173` |
-| `EMAIL_USER` | Gmail address | `your@gmail.com` |
-| `EMAIL_APP_PASSWORD` | Gmail app password | `xxxx xxxx xxxx xxxx` |
-| `JWT_SECRET` | JWT secret (future use) | `your_secret_key` |
+| Variable             | Description               | Example                       |
+| -------------------- | ------------------------- | ----------------------------- |
+| `MONGODB_URI`        | MongoDB connection string | `mongodb+srv://...`           |
+| `PORT`               | Server port               | `5000`                        |
+| `NODE_ENV`           | Environment mode          | `development` or `production` |
+| `FRONTEND_ORIGIN`    | Frontend URL for CORS     | `http://localhost:5173`       |
+| `EMAIL_USER`         | Gmail address             | `your@gmail.com`              |
+| `EMAIL_APP_PASSWORD` | Gmail app password        | `xxxx xxxx xxxx xxxx`         |
+| `JWT_SECRET`         | JWT secret (future use)   | `your_secret_key`             |
 
 ## Error Handling
 
@@ -178,7 +193,8 @@ The API uses a centralized error handling system:
 ## Rate Limiting
 
 Contact form submissions are rate-limited to prevent abuse:
-- 3 submissions per 15 minutes per IP address
+
+- 10 submissions per 15 minutes per IP address
 
 ## Logging
 
@@ -204,6 +220,7 @@ Contact form submissions are rate-limited to prevent abuse:
 ### Deploy to Vercel
 
 1. **Push your code to GitHub**
+
    ```bash
    git add .
    git commit -m "Deploy backend to Vercel"
@@ -237,19 +254,20 @@ Contact form submissions are rate-limited to prevent abuse:
 
 ### Environment Variables for Production
 
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `MONGODB_URI` | MongoDB connection string | `mongodb+srv://...` |
-| `PORT` | Server port (auto-set by Vercel) | `5000` |
-| `NODE_ENV` | Environment mode | `production` |
-| `FRONTEND_ORIGIN` | Frontend URL for CORS | `https://gotham-ai-two.vercel.app` |
-| `EMAIL_USER` | Gmail address | `your@gmail.com` |
-| `EMAIL_APP_PASSWORD` | Gmail app password | `xxxx xxxx xxxx xxxx` |
-| `JWT_SECRET` | JWT secret key | `your_secure_secret` |
+| Variable             | Description                      | Example                            |
+| -------------------- | -------------------------------- | ---------------------------------- |
+| `MONGODB_URI`        | MongoDB connection string        | `mongodb+srv://...`                |
+| `PORT`               | Server port (auto-set by Vercel) | `5000`                             |
+| `NODE_ENV`           | Environment mode                 | `production`                       |
+| `FRONTEND_ORIGIN`    | Frontend URL for CORS            | `https://gotham-ai-two.vercel.app` |
+| `EMAIL_USER`         | Gmail address                    | `your@gmail.com`                   |
+| `EMAIL_APP_PASSWORD` | Gmail app password               | `xxxx xxxx xxxx xxxx`              |
+| `JWT_SECRET`         | JWT secret key                   | `your_secure_secret`               |
 
 ### Vercel Configuration
 
 The `vercel.json` file is configured with:
+
 - Node.js runtime for serverless functions
 - All routes directed to `server.js`
 - Production environment variables
