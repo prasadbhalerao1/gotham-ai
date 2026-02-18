@@ -148,6 +148,8 @@ body {
 
   .mask-clip-path {
     clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    will-change: width, height, clip-path;
+    transform: translateZ(0);
   }
 
   .special-font b {

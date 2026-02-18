@@ -55,6 +55,7 @@ const About = () => {
         scrub: 0.5,
         pin: true,
         pinSpacing: true,
+        pinType: "transform",
       },
     });
 
