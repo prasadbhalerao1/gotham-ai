@@ -45,17 +45,14 @@ const About = () => {
       },
     );
 
-    const isTouch = ScrollTrigger.isTouch;
-
     const clipAnimation = gsap.timeline({
       scrollTrigger: {
         trigger: "#clip",
-        start: isTouch ? "top 80%" : "center center",
-        end: isTouch ? "bottom 20%" : "+=800 center",
+        start: "center center",
+        end: "+=800 center",
         scrub: 0.5,
-        pin: !isTouch,
-        pinSpacing: !isTouch,
-        invalidateOnRefresh: true,
+        pin: true,
+        pinSpacing: true,
       },
     });
 
@@ -63,12 +60,12 @@ const About = () => {
       width: "100vw",
       height: "100dvh",
       borderRadius: 0,
-      ease: isTouch ? "none" : "power1.inOut",
+      ease: "power1.inOut",
     });
   });
 
   return (
-    <div id="about" className="min-h-screen w-screen">
+    <div id="about" className="md:min-h-screen w-screen">
       <div
         ref={headerRef}
         className="relative mb-8 mt-20 flex flex-col items-center gap-5 px-4 sm:mt-36"
@@ -98,7 +95,7 @@ const About = () => {
       </div>
 
       <div
-        className="h-dvh w-screen flex items-center justify-center relative"
+        className="hidden md:flex h-dvh w-screen items-center justify-center relative"
         id="clip"
       >
         <div className="mask-clip-path about-image">
