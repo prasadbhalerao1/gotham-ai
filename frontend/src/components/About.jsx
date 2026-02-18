@@ -1,7 +1,7 @@
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/all";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 
 import AnimatedTitle from "./AnimatedTitle";
 
@@ -11,8 +11,18 @@ const About = () => {
   const headerRef = useRef(null);
   const subtextRef = useRef(null);
 
+  // This component is lazy-loaded via Suspense. When it mounts, ScrollTrigger's
+  // position calculations are based on the page WITHOUT this section's content.
+  // We must call refresh() after mount so ScrollTrigger recalculates all positions.
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
+
   useGSAP(() => {
-    // Text entrance animations (work on all devices)
+    // Text entrance animations
     gsap.fromTo(
       headerRef.current,
       { y: 50, opacity: 0 },
@@ -48,7 +58,7 @@ const About = () => {
 
     const mm = gsap.matchMedia();
 
-    // Desktop: full pin + expand animation (works perfectly with position: fixed)
+    // Desktop: full pin + expand animation
     mm.add("(hover: hover)", () => {
       const clipAnimation = gsap.timeline({
         scrollTrigger: {
@@ -69,7 +79,7 @@ const About = () => {
       });
     });
 
-    // Mobile (touch): non-pinned scroll expansion (no position: fixed needed)
+    // Mobile (touch): non-pinned scroll expansion
     mm.add("(hover: none)", () => {
       gsap.to(".mask-clip-path", {
         width: "100vw",
@@ -78,9 +88,10 @@ const About = () => {
         ease: "none",
         scrollTrigger: {
           trigger: "#clip",
-          start: "top 60%",
-          end: "top 10%",
+          start: "top 80%",
+          end: "bottom 20%",
           scrub: 0.5,
+          invalidateOnRefresh: true,
         },
       });
     });
@@ -125,7 +136,6 @@ const About = () => {
             src="img/about.webp"
             alt="Background"
             className="absolute left-0 top-0 size-full object-cover"
-            loading="lazy"
           />
         </div>
       </div>
