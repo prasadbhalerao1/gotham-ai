@@ -11,18 +11,15 @@ const About = () => {
   const headerRef = useRef(null);
   const subtextRef = useRef(null);
 
-  // This component is lazy-loaded via Suspense. When it mounts, ScrollTrigger's
-  // position calculations are based on the page WITHOUT this section's content.
-  // We must call refresh() after mount so ScrollTrigger recalculates all positions.
+  // Lazy-loaded component: refresh ScrollTrigger positions after mount
   useEffect(() => {
     const timer = setTimeout(() => {
       ScrollTrigger.refresh();
-    }, 100);
+    }, 500);
     return () => clearTimeout(timer);
   }, []);
 
   useGSAP(() => {
-    // Text entrance animations
     gsap.fromTo(
       headerRef.current,
       { y: 50, opacity: 0 },
@@ -56,44 +53,27 @@ const About = () => {
       },
     );
 
-    const mm = gsap.matchMedia();
+    // ScrollTrigger.isTouch: 0 = no touch, 1 = touch+mouse, 2 = touch only
+    // Pin only on non-touch devices (pin uses position:fixed which breaks on mobile)
+    const isTouch = ScrollTrigger.isTouch;
 
-    // Desktop: full pin + expand animation
-    mm.add("(hover: hover)", () => {
-      const clipAnimation = gsap.timeline({
-        scrollTrigger: {
-          trigger: "#clip",
-          start: "center center",
-          end: "+=800 center",
-          scrub: 0.5,
-          pin: true,
-          pinSpacing: true,
-        },
-      });
-
-      clipAnimation.to(".mask-clip-path", {
-        width: "100vw",
-        height: "100dvh",
-        borderRadius: 0,
-        ease: "power1.inOut",
-      });
+    const clipAnimation = gsap.timeline({
+      scrollTrigger: {
+        trigger: "#clip",
+        start: isTouch ? "top 80%" : "center center",
+        end: isTouch ? "bottom 20%" : "+=800 center",
+        scrub: 0.5,
+        pin: isTouch ? false : true,
+        pinSpacing: isTouch ? false : true,
+        invalidateOnRefresh: true,
+      },
     });
 
-    // Mobile (touch): non-pinned scroll expansion
-    mm.add("(hover: none)", () => {
-      gsap.to(".mask-clip-path", {
-        width: "100vw",
-        height: "100dvh",
-        borderRadius: 0,
-        ease: "none",
-        scrollTrigger: {
-          trigger: "#clip",
-          start: "top 80%",
-          end: "bottom 20%",
-          scrub: 0.5,
-          invalidateOnRefresh: true,
-        },
-      });
+    clipAnimation.to(".mask-clip-path", {
+      width: "100vw",
+      height: "100dvh",
+      borderRadius: 0,
+      ease: isTouch ? "none" : "power1.inOut",
     });
   });
 
