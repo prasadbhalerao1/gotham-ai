@@ -46,8 +46,6 @@ const About = () => {
       },
     );
 
-    // Use matchMedia to apply different animations for desktop vs mobile
-    // position: fixed (used by pin) is broken on real mobile browsers with Lenis
     const mm = gsap.matchMedia();
 
     // Desktop: full pin + expand animation (works perfectly with position: fixed)
