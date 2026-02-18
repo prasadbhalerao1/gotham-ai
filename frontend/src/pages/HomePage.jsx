@@ -16,6 +16,17 @@ const HomePage = () => {
   const lenisRef = useRef(null);
 
   useEffect(() => {
+    // Detect touch-only devices (real phones/tablets)
+    const isTouchOnly = window.matchMedia("(hover: none)").matches;
+
+    // Skip Lenis on touch devices — smoothTouch is false so Lenis doesn't
+    // smooth touch scroll anyway, but it DOES intercept scroll events and
+    // prevents ScrollTrigger from receiving them. This is why animations
+    // work in DevTools (mouse = hover) but not on real phones (touch = no hover).
+    if (isTouchOnly) {
+      return;
+    }
+
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -27,16 +38,12 @@ const HomePage = () => {
 
     lenisRef.current = lenis;
 
-    // Official Lenis + GSAP integration pattern:
-    // 1. ScrollTrigger updates ONLY when Lenis detects actual scroll events
     lenis.on("scroll", ScrollTrigger.update);
 
-    // 2. Drive Lenis from GSAP's ticker (keeps them perfectly in sync)
     gsap.ticker.add((time) => {
       lenis.raf(time * 1000);
     });
 
-    // 3. Prevent GSAP from compensating for frame drops (causes jank with Lenis)
     gsap.ticker.lagSmoothing(0);
 
     return () => {
