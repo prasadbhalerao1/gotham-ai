@@ -44,7 +44,14 @@ const Footer = () => {
             <div className="space-y-2 text-sm text-gray-400">
               <div className="flex items-center gap-2">
                 <MdLocationOn className="size-4 text-blue-400" />
-                <span>JSPM's RSCOE, Tathawade</span>
+                <a
+                  href="https://maps.app.goo.gl/QzkAcTycAdpqbPZ96"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="cursor-pointer transition-colors hover:text-blue-400"
+                >
+                  JSPM's RSCOE, Tathawade
+                </a>
               </div>
             </div>
           </div>

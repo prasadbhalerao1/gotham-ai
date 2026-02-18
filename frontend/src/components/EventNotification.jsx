@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { IoClose } from "react-icons/io5";
 import {
   IoCalendarOutline,
@@ -23,6 +23,7 @@ let isNotificationClosed = false;
 const EventNotification = () => {
   const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(!isNotificationClosed);
+  const notificationRef = useRef(null);
 
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
@@ -63,14 +64,14 @@ const EventNotification = () => {
   }, [currentEvent?.date]);
 
   useEffect(() => {
-    if (isVisible) {
+    if (isVisible && currentEvent && notificationRef.current) {
       if (hasSeenAnimation) {
         // If already seen in this session (navigated back), show immediately without animation
-        gsap.set(".event-notification", { y: 0, opacity: 1 });
+        gsap.set(notificationRef.current, { y: 0, opacity: 1 });
       } else {
         // If first time (or refresh), animate and set flag
         gsap.fromTo(
-          ".event-notification",
+          notificationRef.current,
           { y: -100, opacity: 0 },
           {
             y: 0,
@@ -84,10 +85,12 @@ const EventNotification = () => {
         );
       }
     }
-  }, [isVisible]);
+  }, [isVisible, currentEvent]);
 
   const handleClose = () => {
-    gsap.to(".event-notification", {
+    if (!notificationRef.current) return;
+
+    gsap.to(notificationRef.current, {
       y: -100,
       opacity: 0,
       duration: 0.6,
@@ -103,6 +106,7 @@ const EventNotification = () => {
 
   return (
     <div
+      ref={notificationRef}
       className="event-notification fixed inset-x-2 top-[4.5rem] z-40 rounded-xl border border-white/20 bg-black/75 backdrop-blur-xl sm:inset-x-4 sm:top-24"
       style={{
         boxShadow:
@@ -161,7 +165,7 @@ const EventNotification = () => {
                 <div className="text-lg font-bold text-white">
                   {timeLeft.days}
                 </div>
-                <div className="text-xs text-blue-200">Days</div>
+                <div className="text-xs text-gray-200">Days</div>
               </div>
             </div>
             <div className="text-center">
@@ -169,7 +173,7 @@ const EventNotification = () => {
                 <div className="text-lg font-bold text-white">
                   {timeLeft.hours}
                 </div>
-                <div className="text-xs text-blue-200">Hours</div>
+                <div className="text-xs text-gray-200">Hours</div>
               </div>
             </div>
             <div className="text-center">
@@ -177,7 +181,7 @@ const EventNotification = () => {
                 <div className="text-lg font-bold text-white">
                   {timeLeft.minutes}
                 </div>
-                <div className="text-xs text-green-200">Mins</div>
+                <div className="text-xs text-gray-200">Mins</div>
               </div>
             </div>
           </div>
@@ -203,19 +207,19 @@ const EventNotification = () => {
                 <span className="block text-sm font-bold text-white">
                   {timeLeft.days}
                 </span>
-                <span className="block text-[8px] text-blue-200">Days</span>
+                <span className="block text-[8px] text-gray-200">Days</span>
               </div>
               <div className="min-w-[40px] rounded bg-blue-900/60 px-2 py-1 text-center backdrop-blur-sm">
                 <span className="block text-sm font-bold text-white">
                   {timeLeft.hours}
                 </span>
-                <span className="block text-[8px] text-blue-200">Hrs</span>
+                <span className="block text-[8px] text-gray-200">Hrs</span>
               </div>
               <div className="min-w-[40px] rounded bg-green-900/60 px-2 py-1 text-center backdrop-blur-sm">
                 <span className="block text-sm font-bold text-white">
                   {timeLeft.minutes}
                 </span>
-                <span className="block text-[8px] text-green-200">Mins</span>
+                <span className="block text-[8px] text-gray-200">Mins</span>
               </div>
             </div>
 

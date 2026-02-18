@@ -1,36 +1,39 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { useMutation } from '@tanstack/react-query';
-import { 
-  IoCloseOutline, 
-  IoMailOutline, 
-  IoPersonOutline, 
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useMutation } from "@tanstack/react-query";
+import {
+  IoCloseOutline,
+  IoMailOutline,
+  IoPersonOutline,
   IoCallOutline,
   IoDocumentTextOutline,
   IoCheckmarkCircleOutline,
-  IoAlertCircleOutline
-} from 'react-icons/io5';
-import contactService from '../services/contactService';
+  IoAlertCircleOutline,
+} from "react-icons/io5";
+import contactService from "../services/contactService";
 
 const contactSchema = z.object({
-  name: z.string()
-    .min(2, 'Name must be at least 2 characters')
-    .max(100, 'Name cannot exceed 100 characters'),
-  email: z.string()
-    .email('Please provide a valid email address'),
-  subject: z.string()
-    .min(3, 'Subject must be at least 3 characters')
-    .max(200, 'Subject cannot exceed 200 characters'),
-  message: z.string()
-    .min(10, 'Message must be at least 10 characters')
-    .max(2000, 'Message cannot exceed 2000 characters'),
-  phone: z.string()
-    .regex(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/, 'Please provide a valid phone number')
+  name: z
+    .string()
+    .min(2, "Name must be at least 2 characters")
+    .max(100, "Name cannot exceed 100 characters"),
+  email: z.string().email("Please provide a valid email address"),
+  subject: z
+    .string()
+    .min(3, "Subject must be at least 3 characters")
+    .max(200, "Subject cannot exceed 200 characters"),
+  message: z
+    .string()
+    .min(10, "Message must be at least 10 characters")
+    .max(2000, "Message cannot exceed 2000 characters"),
+  phone: z
+    .string()
+    .regex(/^[+]?[0-9\s-]{10,15}$/, "Please provide a valid phone number")
     .optional()
-    .or(z.literal('')),
+    .or(z.literal("")),
 });
 
 const ContactModal = ({ isOpen, onClose }) => {
@@ -48,7 +51,7 @@ const ContactModal = ({ isOpen, onClose }) => {
   const mutation = useMutation({
     mutationFn: contactService.submitContact,
     onSuccess: () => {
-      setSubmitStatus('success');
+      setSubmitStatus("success");
       reset();
       setTimeout(() => {
         setSubmitStatus(null);
@@ -56,8 +59,8 @@ const ContactModal = ({ isOpen, onClose }) => {
       }, 3000);
     },
     onError: (error) => {
-      setSubmitStatus('error');
-      console.error('Contact form error:', error);
+      setSubmitStatus("error");
+      console.error("Contact form error:", error);
     },
   });
 
@@ -72,6 +75,13 @@ const ContactModal = ({ isOpen, onClose }) => {
       onClose();
     }
   };
+
+  const inputClass = (hasError) =>
+    `w-full rounded-lg border py-2 pl-9 pr-3 text-sm transition-colors focus:outline-none ${
+      hasError
+        ? "border-red-300 focus:border-red-500"
+        : "border-gray-200 focus:border-blue-500"
+    }`;
 
   return (
     <AnimatePresence>
@@ -89,205 +99,219 @@ const ContactModal = ({ isOpen, onClose }) => {
           {/* Modal */}
           <div className="pointer-events-none fixed inset-0 z-50 flex items-center justify-center p-4">
             <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              initial={{ opacity: 0, scale: 0.95, y: 16 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="pointer-events-auto max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-3xl bg-white shadow-2xl"
+              exit={{ opacity: 0, scale: 0.95, y: 16 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="pointer-events-auto w-full max-w-md max-h-[90vh] overflow-y-auto rounded-2xl bg-white shadow-2xl"
             >
               {/* Header */}
-              <div className="relative rounded-t-3xl bg-gradient-to-r from-blue-600 to-cyan-600 p-8">
+              <div className="relative rounded-t-2xl bg-gradient-to-r from-blue-600 to-cyan-600 px-5 py-4">
                 <button
                   onClick={handleClose}
                   disabled={mutation.isPending}
-                  className="absolute right-4 top-4 rounded-full bg-white/20 p-2 transition-colors hover:bg-white/30 disabled:opacity-50"
+                  className="absolute right-3 top-3 rounded-full bg-white/20 p-1.5 transition-colors hover:bg-white/30 disabled:opacity-50"
                   aria-label="Close modal"
                 >
-                  <IoCloseOutline className="size-6 text-white" />
+                  <IoCloseOutline className="size-4 text-white" />
                 </button>
-
-                <h2 className="mb-2 text-3xl font-black text-white">Get In Touch</h2>
-                <p className="text-blue-100">
-                  We'd love to hear from you! Fill out the form below and we'll get back to you soon.
+                <h2 className="text-xl font-bold text-white">Get In Touch</h2>
+                <p className="text-xs text-blue-100 mt-0.5">
+                  Fill out the form and we'll get back to you soon.
                 </p>
               </div>
 
-              {/* Success Message */}
-              {submitStatus === 'success' && (
+              {/* Status Messages */}
+              {submitStatus === "success" && (
                 <motion.div
-                  initial={{ opacity: 0, y: -10 }}
+                  initial={{ opacity: 0, y: -8 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="m-6 flex items-start gap-3 rounded-xl border-2 border-green-200 bg-green-50 p-4"
+                  className="mx-4 mt-3 flex items-center gap-2 rounded-lg border border-green-200 bg-green-50 px-3 py-2"
                 >
-                  <IoCheckmarkCircleOutline className="mt-0.5 size-6 shrink-0 text-green-600" />
+                  <IoCheckmarkCircleOutline className="size-4 shrink-0 text-green-600" />
                   <div>
-                    <h3 className="mb-1 font-bold text-green-900">Message Sent Successfully!</h3>
-                    <p className="text-sm text-green-700">
-                      Thank you for contacting us. We'll get back to you via email shortly.
+                    <p className="text-xs font-semibold text-green-900">
+                      Message Sent!
+                    </p>
+                    <p className="text-xs text-green-700">
+                      We'll get back to you via email shortly.
                     </p>
                   </div>
                 </motion.div>
               )}
 
-              {/* Error Message */}
-              {submitStatus === 'error' && (
+              {submitStatus === "error" && (
                 <motion.div
-                  initial={{ opacity: 0, y: -10 }}
+                  initial={{ opacity: 0, y: -8 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="m-6 flex items-start gap-3 rounded-xl border-2 border-red-200 bg-red-50 p-4"
+                  className="mx-4 mt-3 flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2"
                 >
-                  <IoAlertCircleOutline className="mt-0.5 size-6 shrink-0 text-red-600" />
+                  <IoAlertCircleOutline className="size-4 shrink-0 text-red-600" />
                   <div>
-                    <h3 className="mb-1 font-bold text-red-900">Oops! Something went wrong</h3>
-                    <p className="text-sm text-red-700">
-                      {mutation.error?.message || 'Please try again later.'}
+                    <p className="text-xs font-semibold text-red-900">
+                      Something went wrong
+                    </p>
+                    <p className="text-xs text-red-700">
+                      {mutation.error?.message || "Please try again later."}
                     </p>
                   </div>
                 </motion.div>
               )}
 
               {/* Form */}
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 p-8">
-                {/* Name Field */}
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-3 p-4">
+                {/* Name */}
                 <div>
-                  <label htmlFor="name" className="mb-2 block text-sm font-semibold text-gray-700">
+                  <label
+                    htmlFor="name"
+                    className="mb-1 block text-xs font-bold uppercase tracking-wide text-gray-600"
+                  >
                     Full Name <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
-                    <IoPersonOutline className="absolute left-4 top-1/2 size-5 -translate-y-1/2 text-gray-400" />
+                    <IoPersonOutline className="absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-gray-400" />
                     <input
                       id="name"
-                      {...register('name')}
+                      {...register("name")}
                       type="text"
                       placeholder="John Doe"
-                      className={`w-full rounded-xl border-2 py-3 pl-12 pr-4 transition-colors focus:outline-none ${
-                        errors.name 
-                          ? 'border-red-300 focus:border-red-500' 
-                          : 'border-gray-200 focus:border-blue-500'
-                      }`}
+                      className={inputClass(errors.name)}
                     />
                   </div>
                   {errors.name && (
-                    <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>
+                    <p className="mt-0.5 text-xs text-red-600">
+                      {errors.name.message}
+                    </p>
                   )}
                 </div>
 
-                {/* Email Field */}
+                {/* Email */}
                 <div>
-                  <label htmlFor="email" className="mb-2 block text-sm font-semibold text-gray-700">
+                  <label
+                    htmlFor="email"
+                    className="mb-1 block text-xs font-bold uppercase tracking-wide text-gray-600"
+                  >
                     Email Address <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
-                    <IoMailOutline className="absolute left-4 top-1/2 size-5 -translate-y-1/2 text-gray-400" />
+                    <IoMailOutline className="absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-gray-400" />
                     <input
                       id="email"
-                      {...register('email')}
+                      {...register("email")}
                       type="email"
                       placeholder="john@example.com"
-                      className={`w-full rounded-xl border-2 py-3 pl-12 pr-4 transition-colors focus:outline-none ${
-                        errors.email 
-                          ? 'border-red-300 focus:border-red-500' 
-                          : 'border-gray-200 focus:border-blue-500'
-                      }`}
+                      className={inputClass(errors.email)}
                     />
                   </div>
                   {errors.email && (
-                    <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+                    <p className="mt-0.5 text-xs text-red-600">
+                      {errors.email.message}
+                    </p>
                   )}
                 </div>
 
-                {/* Phone Field (Optional) */}
+                {/* Phone (Optional) */}
                 <div>
-                  <label htmlFor="phone" className="mb-2 block text-sm font-semibold text-gray-700">
-                    Phone Number <span className="text-xs text-gray-400">(Optional)</span>
+                  <label
+                    htmlFor="phone"
+                    className="mb-1 block text-xs font-bold uppercase tracking-wide text-gray-600"
+                  >
+                    Phone{" "}
+                    <span className="text-xs font-normal text-gray-400">
+                      (Optional)
+                    </span>
                   </label>
                   <div className="relative">
-                    <IoCallOutline className="absolute left-4 top-1/2 size-5 -translate-y-1/2 text-gray-400" />
+                    <IoCallOutline className="absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-gray-400" />
                     <input
                       id="phone"
-                      {...register('phone')}
+                      {...register("phone")}
                       type="tel"
-                      placeholder="+1 (555) 123-4567"
-                      className={`w-full rounded-xl border-2 py-3 pl-12 pr-4 transition-colors focus:outline-none ${
-                        errors.phone 
-                          ? 'border-red-300 focus:border-red-500' 
-                          : 'border-gray-200 focus:border-blue-500'
-                      }`}
+                      placeholder="+91 8767X XXXXX"
+                      className={inputClass(errors.phone)}
                     />
                   </div>
                   {errors.phone && (
-                    <p className="mt-1 text-sm text-red-600">{errors.phone.message}</p>
+                    <p className="mt-0.5 text-xs text-red-600">
+                      {errors.phone.message}
+                    </p>
                   )}
                 </div>
 
-                {/* Subject Field */}
+                {/* Subject */}
                 <div>
-                  <label htmlFor="subject" className="mb-2 block text-sm font-semibold text-gray-700">
+                  <label
+                    htmlFor="subject"
+                    className="mb-1 block text-xs font-bold uppercase tracking-wide text-gray-600"
+                  >
                     Subject <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
-                    <IoDocumentTextOutline className="absolute left-4 top-1/2 size-5 -translate-y-1/2 text-gray-400" />
+                    <IoDocumentTextOutline className="absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-gray-400" />
                     <input
                       id="subject"
-                      {...register('subject')}
+                      {...register("subject")}
                       type="text"
                       placeholder="What would you like to discuss?"
-                      className={`w-full rounded-xl border-2 py-3 pl-12 pr-4 transition-colors focus:outline-none ${
-                        errors.subject 
-                          ? 'border-red-300 focus:border-red-500' 
-                          : 'border-gray-200 focus:border-blue-500'
-                      }`}
+                      className={inputClass(errors.subject)}
                     />
                   </div>
                   {errors.subject && (
-                    <p className="mt-1 text-sm text-red-600">{errors.subject.message}</p>
+                    <p className="mt-0.5 text-xs text-red-600">
+                      {errors.subject.message}
+                    </p>
                   )}
                 </div>
 
-                {/* Message Field */}
+                {/* Message */}
                 <div>
-                  <label htmlFor="message" className="mb-2 block text-sm font-semibold text-gray-700">
+                  <label
+                    htmlFor="message"
+                    className="mb-1 block text-xs font-bold uppercase tracking-wide text-gray-600"
+                  >
                     Message <span className="text-red-500">*</span>
                   </label>
                   <textarea
                     id="message"
-                    {...register('message')}
-                    rows="5"
+                    {...register("message")}
+                    rows="4"
                     placeholder="Tell us more about your inquiry..."
-                    className={`w-full resize-none rounded-xl border-2 px-4 py-3 transition-colors focus:outline-none ${
-                      errors.message 
-                        ? 'border-red-300 focus:border-red-500' 
-                        : 'border-gray-200 focus:border-blue-500'
+                    className={`w-full resize-none rounded-lg border px-3 py-2 text-sm transition-colors focus:outline-none ${
+                      errors.message
+                        ? "border-red-300 focus:border-red-500"
+                        : "border-gray-200 focus:border-blue-500"
                     }`}
                   />
                   {errors.message && (
-                    <p className="mt-1 text-sm text-red-600">{errors.message.message}</p>
+                    <p className="mt-0.5 text-xs text-red-600">
+                      {errors.message.message}
+                    </p>
                   )}
                 </div>
 
-                {/* Submit Button */}
-                <div className="flex gap-4">
+                {/* Buttons */}
+                <div className="flex gap-2 pt-1">
                   <button
                     type="button"
                     onClick={handleClose}
                     disabled={mutation.isPending}
-                    className="flex-1 rounded-xl border-2 border-gray-300 px-6 py-3 font-semibold text-gray-700 transition-colors hover:bg-gray-50 disabled:opacity-50"
+                    className="flex-1 rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 disabled:opacity-50"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={mutation.isPending}
-                    className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 px-6 py-3 font-semibold text-white transition-all duration-300 hover:from-blue-700 hover:to-cyan-700 disabled:cursor-not-allowed disabled:opacity-50"
+                    className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600 px-4 py-2 text-sm font-semibold text-white transition-all duration-300 hover:from-blue-700 hover:to-cyan-700 disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     {mutation.isPending ? (
                       <>
-                        <div className="size-5 animate-spin rounded-full border-y-2 border-white"></div>
+                        <div className="size-4 animate-spin rounded-full border-y-2 border-white" />
                         Sending...
                       </>
                     ) : (
                       <>
-                        <IoMailOutline className="size-5" />
+                        <IoMailOutline className="size-4" />
                         Send Message
                       </>
                     )}
