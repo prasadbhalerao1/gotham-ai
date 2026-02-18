@@ -6,6 +6,7 @@ import { useRef } from "react";
 import AnimatedTitle from "./AnimatedTitle";
 
 gsap.registerPlugin(ScrollTrigger);
+ScrollTrigger.normalizeScroll(true);
 
 const About = () => {
   const headerRef = useRef(null);
@@ -96,13 +97,14 @@ const About = () => {
         </div>
       </div>
 
-      <div className="h-dvh w-screen" id="clip">
+      <div
+        className="h-screen w-screen flex items-center justify-center relative"
+        id="clip"
+      >
         <div className="mask-clip-path about-image">
           <img
             src="img/about.webp"
             alt="Background"
-            width="1920"
-            height="1080"
             className="absolute left-0 top-0 size-full object-cover"
             loading="lazy"
           />
