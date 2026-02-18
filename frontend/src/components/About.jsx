@@ -45,14 +45,16 @@ const About = () => {
       },
     );
 
+    const isTouch = ScrollTrigger.isTouch;
+
     const clipAnimation = gsap.timeline({
       scrollTrigger: {
         trigger: "#clip",
-        start: "center center",
-        end: "+=800 center",
+        start: isTouch ? "top 80%" : "center center",
+        end: isTouch ? "bottom 20%" : "+=800 center",
         scrub: 0.5,
-        pin: true,
-        pinSpacing: true,
+        pin: !isTouch,
+        pinSpacing: !isTouch,
         invalidateOnRefresh: true,
       },
     });
@@ -61,7 +63,7 @@ const About = () => {
       width: "100vw",
       height: "100dvh",
       borderRadius: 0,
-      ease: "power1.inOut",
+      ease: isTouch ? "none" : "power1.inOut",
     });
   });
 
