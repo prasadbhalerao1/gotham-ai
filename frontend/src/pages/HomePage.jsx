@@ -1,14 +1,13 @@
-import { useEffect, useRef, lazy, Suspense } from "react";
+import { useEffect, useRef } from "react";
 import Lenis from "lenis";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/all";
 
 import Hero from "../components/Hero.jsx";
 import SEO from "../components/SEO.jsx";
-
-const Events = lazy(() => import("../components/Events.jsx"));
-const About = lazy(() => import("../components/About.jsx"));
-const Contact = lazy(() => import("../components/Contact.jsx"));
+import Events from "../components/Events.jsx";
+import About from "../components/About.jsx";
+import Contact from "../components/Contact.jsx";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -16,13 +15,7 @@ const HomePage = () => {
   const lenisRef = useRef(null);
 
   useEffect(() => {
-    // Detect touch-only devices (real phones/tablets)
     const isTouchOnly = window.matchMedia("(hover: none)").matches;
-
-    // Skip Lenis on touch devices — smoothTouch is false so Lenis doesn't
-    // smooth touch scroll anyway, but it DOES intercept scroll events and
-    // prevents ScrollTrigger from receiving them. This is why animations
-    // work in DevTools (mouse = hover) but not on real phones (touch = no hover).
     if (isTouchOnly) {
       return;
     }
@@ -62,11 +55,9 @@ const HomePage = () => {
       <div className="hero-section-marker">
         <Hero />
       </div>
-      <Suspense fallback={null}>
-        <Events />
-        <About />
-        <Contact />
-      </Suspense>
+      <Events />
+      <About />
+      <Contact />
     </>
   );
 };

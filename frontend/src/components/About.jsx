@@ -1,7 +1,7 @@
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/all";
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
 
 import AnimatedTitle from "./AnimatedTitle";
 
@@ -10,14 +10,6 @@ gsap.registerPlugin(ScrollTrigger);
 const About = () => {
   const headerRef = useRef(null);
   const subtextRef = useRef(null);
-
-  // Lazy-loaded component: refresh ScrollTrigger positions after mount
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      ScrollTrigger.refresh();
-    }, 500);
-    return () => clearTimeout(timer);
-  }, []);
 
   useGSAP(() => {
     gsap.fromTo(
@@ -53,8 +45,6 @@ const About = () => {
       },
     );
 
-    // ScrollTrigger.isTouch: 0 = no touch, 1 = touch+mouse, 2 = touch only
-    // Pin only on non-touch devices (pin uses position:fixed which breaks on mobile)
     const isTouch = ScrollTrigger.isTouch;
 
     const clipAnimation = gsap.timeline({
@@ -63,8 +53,8 @@ const About = () => {
         start: isTouch ? "top 80%" : "center center",
         end: isTouch ? "bottom 20%" : "+=800 center",
         scrub: 0.5,
-        pin: isTouch ? false : true,
-        pinSpacing: isTouch ? false : true,
+        pin: !isTouch,
+        pinSpacing: !isTouch,
         invalidateOnRefresh: true,
       },
     });
