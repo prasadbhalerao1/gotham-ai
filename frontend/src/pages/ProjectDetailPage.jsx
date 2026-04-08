@@ -212,8 +212,9 @@ const ProjectDetailPage = () => {
   }
 
   return (
-    <section className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 py-24 text-white">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 py-12 md:py-24 text-white">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* Back Button */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -222,161 +223,210 @@ const ProjectDetailPage = () => {
         >
           <Link
             to="/projects"
-            className="inline-flex items-center gap-2 font-semibold text-slate-300 transition-colors hover:text-white"
+            className="inline-flex items-center gap-2 font-semibold text-cyan-400 transition-colors hover:text-cyan-300 hover:underline"
           >
             <IoArrowBack className="size-5" /> Back to Projects
           </Link>
         </motion.div>
 
-        <motion.article
+        {/* Split Hero Section */}
+        <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-[0_35px_80px_-35px_rgba(15,23,42,0.9)]"
+          className="mb-16 grid grid-cols-1 gap-12 lg:grid-cols-12 lg:items-center"
         >
-          <div className="relative h-80 bg-gradient-to-br from-blue-900 to-slate-900">
-            {project.heroImage && (
-              <img
-                src={project.heroImage}
-                alt={project.title}
-                className="absolute inset-0 size-full object-cover opacity-50"
-              />
-            )}
-            <div className="absolute inset-0 bg-gradient-to-tr from-slate-950 via-slate-900/80 to-transparent"></div>
-
-            <div className="relative z-10 flex h-full flex-col justify-end p-8 sm:p-12">
-              <h1 className="special-font mb-3 text-4xl font-black sm:text-5xl md:text-6xl">
+          {/* Left Side: Title & Info */}
+          <div className="space-y-8 lg:col-span-7">
+            <div>
+              <p className="mb-3 text-sm font-bold uppercase tracking-[0.3em] text-cyan-400">
+                Gotham AI Labs Spotlight
+              </p>
+              <h1 className="special-font leading-tight mb-4 text-5xl font-black text-white sm:text-6xl md:text-7xl">
                 {project.title}
               </h1>
-              <p className="max-w-3xl text-lg text-slate-200">
+              <p className="max-w-xl text-xl text-slate-300 md:text-2xl leading-relaxed">
                 {project.shortDescription}
               </p>
             </div>
+
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div className="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/5 p-5 shadow-lg backdrop-blur transition-all hover:bg-white/10 hover:shadow-xl">
+                <div className="rounded-xl bg-blue-900/50 p-3 text-cyan-400">
+                  <IoBusinessOutline className="size-7" />
+                </div>
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-wider text-slate-400">Industry Partner</p>
+                  <p className="font-bold text-white transition-colors">{project.industryPartner}</p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/5 p-5 shadow-lg backdrop-blur transition-all hover:bg-white/10 hover:shadow-xl">
+                <div className="rounded-xl bg-cyan-900/50 p-3 text-cyan-400">
+                  <IoRibbonOutline className="size-7" />
+                </div>
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-wider text-slate-400">Source</p>
+                  <div className="font-bold text-white flex items-center gap-2">
+                    {project.source}
+                    {project.sourceLink && (
+                      <a
+                        href={project.sourceLink}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1 text-sm font-bold text-cyan-400 hover:text-cyan-300 transition-colors"
+                      >
+                         <IoLinkOutline />
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/5 p-5 shadow-lg backdrop-blur transition-all hover:bg-white/10 hover:shadow-xl sm:col-span-2 lg:col-span-1">
+                <div className="rounded-xl bg-slate-800 p-3 text-cyan-400">
+                  <IoPeopleOutline className="size-7" />
+                </div>
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-wider text-slate-400">Developed By</p>
+                  <p className="font-bold text-white">Versanix Community</p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/5 p-5 shadow-lg backdrop-blur transition-all hover:bg-white/10 hover:shadow-xl sm:col-span-2 lg:col-span-1">
+                <div className="rounded-xl bg-green-900/40 p-3 text-green-400 border border-green-500/20">
+                  <IoCheckmarkCircleOutline className="size-7" />
+                </div>
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-wider text-slate-400">Current Status</p>
+                  <p className="font-bold text-white">{project.status}</p>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div className="p-8 sm:p-12">
-            <div className="mb-12 grid grid-cols-1 gap-6 md:grid-cols-3">
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
-                <div className="mb-2 flex items-center gap-3 font-semibold text-cyan-300">
-                  <IoBusinessOutline className="size-5" />
-                  Industry Partner
-                </div>
-                <p className="text-lg font-bold text-white">
-                  {project.industryPartner}
-                </p>
+          {/* Right Side: Floating Cover Image */}
+          <div className="lg:col-span-5">
+            <div className="relative overflow-hidden rounded-3xl shadow-2xl ring-1 ring-white/10">
+              <img
+                src={project.heroImage || "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=600&auto=format"}
+                alt={project.title}
+                className="aspect-square w-full object-cover lg:aspect-[4/5]"
+              />
+              <div className="absolute inset-0 bg-gradient-to-tr from-cyan-900/30 to-transparent mix-blend-overlay"></div>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Content Section */}
+        <div className="mt-20 grid grid-cols-1 gap-16 lg:grid-cols-12">
+          {/* Main Content Column */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.6 }}
+            className="space-y-16 lg:col-span-8"
+          >
+            {/* Overview / Brief */}
+            <div className="pt-4">
+              <h2 className="mb-8 text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+                Project Overview
+              </h2>
+              <div className="prose prose-lg sm:prose-xl max-w-none prose-p:text-slate-300 prose-p:leading-relaxed marker:text-cyan-400">
+                {overviewParagraphs.map((paragraph, index) => (
+                  <p key={index}>{paragraph}</p>
+                ))}
               </div>
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
-                <div className="mb-2 flex items-center gap-3 font-semibold text-cyan-300">
-                  <IoRibbonOutline className="size-5" />
-                  Source
-                </div>
-                <p className="text-lg font-bold text-white">
-                  {project.source}
-                  {project.sourceLink && (
-                    <a
-                      href={project.sourceLink}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="ml-2 inline-flex items-center gap-1 text-sm font-semibold text-cyan-300 underline"
+            </div>
+
+            {/* Key Capabilities */}
+            {project.keyCapabilities?.length > 0 && (
+              <div className="pt-8 border-t border-white/10">
+                <h2 className="mb-8 text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+                  Key Capabilities
+                </h2>
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  {project.keyCapabilities.map((capability, index) => (
+                    <div
+                      key={index}
+                      className="group flex items-start gap-3 rounded-2xl border border-white/5 bg-white/[0.03] p-5 backdrop-blur transition-all hover:bg-white/[0.08]"
                     >
-                      <IoLinkOutline /> Visit
-                    </a>
-                  )}
-                </p>
-              </div>
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
-                <div className="mb-2 flex items-center gap-3 font-semibold text-cyan-300">
-                  <IoPeopleOutline className="size-5" />
-                  Gotham AI Team
+                      <IoCheckmarkCircleOutline className="mt-1 size-6 shrink-0 text-cyan-400 transition-transform group-hover:-translate-y-1" />
+                      <p className="text-slate-200 leading-relaxed font-medium">{capability}</p>
+                    </div>
+                  ))}
                 </div>
-                <p className="text-lg font-bold text-white">
-                  Versanix Community
-                </p>
               </div>
-            </div>
+            )}
 
-            <div className="grid grid-cols-1 gap-10 lg:grid-cols-3">
-              <div className="space-y-8 lg:col-span-2">
-                <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-                  <h2 className="mb-4 text-3xl font-bold">Overview</h2>
-                  <div className="space-y-4 leading-relaxed text-slate-200">
-                    {overviewParagraphs.map((paragraph, index) => (
-                      <p key={index}>{paragraph}</p>
-                    ))}
-                  </div>
+            {/* Photo Gallery */}
+            {galleryItems.length > 0 && (
+              <div className="pt-8 border-t border-white/10">
+                <h2 className="mb-8 text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+                  Project Gallery
+                </h2>
+                <div className="mt-4 drop-shadow-2xl">
+                  <ImageGallery
+                    items={galleryItems}
+                    showPlayButton={false}
+                    showFullscreenButton={true}
+                    showThumbnails={galleryItems.length > 1}
+                    showNav={galleryItems.length > 1}
+                    autoPlay={false}
+                    additionalClass="custom-gallery"
+                    renderItem={(item) => (
+                      <div className="gallery-slide">
+                        <img
+                          src={item.original}
+                          alt={item.originalAlt || project.title}
+                          className="gallery-image"
+                        />
+                      </div>
+                    )}
+                  />
                 </div>
-
-                {galleryItems.length > 0 && (
-                  <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-                    <h2 className="mb-6 text-3xl font-bold">Project Gallery</h2>
-                    <div className="gallery-container">
-                      <ImageGallery
-                        items={galleryItems}
-                        showPlayButton={false}
-                        showFullscreenButton={true}
-                        showThumbnails={galleryItems.length > 1}
-                        showNav={galleryItems.length > 1}
-                        autoPlay={false}
-                        additionalClass="custom-gallery"
-                        renderItem={(item) => (
-                          <div className="gallery-slide">
-                            <img
-                              src={item.original}
-                              alt={item.originalAlt || project.title}
-                              className="gallery-image"
-                            />
-                          </div>
-                        )}
-                      />
-                    </div>
-                  </div>
-                )}
-
-                {project.keyCapabilities?.length > 0 && (
-                  <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-                    <h2 className="mb-6 text-3xl font-bold">
-                      Key Capabilities
-                    </h2>
-                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                      {project.keyCapabilities.map((capability, index) => (
-                        <div
-                          key={index}
-                          className="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/5 p-4"
-                        >
-                          <IoCheckmarkCircleOutline className="mt-1 size-6 shrink-0 text-cyan-300" />
-                          <p className="text-slate-200">{capability}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
               </div>
+            )}
+          </motion.div>
 
-              <div className="space-y-8">
-                {project.projectTeam?.length > 0 && (
-                  <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-                    <h3 className="mb-5 text-2xl font-bold">Project Team</h3>
-                    <div className="space-y-4">
-                      {project.projectTeam.map((member, index) => (
-                        <div
-                          key={index}
-                          className="rounded-2xl border border-white/5 bg-white/5 p-4"
-                        >
-                          <p className="font-semibold text-white">
-                            {member.name}
-                          </p>
-                          <p className="text-sm text-cyan-300">{member.role}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
+          {/* Sidebar */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.6 }}
+            className="lg:col-span-4"
+          >
+            {/* Project Team Widget */}
+            {project.projectTeam?.length > 0 && (
+              <div className="sticky top-8 rounded-3xl border border-white/10 bg-white/5 px-6 py-8 backdrop-blur-xl shadow-2xl sm:p-8">
+                <h3 className="mb-8 text-sm font-black uppercase tracking-widest text-cyan-400">
+                  Project Team
+                </h3>
+                <div className="space-y-4">
+                  {project.projectTeam.map((member, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.5 + index * 0.1 }}
+                      className="group flex gap-4 rounded-2xl border border-white/5 p-4 transition-all hover:bg-white/10"
+                    >
+                       <div className="flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-slate-800 ring-2 ring-white/10 transition-transform duration-500 group-hover:scale-110">
+                         <span className="text-lg font-bold text-cyan-400">{member.name.charAt(0)}</span>
+                       </div>
+                       <div>
+                         <p className="font-bold text-white text-lg">{member.name}</p>
+                         <p className="text-xs font-semibold uppercase tracking-wider text-cyan-400/80">{member.role}</p>
+                       </div>
+                    </motion.div>
+                  ))}
+                </div>
               </div>
-            </div>
-          </div>
-        </motion.article>
+            )}
+          </motion.div>
+        </div>
       </div>
-    </section>
+    </div>
   );
 };
 

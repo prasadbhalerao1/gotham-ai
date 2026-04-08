@@ -12,10 +12,10 @@ import projectService from "../services/projectService";
 import SEO from "../components/SEO";
 
 const statusStyles = {
-  "In Progress": "bg-green-100 text-green-700",
-  "Documentation Phase": "bg-yellow-50 text-yellow-700",
-  Completed: "bg-blue-100 text-blue-700",
-  "On Hold": "bg-gray-100 text-gray-600",
+  "In Progress": "border border-green-500/30 bg-green-500/10 text-green-400",
+  "Documentation Phase": "border border-yellow-500/30 bg-yellow-500/10 text-yellow-400",
+  Completed: "border border-blue-500/30 bg-blue-500/10 text-blue-400",
+  "On Hold": "border border-gray-500/30 bg-gray-500/10 text-gray-400",
 };
 
 const ProjectsPage = () => {
@@ -136,10 +136,10 @@ const ProjectsPage = () => {
                     },
                   }}
                   whileHover={{ y: -6 }}
-                  className="relative overflow-hidden rounded-2xl border border-slate-700/50 bg-slate-800/50 p-8 transition-colors duration-300 hover:border-cyan-500/30"
+                  className="group relative overflow-hidden rounded-3xl border border-white/5 bg-white/[0.02] p-8 backdrop-blur transition-all duration-500 hover:border-cyan-500/30 hover:bg-white/[0.04] hover:shadow-[0_0_40px_-10px_rgba(6,182,212,0.15)]"
                 >
                   {/* Subtle top accent line */}
-                  <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" />
+                  <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent transition-opacity duration-500 group-hover:via-cyan-400/80" />
 
                   <div className="relative z-10 mb-6 flex flex-wrap items-center justify-between gap-3">
                     <span className="inline-flex items-center gap-2 text-sm font-semibold text-cyan-200">
