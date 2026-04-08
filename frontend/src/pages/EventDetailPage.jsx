@@ -104,13 +104,15 @@ const EventDetailPage = () => {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  background: "#000",
+                  background: "#050505",
+                  borderRadius: "16px",
+                  overflow: "hidden"
                 }}
               >
                 <video
                   controls
                   src={item.original}
-                  style={{ maxHeight: "600px", width: "auto" }}
+                  style={{ width: "100%", height: "100%", objectFit: "contain" }}
                 />
               </div>
             )
@@ -194,7 +196,7 @@ const EventDetailPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-blue-50 py-24">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-blue-50 py-12 md:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Back Button */}
         <motion.div
@@ -205,155 +207,125 @@ const EventDetailPage = () => {
         >
           <Link
             to="/#events"
-            className="inline-flex items-center gap-2 font-semibold text-blue-600 transition-colors hover:text-blue-700"
+            className="inline-flex items-center gap-2 font-semibold text-blue-600 transition-colors hover:text-blue-700 hover:underline"
           >
             <IoArrowBack className="size-5" /> Back to Events
           </Link>
         </motion.div>
 
-        {/* Hero Section */}
+        {/* Split Hero Section */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="mb-12 overflow-hidden rounded-3xl bg-white shadow-2xl"
+          className="mb-12 grid grid-cols-1 gap-12 lg:grid-cols-12 lg:items-center"
         >
-          {/* Header Image */}
-          <div className="relative h-96 overflow-hidden">
-            <img
-              src={event.image}
-              alt={event.title}
-              className="size-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
+          {/* Left Side: Title & Info */}
+          <div className="space-y-8 lg:col-span-7">
+            <h1 className="special-font text-5xl font-black leading-tight text-gray-900 sm:text-6xl md:text-7xl">
+              {event.title}
+            </h1>
+            {event.description && (
+              <p className="text-xl text-gray-700 md:text-2xl">
+                {event.description}
+              </p>
+            )}
 
-            {/* Title Overlay */}
-            <div className="absolute inset-x-0 bottom-0 p-8">
-              <h1 className="special-font mb-4 text-4xl font-black text-white sm:text-5xl md:text-6xl">
-                {event.title}
-              </h1>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div className="flex items-center gap-4 rounded-2xl bg-white p-5 shadow-sm transition-shadow hover:shadow-md">
+                <div className="rounded-xl bg-blue-100 p-3 text-blue-600">
+                  <IoCalendarOutline className="size-7" />
+                </div>
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-wider text-gray-500">Date</p>
+                  <p className="font-bold text-gray-900">{event.dateDisplay}</p>
+                </div>
+              </div>
+
+              {event.time && (
+                <div className="flex items-center gap-4 rounded-2xl bg-white p-5 shadow-sm transition-shadow hover:shadow-md">
+                  <div className="rounded-xl bg-cyan-100 p-3 text-cyan-600">
+                    <IoTimeOutline className="size-7" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-wider text-gray-500">Time</p>
+                    <p className="font-bold text-gray-900">{event.time}</p>
+                  </div>
+                </div>
+              )}
+
+              <div className="flex items-center gap-4 rounded-2xl bg-white p-5 shadow-sm transition-shadow hover:shadow-md">
+                <div className="rounded-xl bg-green-100 p-3 text-green-600">
+                  <IoLocationOutline className="size-7" />
+                </div>
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-wider text-gray-500">Location</p>
+                  <p className="font-bold text-gray-900">{event.location}</p>
+                </div>
+              </div>
+
+              {event.attendees > 0 && (
+                <div className="flex items-center gap-4 rounded-2xl bg-white p-5 shadow-sm transition-shadow hover:shadow-md">
+                  <div className="rounded-xl bg-purple-100 p-3 text-purple-600">
+                    <IoPeopleOutline className="size-7" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-wider text-gray-500">Attendees</p>
+                    <p className="font-bold text-gray-900">{event.attendees}+</p>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
-          {/* Event Info Cards */}
-          <div className="p-8">
-            <div
-              className={`grid grid-cols-1 md:grid-cols-2 ${event.attendees > 0 ? "lg:grid-cols-4" : "lg:grid-cols-3"} mb-8 gap-6`}
-            >
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="flex items-center gap-4 rounded-xl bg-blue-50 p-4"
-              >
-                <div className="rounded-lg bg-blue-600 p-3">
-                  <IoCalendarOutline className="size-6 text-white" />
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-600">Date</p>
-                  <p className="font-bold text-gray-900">{event.dateDisplay}</p>
-                </div>
-              </motion.div>
-
-              {event.time && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 }}
-                  className="flex items-center gap-4 rounded-xl bg-cyan-50 p-4"
-                >
-                  <div className="rounded-lg bg-cyan-600 p-3">
-                    <IoTimeOutline className="size-6 text-white" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-600">Time</p>
-                    <p className="font-bold text-gray-900">{event.time}</p>
-                  </div>
-                </motion.div>
-              )}
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-                className="flex items-center gap-4 rounded-xl bg-green-50 p-4"
-              >
-                <div className="rounded-lg bg-green-600 p-3">
-                  <IoLocationOutline className="size-6 text-white" />
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-600">Location</p>
-                  <p className="font-bold text-gray-900">{event.location}</p>
-                </div>
-              </motion.div>
-
-              {event.attendees > 0 && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 }}
-                  className="flex items-center gap-4 rounded-xl bg-blue-50 p-4"
-                >
-                  <div className="rounded-lg bg-blue-600 p-3">
-                    <IoPeopleOutline className="size-6 text-white" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-600">
-                      Attendees
-                    </p>
-                    <p className="font-bold text-gray-900">
-                      {event.attendees}+
-                    </p>
-                  </div>
-                </motion.div>
-              )}
+          {/* Right Side: Floating Cover Image */}
+          <div className="lg:col-span-5">
+            <div className="relative overflow-hidden rounded-3xl shadow-2xl ring-1 ring-black/5">
+              <img
+                src={event.image}
+                alt={event.title}
+                className="aspect-square w-full object-cover lg:aspect-[4/5]"
+              />
+              <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/10 to-transparent mix-blend-overlay"></div>
             </div>
           </div>
         </motion.div>
 
-        {/* Content Grid */}
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-          {/* Main Content */}
+        {/* Content Section */}
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
+          {/* Main Column */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.6 }}
-            className="lg:col-span-2"
+            className="space-y-12 lg:col-span-8"
           >
-            {/* Description */}
-            {event.description && (
-              <div className="mb-8 rounded-2xl bg-white p-8 shadow-lg">
-                <h2 className="mb-4 text-3xl font-bold text-gray-900">
-                  About This Event
-                </h2>
-                <p className="mb-6 text-lg leading-relaxed text-gray-700">
-                  {event.description}
-                </p>
-
-                {/* Event Content */}
-                {event.content && (
-                  <div
-                    className="prose prose-lg max-w-none"
-                    dangerouslySetInnerHTML={{ __html: event.content }}
-                  />
-                )}
+            {/* Event Description (About) */}
+            {event.content && (
+              <div className="rounded-3xl bg-white p-8 shadow-lg md:p-12">
+                <div
+                  className="prose prose-lg max-w-none prose-headings:font-bold prose-headings:text-gray-900 prose-p:text-gray-700 prose-p:leading-relaxed prose-a:text-blue-600 prose-li:text-gray-700"
+                  dangerouslySetInnerHTML={{ __html: event.content }}
+                />
               </div>
             )}
 
             {/* Photo Gallery */}
             {galleryImages.length > 0 && (
-              <div className="rounded-2xl bg-white p-8 shadow-lg">
-                <h2 className="mb-6 text-3xl font-bold text-gray-900">
-                  Event Gallery
+              <div className="rounded-3xl bg-white p-8 shadow-lg md:p-12">
+                <h2 className="mb-8 text-3xl font-bold text-gray-900">
+                  Event Highlights
                 </h2>
-                <ImageGallery
-                  items={galleryImages}
-                  showPlayButton={false}
-                  showFullscreenButton={true}
-                  showNav={true}
-                  additionalClass="custom-gallery"
-                  autoPlay={false}
-                />
+                <div className="overflow-hidden rounded-2xl ring-1 ring-black/5">
+                  <ImageGallery
+                    items={galleryImages}
+                    showPlayButton={false}
+                    showFullscreenButton={true}
+                    showNav={true}
+                    additionalClass="custom-gallery"
+                    autoPlay={false}
+                  />
+                </div>
               </div>
             )}
           </motion.div>
@@ -363,47 +335,56 @@ const EventDetailPage = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.6 }}
-            className="lg:col-span-1"
+            className="space-y-8 lg:col-span-4"
           >
-            {/* Speakers */}
+            {/* Speakers Widget */}
             {event.speakers && event.speakers.length > 0 && (
-              <div className="mb-8 rounded-2xl bg-white p-6 shadow-lg">
-                <h3 className="mb-4 text-2xl font-bold text-gray-900">
-                  Speakers
+              <div className="sticky top-8 rounded-3xl bg-white p-8 shadow-lg">
+                <h3 className="mb-6 text-2xl font-bold text-gray-900">
+                  Featured Speakers
                 </h3>
-                <div className="space-y-4">
+                <div className="space-y-6">
                   {event.speakers.map((speaker, index) => (
                     <motion.div
                       key={index}
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.5 + index * 0.1 }}
-                      className="flex items-start gap-4 rounded-xl bg-gray-50 p-4 transition-colors hover:bg-gray-100"
+                      className="group flex flex-col gap-4 rounded-2xl bg-gray-50 p-5 transition-all hover:bg-blue-50"
                     >
-                      <div className="flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-blue-600 to-cyan-600 text-xl font-bold text-white">
-                        {speaker.image ? (
-                          <img
-                            src={speaker.image}
-                            alt={speaker.name}
-                            className="size-full object-cover"
-                          />
-                        ) : (
-                          speaker.name.charAt(0)
-                        )}
+                      <div className="flex items-center gap-4">
+                        <div className="flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-blue-600 to-cyan-500 shadow-inner">
+                          {speaker.image ? (
+                            <img
+                              src={speaker.image}
+                              alt={speaker.name}
+                              className="size-full object-cover transition-transform duration-500 group-hover:scale-110"
+                            />
+                          ) : (
+                            <span className="text-xl font-bold text-white">
+                              {speaker.name.charAt(0)}
+                            </span>
+                          )}
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-gray-900">
+                            {speaker.name}
+                          </h4>
+                          {speaker.title && (
+                            <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-blue-600">
+                              {speaker.title}
+                            </p>
+                          )}
+                        </div>
                       </div>
-                      <div>
-                        <h4 className="font-bold text-gray-900">
-                          {speaker.name}
-                        </h4>
-                        <p className="text-sm text-gray-600">{speaker.bio}</p>
-                      </div>
+                      <p className="text-sm leading-relaxed text-gray-600">
+                        {speaker.bio}
+                      </p>
                     </motion.div>
                   ))}
                 </div>
               </div>
             )}
-
-            {/* Tags */}
           </motion.div>
         </div>
       </div>
