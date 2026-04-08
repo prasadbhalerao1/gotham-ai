@@ -67,10 +67,55 @@ const ProjectDetailPage = () => {
     );
   }
 
-  const galleryItems = (project.gallery ?? []).filter(Boolean).map((img) => ({
-    original: img,
-    thumbnail: img,
-  }));
+  const isVideo = (url) =>
+    typeof url === "string" && /\.(mp4|webm|ogg)$/i.test(url);
+
+  const galleryItems = (project.gallery ?? []).filter(Boolean).map((url) => {
+    const video = isVideo(url);
+    return {
+      original: url,
+      thumbnail: url,
+      renderItem: video
+        ? (item) => (
+            <div
+              className="gallery-slide"
+              style={{
+                width: "100%",
+                height: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                background: "#000",
+              }}
+            >
+              <video
+                controls
+                src={item.original}
+                style={{ maxHeight: "600px", width: "auto" }}
+              />
+            </div>
+          )
+        : undefined,
+      renderThumbInner: video
+        ? () => (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                height: "100%",
+                minHeight: "80px",
+                background: "#111",
+              }}
+            >
+              <svg fill="#fff" viewBox="0 0 24 24" width="32px" height="32px">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            </div>
+          )
+        : undefined,
+    };
+  });
 
   if (project.disableDetail) {
     return (
