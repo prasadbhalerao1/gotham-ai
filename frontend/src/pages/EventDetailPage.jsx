@@ -175,9 +175,9 @@ const EventDetailPage = () => {
               {/* Gallery Only view: show only gallery */}
               {/* Gallery */}
               {galleryImages.length > 0 && (
-                <div className="rounded-2xl bg-gray-50 p-6">
-                  <h2 className="mb-4 text-2xl font-bold text-gray-900">
-                    Photo Gallery
+                <div className="pt-4">
+                  <h2 className="mb-6 text-3xl font-extrabold tracking-tight text-gray-900">
+                    Event Gallery
                   </h2>
                   <ImageGallery
                     items={galleryImages}
@@ -292,19 +292,22 @@ const EventDetailPage = () => {
         </motion.div>
 
         {/* Content Section */}
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
+        <div className="mt-16 grid grid-cols-1 gap-16 lg:grid-cols-12">
           {/* Main Column */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.6 }}
-            className="space-y-12 lg:col-span-8"
+            className="space-y-16 lg:col-span-8"
           >
             {/* Event Description (About) */}
             {event.content && (
-              <div className="rounded-3xl bg-white p-8 shadow-lg md:p-12">
+              <div className="pt-4">
+                <h2 className="mb-8 text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+                  About This Event
+                </h2>
                 <div
-                  className="prose prose-lg max-w-none prose-headings:font-bold prose-headings:text-gray-900 prose-p:text-gray-700 prose-p:leading-relaxed prose-a:text-blue-600 prose-li:text-gray-700"
+                  className="prose prose-lg sm:prose-xl max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-headings:text-gray-900 prose-p:text-gray-600 prose-p:leading-relaxed prose-a:text-blue-600 prose-li:text-gray-600 marker:text-blue-500"
                   dangerouslySetInnerHTML={{ __html: event.content }}
                 />
               </div>
@@ -312,11 +315,11 @@ const EventDetailPage = () => {
 
             {/* Photo Gallery */}
             {galleryImages.length > 0 && (
-              <div className="rounded-3xl bg-white p-8 shadow-lg md:p-12">
-                <h2 className="mb-8 text-3xl font-bold text-gray-900">
+              <div className="pt-8">
+                <h2 className="mb-6 text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
                   Event Highlights
                 </h2>
-                <div className="overflow-hidden rounded-2xl ring-1 ring-black/5">
+                <div className="mt-4 drop-shadow-2xl">
                   <ImageGallery
                     items={galleryImages}
                     showPlayButton={false}
@@ -335,30 +338,30 @@ const EventDetailPage = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.6 }}
-            className="space-y-8 lg:col-span-4"
+            className="lg:col-span-4"
           >
             {/* Speakers Widget */}
             {event.speakers && event.speakers.length > 0 && (
-              <div className="sticky top-8 rounded-3xl bg-white p-8 shadow-lg">
-                <h3 className="mb-6 text-2xl font-bold text-gray-900">
+              <div className="sticky top-8 rounded-3xl bg-white/60 px-6 py-8 backdrop-blur-xl shadow-sm ring-1 ring-gray-900/5 sm:p-8">
+                <h3 className="mb-8 text-sm font-black uppercase tracking-widest text-blue-600">
                   Featured Speakers
                 </h3>
-                <div className="space-y-6">
+                <div className="space-y-8">
                   {event.speakers.map((speaker, index) => (
                     <motion.div
                       key={index}
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.5 + index * 0.1 }}
-                      className="group flex flex-col gap-4 rounded-2xl bg-gray-50 p-5 transition-all hover:bg-blue-50"
+                      className="group flex flex-col gap-4"
                     >
                       <div className="flex items-center gap-4">
-                        <div className="flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-blue-600 to-cyan-500 shadow-inner">
+                        <div className="flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-blue-600 to-cyan-500 shadow-md ring-2 ring-white/50 transition-transform duration-500 group-hover:scale-105">
                           {speaker.image ? (
                             <img
                               src={speaker.image}
                               alt={speaker.name}
-                              className="size-full object-cover transition-transform duration-500 group-hover:scale-110"
+                              className="size-full object-cover"
                             />
                           ) : (
                             <span className="text-xl font-bold text-white">
@@ -367,11 +370,11 @@ const EventDetailPage = () => {
                           )}
                         </div>
                         <div>
-                          <h4 className="font-bold text-gray-900">
+                          <h4 className="text-lg font-bold text-gray-900">
                             {speaker.name}
                           </h4>
                           {speaker.title && (
-                            <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-blue-600">
+                            <p className="mt-0.5 text-xs font-semibold uppercase tracking-wider text-gray-500">
                               {speaker.title}
                             </p>
                           )}
