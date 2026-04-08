@@ -238,7 +238,7 @@ const EventDetailPage = () => {
           {/* Event Info Cards */}
           <div className="p-8">
             <div
-              className={`grid grid-cols-1 md:grid-cols-2 ${event.attendees && event.attendees > 0 ? "lg:grid-cols-4" : "lg:grid-cols-3"} mb-8 gap-6`}
+              className={`grid grid-cols-1 md:grid-cols-2 ${event.attendees > 0 ? "lg:grid-cols-4" : "lg:grid-cols-3"} mb-8 gap-6`}
             >
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -287,7 +287,7 @@ const EventDetailPage = () => {
                 </div>
               </motion.div>
 
-              {event.attendees && event.attendees > 0 && (
+              {event.attendees > 0 && (
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
