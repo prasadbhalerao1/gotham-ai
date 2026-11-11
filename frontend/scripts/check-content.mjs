@@ -1,14 +1,13 @@
-// Validates src/data/*.js so adding an event or project can't silently break
+// Validates src/content/** so adding an event, project or resource can't silently break
 // the site. Runs before every build; run it alone with `npm run check:content`.
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath, pathToFileURL } from "node:url";
 
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const load = (f) => import(pathToFileURL(path.join(root, "src/data", f)).href);
-const { events } = await load("events.js");
-const { projects } = await load("projects.js");
-const { resources } = await load("resources.js");
+import { ROOT as root, loadContent } from "./lib/content.mjs";
+
+const events = await loadContent("events");
+const projects = await loadContent("projects");
+const resources = await loadContent("resources");
 
 const errors = [];
 const warnings = [];
@@ -38,9 +37,9 @@ const uniqueSlugs = (kind, list) => {
 };
 
 events.forEach((e, i) => {
-  const w = `events[${i}] ${e.slug ?? "(no slug)"}`;
-  need(w, e, ["slug", "title", "date", "location", "category", "summary", "cover"]);
-  if (e.slug && !SLUG.test(e.slug)) errors.push(`${w}: slug must be lowercase-with-hyphens`);
+  const w = `content/events/${e.slug}.js`;
+  need(w, e, ["title", "date", "location", "category", "summary", "cover"]);
+  if (!SLUG.test(e.slug)) errors.push(`${w}: rename the file — lowercase words joined by hyphens (e.g. my-event-2026.js)`);
   [e.date, e.endDate].filter(Boolean).forEach((d) => {
     if (!ISO_IST.test(d)) errors.push(`${w}: date "${d}" must look like 2026-03-18T11:00:00+05:30`);
   });
@@ -49,7 +48,10 @@ events.forEach((e, i) => {
     errors.push(`${w}: category "${e.category}" — use one of ${EVENT_CATEGORIES.join(", ")}`);
   if (e.summary?.length > 200) warnings.push(`${w}: summary is ${e.summary.length} chars — keep under ~160 for search results`);
   checkAsset(`${w} cover`, e.cover);
-  (e.gallery || []).forEach((g, j) => checkAsset(`${w} gallery[${j}]`, g));
+  (e.gallery || []).forEach((g, j) => {
+    if (typeof g === "object" && !g.src) errors.push(`${w} gallery[${j}]: an object entry needs "src"`);
+    checkAsset(`${w} gallery[${j}]`, typeof g === "string" ? g : g.src);
+  });
   (e.speakers || []).forEach((s, j) => {
     need(`${w} speakers[${j}]`, s, ["name"]);
     checkAsset(`${w} speakers[${j}]`, s.image);
@@ -61,9 +63,9 @@ events.forEach((e, i) => {
 });
 
 projects.forEach((p, i) => {
-  const w = `projects[${i}] ${p.slug ?? "(no slug)"}`;
-  need(w, p, ["slug", "title", "status", "summary", "overview", "partner", "capabilities"]);
-  if (p.slug && !SLUG.test(p.slug)) errors.push(`${w}: slug must be lowercase-with-hyphens`);
+  const w = `content/projects/${p.slug}.js`;
+  need(w, p, ["title", "status", "summary", "overview", "partner", "capabilities"]);
+  if (!SLUG.test(p.slug)) errors.push(`${w}: rename the file — lowercase words joined by hyphens`);
   if (p.status && !PROJECT_STATUS.includes(p.status))
     errors.push(`${w}: status "${p.status}" — use one of ${PROJECT_STATUS.join(", ")}`);
   if (p.overview && !Array.isArray(p.overview)) errors.push(`${w}: overview must be an array of paragraphs`);
@@ -72,7 +74,14 @@ projects.forEach((p, i) => {
   (p.gallery || []).forEach((g, j) => checkAsset(`${w} gallery[${j}]`, g));
 });
 
-resources.forEach((r, i) => need(`resources[${i}] ${r.slug ?? ""}`, r, ["slug", "title", "description", "type"]));
+const LEVELS = ["Beginner", "Intermediate", "Advanced"];
+resources.forEach((r, i) => {
+  const w = `content/resources/${r.slug}.js`;
+  need(w, r, ["title", "description", "type", "category", "difficulty"]);
+  if (!SLUG.test(r.slug)) errors.push(`${w}: rename the file — lowercase words joined by hyphens`);
+  if (r.difficulty && !LEVELS.includes(r.difficulty)) errors.push(`${w}: difficulty "${r.difficulty}" — use one of ${LEVELS.join(", ")}`);
+  if (r.url && !/^https?:\/\//.test(r.url)) errors.push(`${w}: url must start with http(s)://`);
+});
 
 uniqueSlugs("events", events);
 uniqueSlugs("projects", projects);
