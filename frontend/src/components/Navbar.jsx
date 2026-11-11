@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { lockScroll } from "../lib/smooth.js";
 import { navItems, site } from "../data/site.js";
 import Logo from "./Logo.jsx";
+import SoundToggle from "./SoundToggle.jsx";
 
 
 function PuneClock() {
@@ -77,7 +78,7 @@ const NavBar = () => {
               <NavLink
                 key={item.label}
                 to={item.to}
-                className={`group relative px-4 py-2 font-mono text-[11px] uppercase tracking-[0.18em] transition-colors ${
+                className={`group relative px-4 py-2 font-mono text-[0.6875rem] uppercase tracking-[0.18em] transition-colors ${
                   isActive(item.to) ? "text-signal" : "text-bone-dim hover:text-bone"
                 }`}
               >
@@ -92,6 +93,7 @@ const NavBar = () => {
             <span className="label hidden xl:inline">
               <PuneClock />
             </span>
+            <SoundToggle />
             <a href={site.joinForm} target="_blank" rel="noreferrer" className="btn-signal hidden !px-5 !py-2.5 sm:inline-flex">
               Join <span aria-hidden>↗</span>
             </a>

@@ -230,6 +230,8 @@ export function createGothamScene(canvas, { reducedMotion = false, onReady } = {
   let raf = 0;
   let intro = reducedMotion ? 1 : 0;
   let ready = false;
+  let started = reducedMotion;
+  let startAt = 0;
 
   const frame = () => {
     raf = requestAnimationFrame(frame);
@@ -237,7 +239,7 @@ export function createGothamScene(canvas, { reducedMotion = false, onReady } = {
     clock.getDelta();
     const t = clock.elapsedTime;
     // driven by wall-clock time so slow GPUs still finish the intro
-    intro = reducedMotion ? 1 : Math.min(1, t * 0.4);
+    intro = reducedMotion ? 1 : started ? Math.min(1, (t - startAt) * 0.4) : 0;
     const ease = 1 - Math.pow(1 - intro, 3);
     const moonOn = THREE.MathUtils.smoothstep(intro, 0.3, 1);
 
@@ -248,7 +250,7 @@ export function createGothamScene(canvas, { reducedMotion = false, onReady } = {
     const r = 34;
     moon.position.set(moonPos.x, moonPos.y - (1 - moonOn) * 14, skyZ + 1);
     moon.scale.set(r * 2, r * 2, 1);
-    moonMat.opacity = 0.62 * moonOn;
+    moonMat.opacity = 0.45 * moonOn;
 
     cityMat.uniforms.uTime.value = t;
     cityMat.uniforms.uIntro.value = ease;
@@ -269,6 +271,12 @@ export function createGothamScene(canvas, { reducedMotion = false, onReady } = {
   } else frame();
 
   return {
+    /** begin the entrance once the intro has closed */
+    start() {
+      if (started) return;
+      started = true;
+      startAt = clock.elapsedTime;
+    },
     setScroll(v) {
       scroll = v;
     },

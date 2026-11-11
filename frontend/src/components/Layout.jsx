@@ -3,7 +3,9 @@ import { Outlet, useLocation } from "react-router-dom";
 import NavBar from "./Navbar.jsx";
 import Footer from "./Footer.jsx";
 import ContactModal from "./ContactModal.jsx";
+import Intro from "./Intro.jsx";
 import { ContactContext } from "../lib/contact.js";
+import { sound } from "../lib/sound.js";
 import { startSmoothScroll, scrollToTarget, ScrollTrigger } from "../lib/smooth.js";
 
 const Layout = () => {
@@ -13,6 +15,7 @@ const Layout = () => {
 
   useEffect(() => {
     startSmoothScroll();
+    sound.autostart(); // music on by default; the navbar symbol mutes it
   }, []);
 
   // Route changes: new pages start at the top; "/#section" links scroll once the
@@ -38,6 +41,7 @@ const Layout = () => {
       >
         Skip to content
       </a>
+      <Intro />
       <NavBar />
       <main id="main" className="relative">
         <Outlet />

@@ -12,6 +12,13 @@
       content="_vDlKMqNlxWhWpWK0v23xdX6c0aN5uUMKBqIF0Y7N_Q"
     />
     <title>Gotham AI</title>
+    <script>
+      // first visit to the home page shows the intro gate; hide the page until then
+      try {
+        if (location.pathname === "/" && !sessionStorage.getItem("gotham-intro-seen"))
+          document.documentElement.classList.add("intro-pending");
+      } catch (e) {}
+    </script>
   </head>
   <body style="background: #09090b">
     <div id="root"></div>

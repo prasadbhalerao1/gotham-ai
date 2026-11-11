@@ -8,11 +8,13 @@
     --ink: #09090b;
     --bone: #f2f2ee;
     --signal: #edff66;
-    --gutter: clamp(16px, 4vw, 56px);
+    --gutter: clamp(16px, 4vw, 3.5rem);
   }
 
   html {
     background: var(--ink);
+    /* big displays: scale the whole layout (everything is rem-based) */
+    font-size: max(16px, min(0.8333vw, 32px));
     -webkit-text-size-adjust: 100%;
   }
   html.lenis,
@@ -46,13 +48,13 @@
 
 @layer components {
   .wrap {
-    @apply mx-auto w-full max-w-[1480px];
+    @apply mx-auto w-full max-w-[92.5rem];
     padding-inline: var(--gutter);
   }
 
   /* mono micro-labels used across the system */
   .label {
-    @apply font-mono text-[11px] uppercase tracking-[0.18em] text-bone-mute;
+    @apply font-mono text-[0.6875rem] uppercase tracking-[0.18em] text-bone-mute;
   }
 
   .display {
@@ -151,6 +153,28 @@
   .mask-fade-x {
     mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
   }
+}
+
+/* intro gate: hide the page until the visitor enters (class set by index.html) */
+html.intro-pending #main,
+html.intro-pending header {
+  visibility: hidden;
+  /* failsafe: if the script never runs, show the page anyway */
+  animation: introFailsafe 0s 8s forwards;
+}
+@keyframes introFailsafe {
+  to { visibility: visible; }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* sound toggle: speaker waves pulse while music plays */
+@keyframes wave {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; }
 }
 
 /* used by the photo marquee (inline animation, so declare it explicitly) */
