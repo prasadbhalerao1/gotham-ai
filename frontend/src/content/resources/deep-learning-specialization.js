@@ -1,13 +1,12 @@
 export default {
   title: "Deep Learning Specialization",
   description:
-    "Complete course on deep learning from basics to advanced topics including CNNs, RNNs, and GANs.",
+    "Five courses on neural networks, tuning and optimisation, structuring ML projects, CNNs and sequence models.",
   type: "course",
   category: "Deep Learning",
   difficulty: "Intermediate",
-  image: "/img/dl-course.jpg",
-  url: "https://example.com/dl-course",
-  author: "Andrew Ng",
+  url: "https://www.coursera.org/specializations/deep-learning",
+  author: "Andrew Ng, DeepLearning.AI",
   featured: true,
   published: true,
 };

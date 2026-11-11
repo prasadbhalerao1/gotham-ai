@@ -1,13 +1,11 @@
 export default {
   title: "ImageNet Dataset",
   description:
-    "Large-scale dataset for image classification and object detection tasks.",
+    "A large image database organised by the WordNet hierarchy, the benchmark behind many advances in computer vision.",
   type: "dataset",
   category: "Computer Vision",
-  difficulty: "Intermediate",
-  image: "/img/imagenet.jpg",
-  url: "https://example.com/imagenet",
-  author: "Stanford University",
-  featured: false,
+  difficulty: "Advanced",
+  url: "https://www.image-net.org/",
+  author: "Stanford & Princeton",
   published: true,
 };

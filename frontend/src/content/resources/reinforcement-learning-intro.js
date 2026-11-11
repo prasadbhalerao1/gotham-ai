@@ -1,13 +1,11 @@
 export default {
   title: "Reinforcement Learning: An Introduction",
   description:
-    "Classic textbook on reinforcement learning covering theory and practical applications.",
+    "The standard textbook on reinforcement learning, free online in its second edition: bandits, MDPs, TD learning and policy gradients.",
   type: "book",
-  category: "Machine Learning",
+  category: "Reinforcement Learning",
   difficulty: "Advanced",
-  image: "/img/rl-book.jpg",
-  url: "https://example.com/rl-book",
-  author: "Sutton & Barto",
-  featured: false,
+  url: "http://incompleteideas.net/book/the-book-2nd.html",
+  author: "Richard S. Sutton & Andrew G. Barto",
   published: true,
 };
