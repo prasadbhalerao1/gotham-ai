@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { lockScroll } from "../lib/smooth.js";
+import { useFocusTrap } from "../lib/useFocusTrap.js";
 import { navItems, site } from "../data/site.js";
 import Logo from "./Logo.jsx";
 import SoundToggle from "./SoundToggle.jsx";
+import SearchButton from "./SearchButton.jsx";
 
 
 function PuneClock() {
@@ -30,6 +32,9 @@ const NavBar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const { pathname, hash } = useLocation();
+  // trap covers the header too, so the close button stays reachable
+  const shell = useRef(null);
+  useFocusTrap(shell, open);
 
   useEffect(() => {
     let last = window.scrollY;
@@ -57,7 +62,7 @@ const NavBar = () => {
     to.startsWith("/#") ? pathname === "/" && hash === to.slice(1) : pathname.startsWith(to);
 
   return (
-    <>
+    <div ref={shell}>
       <header
         className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ease-expo ${
           hidden && !open ? "-translate-y-full" : "translate-y-0"
@@ -93,6 +98,7 @@ const NavBar = () => {
             <span className="label hidden xl:inline">
               <PuneClock />
             </span>
+            <SearchButton />
             <SoundToggle />
             <a href={site.joinForm} target="_blank" rel="noreferrer" className="btn-signal hidden !px-5 !py-2.5 sm:inline-flex">
               Join <span aria-hidden>↗</span>
@@ -164,7 +170,7 @@ const NavBar = () => {
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+    </div>
   );
 };
 

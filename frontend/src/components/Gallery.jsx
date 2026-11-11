@@ -1,8 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { gsap, lockScroll } from "../lib/smooth.js";
+import { useFocusTrap } from "../lib/useFocusTrap.js";
 
-const isVideo = (src) => /\.(mp4|webm|mov)$/i.test(src);
+// items: media objects from eventMedia() — { src, alt, caption, video, width, height }
+// (plain path strings still work)
+const asMedia = (m, i, title) => (typeof m === "string" ? { src: m, alt: `${title} — photo ${i + 1}`, video: /\.(mp4|webm|mov)$/i.test(m) } : m);
 
 // Repeating bento rhythm for the board (4-column grid on desktop).
 const SPANS = [
@@ -18,9 +21,12 @@ const SPANS = [
 const tilt = (i) => [-1.6, 1.2, -0.8, 1.8, -1.2, 0.9, -1.9][i % 7];
 
 /** A photo board with settle-in motion, hover lift and a keyboard lightbox. */
-const Gallery = ({ items, title }) => {
+const Gallery = ({ items: raw, title }) => {
+  const items = raw.map((m, i) => asMedia(m, i, title));
   const [open, setOpen] = useState(-1);
   const board = useRef(null);
+  const box = useRef(null);
+  useFocusTrap(box, open >= 0);
   const close = useCallback(() => setOpen(-1), []);
   const step = useCallback((d) => setOpen((i) => (i + d + items.length) % items.length), [items.length]);
 
@@ -60,9 +66,9 @@ const Gallery = ({ items, title }) => {
   return (
     <>
       <div ref={board} className="grid auto-rows-[44vw] grid-cols-2 gap-3 md:auto-rows-[15vw] md:grid-cols-4 md:gap-4 xl:auto-rows-[220px]">
-        {items.map((src, i) => (
+        {items.map((m, i) => (
           <button
-            key={src}
+            key={m.src}
             type="button"
             data-tile
             onClick={() => setOpen(i)}
@@ -70,11 +76,11 @@ const Gallery = ({ items, title }) => {
             className={`group relative overflow-hidden bg-ink-700 outline-offset-4 transition-[transform,box-shadow] duration-700 ease-expo [transform:rotate(var(--tilt))] hover:z-10 hover:shadow-[0_40px_80px_-30px_rgba(0,0,0,0.9)] hover:[transform:rotate(0deg)_scale(1.03)] ${
               items.length === 1 ? "col-span-2 row-span-2 md:col-span-4 md:row-span-3" : i === 0 ? "col-span-2 row-span-2" : ""
             } ${items.length === 1 ? "" : SPANS[i % SPANS.length]}`}
-            aria-label={`Open ${isVideo(src) ? "video" : "photo"} ${i + 1} of ${items.length}`}
+            aria-label={`Open ${m.alt}`}
           >
-            {isVideo(src) ? (
+            {m.video ? (
               <>
-                <video src={`${src}#t=0.5`} muted playsInline preload="metadata" className="size-full object-cover" />
+                <video src={`${m.src}#t=0.5`} muted playsInline preload="metadata" aria-label={m.alt} className="size-full object-cover" />
                 <span className="absolute inset-0 flex items-center justify-center bg-ink/30">
                   <span className="flex size-14 items-center justify-center rounded-full bg-signal pl-1 text-ink transition-transform duration-500 group-hover:scale-110">
                     ▶
@@ -83,8 +89,10 @@ const Gallery = ({ items, title }) => {
               </>
             ) : (
               <img
-                src={src}
-                alt={`${title} — photo ${i + 1}`}
+                src={m.src}
+                alt={m.alt}
+                width={m.width}
+                height={m.height}
                 loading="lazy"
                 decoding="async"
                 className="size-full object-cover transition-transform duration-1000 ease-expo group-hover:scale-105"
@@ -100,6 +108,7 @@ const Gallery = ({ items, title }) => {
       <AnimatePresence>
         {open >= 0 && (
           <motion.div
+            ref={box}
             role="dialog"
             aria-modal="true"
             aria-label={`${title} gallery`}
@@ -110,13 +119,13 @@ const Gallery = ({ items, title }) => {
             onClick={close}
           >
             <div className="wrap flex items-center justify-between py-4" onClick={(e) => e.stopPropagation()}>
-              <span className="label">
+              <span className="label min-w-0 truncate">
                 {String(open + 1).padStart(2, "0")} / {String(items.length).padStart(2, "0")}
+                {items[open].caption && <span className="ml-4 normal-case tracking-normal text-bone-dim">{items[open].caption}</span>}
               </span>
               <button
                 type="button"
                 onClick={close}
-                autoFocus
                 aria-label="Close gallery"
                 className="flex size-11 items-center justify-center rounded-full border border-bone/20 text-xl hover:border-bone"
               >
@@ -124,13 +133,15 @@ const Gallery = ({ items, title }) => {
               </button>
             </div>
             <div className="relative flex min-h-0 flex-1 items-center justify-center px-4 pb-8 md:px-20">
-              {isVideo(items[open]) ? (
-                <video key={items[open]} src={items[open]} controls autoPlay playsInline className="max-h-full max-w-full" onClick={(e) => e.stopPropagation()} />
+              {items[open].video ? (
+                <video key={items[open].src} src={items[open].src} aria-label={items[open].alt} controls autoPlay playsInline className="max-h-full max-w-full" onClick={(e) => e.stopPropagation()} />
               ) : (
                 <motion.img
-                  key={items[open]}
-                  src={items[open]}
-                  alt={`${title} — photo ${open + 1}`}
+                  key={items[open].src}
+                  src={items[open].src}
+                  alt={items[open].alt}
+                  width={items[open].width}
+                  height={items[open].height}
                   initial={{ opacity: 0, scale: 0.97 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
