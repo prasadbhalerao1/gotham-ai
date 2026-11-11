@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 
 const PageHeader = ({ crumbs = [], title, intro, children }) => (
-  <header className="grain relative overflow-hidden border-b border-bone/10 bg-ink pb-16 pt-32 md:pb-20 md:pt-44">
+  <header className="relative overflow-hidden border-b border-bone/10 bg-ink pb-16 pt-32 md:pb-20 md:pt-44">
     <div
       aria-hidden
       className="pointer-events-none absolute inset-0"

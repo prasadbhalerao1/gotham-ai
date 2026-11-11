@@ -51,7 +51,7 @@ const Join = () => {
       id="join"
       onPointerMove={onMove}
       aria-labelledby="join-title"
-      className="grain relative overflow-hidden bg-ink-900 py-28 md:py-40"
+      className="relative overflow-hidden bg-ink-900 py-28 md:py-40"
       style={{ "--mx": "70%", "--my": "30%" }}
     >
       <div

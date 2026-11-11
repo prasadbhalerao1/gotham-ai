@@ -16,14 +16,9 @@ const Faq = () => (
           <details
             key={f.q}
             data-reveal="rise"
-            className="faq group border-b border-bone/10 transition-colors duration-500 first:border-t open:border-b-signal/40"
+            className="faq group border-b border-bone/10 first:border-t"
           >
-            <summary className="relative flex cursor-pointer list-none items-center gap-5 py-6 text-xl text-bone md:gap-8 md:text-2xl [&::-webkit-details-marker]:hidden">
-              {/* lime line that sweeps along the row on hover */}
-              <span
-                aria-hidden
-                className="pointer-events-none absolute -bottom-px left-0 h-px w-full origin-left scale-x-0 bg-signal transition-transform duration-700 ease-expo group-hover:scale-x-100 group-open:hidden"
-              />
+            <summary className="flex cursor-pointer list-none items-center gap-5 py-6 text-xl text-bone md:gap-8 md:text-2xl [&::-webkit-details-marker]:hidden">
               <span aria-hidden className="w-7 shrink-0 font-mono text-xs text-bone-mute transition-colors duration-300 group-hover:text-signal group-open:text-signal">
                 {String(i + 1).padStart(2, "0")}
               </span>

@@ -34,7 +34,7 @@ const NotFoundPage = ({ what = "page" }) => {
   };
 
   return (
-    <section onPointerDown={restore} className="relative flex min-h-[100svh] cursor-pointer flex-col overflow-hidden bg-ink pt-24">
+    <section onPointerDown={restore} className="relative flex min-h-svh cursor-pointer flex-col overflow-hidden bg-ink pt-24">
       <Helmet>
         <title>Signal lost | Gotham AI</title>
         <meta name="robots" content="noindex" />

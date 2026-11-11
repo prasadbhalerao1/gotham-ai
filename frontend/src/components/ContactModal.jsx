@@ -117,7 +117,7 @@ const ContactModal = ({ isOpen, onClose }) => {
             exit={{ opacity: 0, y: 24, transition: { duration: 0.25 } }}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
             data-lenis-prevent
-            className="grain relative max-h-[92vh] w-full max-w-xl overflow-y-auto border border-bone/15 bg-ink-800 p-6 sm:p-10"
+            className="relative max-h-[92vh] w-full max-w-xl overflow-y-auto border border-bone/15 bg-ink-800 p-6 sm:p-10"
           >
             <div className="mb-8 flex items-start justify-between gap-6">
               <div>

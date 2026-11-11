@@ -89,7 +89,6 @@ const NavBar = () => {
               >
                 <span className="mr-1.5 text-bone-mute">0{i + 1}</span>
                 {item.label}
-                <span className="absolute inset-x-4 -bottom-0.5 h-px origin-left scale-x-0 bg-signal transition-transform duration-500 ease-expo group-hover:scale-x-100" />
               </NavLink>
             ))}
           </nav>
@@ -137,7 +136,7 @@ const NavBar = () => {
             animate={{ clipPath: "circle(150% at 100% 0%)" }}
             exit={{ clipPath: "circle(0% at 100% 0%)" }}
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            className="grain fixed inset-0 z-40 flex flex-col bg-ink-800 pt-24"
+            className="fixed inset-0 z-40 flex flex-col bg-ink-800 pt-24"
           >
             <nav aria-label="Mobile" className="wrap flex flex-1 flex-col justify-center gap-1">
               {navItems.map((item, i) => (
