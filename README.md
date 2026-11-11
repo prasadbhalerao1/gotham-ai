@@ -5,6 +5,21 @@ We connect learners, developers, and innovators through engaging events, worksho
 
 Our mission is to **empower the next generation of AI enthusiasts** to turn ideas into impact — shaping the intelligent future, together.
 
+## 🧭 Architecture at a glance
+
+- **Frontend** (`frontend/`): React 18 + Vite + Tailwind. Content is static data in `src/data/`;
+  `npm run build` validates it, builds the app and prerenders every route to HTML, plus
+  `sitemap.xml`, `llms.txt` and schema.org structured data.
+- **Hero**: a lazy-loaded Three.js scene (`src/three/gothamScene.js`).
+- **Backend** (`backend/`): Express, used by the frontend **only for the contact form**
+  (`POST /api/contact`). The older event/project/resource endpoints and the Mongo seed
+  script are no longer used by the site.
+
+```bash
+cd frontend && npm install && npm run dev        # site at http://localhost:5173
+cd backend && npm install && npm start           # only needed to test the contact form
+```
+
 ## 🌟 Overview
 
 Gotham AI is a comprehensive platform designed to bring together AI enthusiasts, researchers, and learners. It features:
@@ -13,7 +28,7 @@ Gotham AI is a comprehensive platform designed to bring together AI enthusiasts,
 - **Resources Hub** - Curated AI/ML learning materials with advanced filtering
 - **Contact System** - Beautiful form with email integration
 - **Professional Animations** - GSAP and Framer Motion for smooth UX
-- **Data-Driven** - Content managed through MongoDB, no code changes needed
+- **Static & SEO-first** - Events, projects and resources live in `frontend/src/data/` and every page is prerendered to HTML (see [docs/content-guide.md](docs/content-guide.md))
 
 ---
 
