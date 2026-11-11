@@ -17,7 +17,7 @@ const SearchButton = ({ className = "" }) => {
         <circle cx="11" cy="11" r="7" />
         <path d="m20 20-3.5-3.5" strokeLinecap="round" />
       </svg>
-      <kbd suppressHydrationWarning className="hidden rounded border border-bone/20 px-1.5 py-0.5 font-mono text-[0.625rem] lg:inline">
+      <kbd suppressHydrationWarning className="hidden rounded border border-bone/20 px-1.5 py-0.5 font-mono text-[0.6875rem] lg:inline">
         {isMac() ? "⌘K" : "Ctrl K"}
       </kbd>
     </button>

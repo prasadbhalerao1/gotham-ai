@@ -95,7 +95,7 @@ const EventsPage = () => {
         <dl className="mt-10 flex flex-wrap gap-x-12 gap-y-6">
           {totals.map(([v, label, plus]) => (
             <div key={label} data-reveal="rise" className="flex flex-col">
-              <dt className="order-2 mt-1 font-mono text-[0.625rem] uppercase tracking-[0.16em] text-bone-mute">
+              <dt className="order-2 mt-1 font-mono text-[0.6875rem] uppercase tracking-[0.16em] text-bone-mute">
                 {label}
               </dt>
               <dd className="display order-1 text-6xl md:text-7xl">
@@ -124,7 +124,7 @@ const EventsPage = () => {
                 <path d="m20 20-3.5-3.5" strokeLinecap="round" />
               </svg>
               <span className="flex-1">Search events, speakers, venues…</span>
-              <kbd className="rounded border border-bone/20 px-1.5 py-0.5 font-mono text-[0.625rem]">
+              <kbd className="rounded border border-bone/20 px-1.5 py-0.5 font-mono text-[0.6875rem]">
                 Ctrl K
               </kbd>
             </button>
@@ -205,7 +205,7 @@ const EventsPage = () => {
                     No. {eventNumber(item.event)}
                   </span>
                   <span
-                    className={`rounded-full px-3 py-1 font-mono text-[0.625rem] uppercase tracking-[0.16em] backdrop-blur-sm ${
+                    className={`rounded-full px-3 py-1 font-mono text-[0.6875rem] uppercase tracking-[0.16em] backdrop-blur-sm ${
                       now && isUpcoming(item.event, now)
                         ? "bg-signal text-ink"
                         : "border border-bone/30 bg-ink/40 text-bone"

@@ -145,7 +145,7 @@ const AboutPage = () => {
                 ].map(([k, v]) => (
                   <div key={k} className="flex justify-between gap-4">
                     <dt className="text-bone-mute">{k}</dt>
-                    <dd className="text-right text-bone">{v}</dd>
+                    <dd className="min-w-0 text-right text-bone [overflow-wrap:anywhere]">{v}</dd>
                   </div>
                 ))}
               </dl>

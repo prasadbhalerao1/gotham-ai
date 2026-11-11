@@ -7,7 +7,7 @@ import { Reveal } from "./ui.jsx";
 export function Breadcrumbs({ items }) {
   return (
     <nav aria-label="Breadcrumb" className="label flex flex-wrap items-center gap-2">
-      <Link to="/" className="hover:text-bone">
+      <Link to="/" className="-my-3 inline-block py-3 hover:text-bone">
         Gotham AI
       </Link>
       {items.map((c) => (
@@ -16,7 +16,7 @@ export function Breadcrumbs({ items }) {
             /
           </span>
           {c.to ? (
-            <Link to={c.to} className="hover:text-bone">
+            <Link to={c.to} className="-my-3 inline-block py-3 hover:text-bone">
               {c.label}
             </Link>
           ) : (
@@ -37,7 +37,7 @@ export function Chip({ children, tone = "default", className = "" }) {
     solid: "border-signal bg-signal text-ink",
   };
   return (
-    <span className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 font-mono text-[0.625rem] uppercase tracking-[0.16em] ${tones[tone]} ${className}`}>
+    <span className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 font-mono text-[0.6875rem] uppercase tracking-[0.16em] ${tones[tone]} ${className}`}>
       {children}
     </span>
   );
@@ -120,7 +120,7 @@ export function Block({ id, label, title, children, className = "" }) {
   return (
     <section id={id} aria-labelledby={`${id}-title`} className={`scroll-mt-24 py-16 md:py-24 ${className}`}>
       <div className="wrap">
-        <div className="mb-10 flex items-baseline justify-between gap-6 border-b border-bone/10 pb-5 md:mb-14">
+        <div className="mb-10 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 border-b border-bone/10 pb-5 md:mb-14">
           <h2 id={`${id}-title`} data-reveal="mask" className="display text-5xl md:text-6xl">
             {title}
           </h2>

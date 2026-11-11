@@ -19,7 +19,7 @@ function Featured({ event, upcoming }) {
           height={eventCover(event).height}
           className="aspect-[16/10] w-full object-cover transition-transform duration-1000 ease-expo group-hover:scale-[1.03]"
         />
-        <span className="absolute left-4 top-4 rounded-full bg-signal px-3 py-1 font-mono text-[0.625rem] uppercase tracking-[0.16em] text-ink">
+        <span className="absolute left-4 top-4 rounded-full bg-signal px-3 py-1 font-mono text-[0.6875rem] uppercase tracking-[0.16em] text-ink">
           {upcoming ? "Upcoming" : "Latest event"}
         </span>
       </div>

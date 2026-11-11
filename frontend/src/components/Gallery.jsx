@@ -32,11 +32,13 @@ const Gallery = ({ items: raw, title }) => {
 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    // tiles only tilt from md up; on phones a rotated tile would poke past the screen edge
+    const tilted = window.matchMedia("(min-width: 768px)").matches;
     const ctx = gsap.context(() => {
       gsap.utils.toArray("[data-tile]").forEach((el, i) => {
         gsap.from(el, {
           y: 90,
-          rotate: tilt(i) * 4,
+          rotate: tilted ? tilt(i) * 4 : 0,
           opacity: 0,
           duration: 1.3,
           ease: "expo.out",
@@ -73,7 +75,7 @@ const Gallery = ({ items: raw, title }) => {
             data-tile
             onClick={() => setOpen(i)}
             style={{ "--tilt": `${tilt(i)}deg` }}
-            className={`group relative overflow-hidden bg-ink-700 outline-offset-4 transition-[transform,box-shadow] duration-700 ease-expo [transform:rotate(var(--tilt))] hover:z-10 hover:shadow-[0_40px_80px_-30px_rgba(0,0,0,0.9)] hover:[transform:rotate(0deg)_scale(1.03)] ${
+            className={`group relative overflow-hidden bg-ink-700 outline-offset-4 transition-[transform,box-shadow] duration-700 ease-expo md:[transform:rotate(var(--tilt))] hover:z-10 hover:shadow-[0_40px_80px_-30px_rgba(0,0,0,0.9)] hover:[transform:rotate(0deg)_scale(1.03)] ${
               items.length === 1 ? "col-span-2 row-span-2 md:col-span-4 md:row-span-3" : i === 0 ? "col-span-2 row-span-2" : ""
             } ${items.length === 1 ? "" : SPANS[i % SPANS.length]}`}
             aria-label={`Open ${m.alt}`}
@@ -98,7 +100,7 @@ const Gallery = ({ items: raw, title }) => {
                 className="size-full object-cover transition-transform duration-1000 ease-expo group-hover:scale-105"
               />
             )}
-            <span className="absolute bottom-2 left-2 rounded-full bg-ink/70 px-2 py-0.5 font-mono text-[0.625rem] text-bone opacity-0 backdrop-blur transition-opacity duration-300 group-hover:opacity-100">
+            <span className="absolute bottom-2 left-2 rounded-full bg-ink/70 px-2 py-0.5 font-mono text-[0.6875rem] text-bone opacity-0 backdrop-blur transition-opacity duration-300 group-hover:opacity-100">
               {String(i + 1).padStart(2, "0")}
             </span>
           </button>

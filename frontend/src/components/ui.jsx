@@ -52,7 +52,7 @@ export function Monogram({ name, className = "" }) {
     .replace(/^(Dr\.|Mr\.|Ms\.|Br\.)\s*/, "")
     .split(/\s+/)
     .slice(0, 2)
-    .map((w) => w-[0])
+    .map((w) => w[0])
     .join("");
   return (
     <div className={`flex items-center justify-center bg-ink-700 font-display text-5xl text-bone/25 ${className}`} aria-hidden>

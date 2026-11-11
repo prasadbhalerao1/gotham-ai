@@ -9,14 +9,14 @@ const PageHeader = ({ crumbs = [], title, intro, children }) => (
     />
     <div className="wrap relative">
       <nav aria-label="Breadcrumb" className="label mb-8 flex flex-wrap items-center gap-2">
-        <Link to="/" className="hover:text-signal">
+        <Link to="/" className="-my-3 inline-block py-3 hover:text-signal">
           Gotham
         </Link>
         {crumbs.map((c) => (
           <span key={c.label} className="flex items-center gap-2">
             <span aria-hidden>/</span>
             {c.to ? (
-              <Link to={c.to} className="hover:text-signal">
+              <Link to={c.to} className="-my-3 inline-block py-3 hover:text-signal">
                 {c.label}
               </Link>
             ) : (

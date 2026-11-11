@@ -13,13 +13,13 @@ const ProjectPlate = ({ project, number, compact = false, className = "" }) => (
       }}
     />
     <div className="relative flex items-start justify-between">
-      <span className="font-mono text-[0.625rem] uppercase tracking-[0.18em] text-bone-mute">Case {number}</span>
+      <span className="font-mono text-[0.6875rem] uppercase tracking-[0.18em] text-bone-mute">Case {number}</span>
       <Logo className="size-6 text-bone/40" />
     </div>
     <p aria-hidden className={`display relative leading-[0.8] text-bone/90 ${compact ? "text-5xl" : "text-[clamp(3rem,9vw,7rem)]"}`}>
       {project.title}
     </p>
-    <div className="relative flex items-end justify-between gap-4 font-mono text-[0.625rem] uppercase tracking-[0.16em] text-bone-mute">
+    <div className="relative flex items-end justify-between gap-4 font-mono text-[0.6875rem] uppercase tracking-[0.16em] text-bone-mute">
       <span>{project.partner?.name}</span>
       <span className="text-signal">{project.status}</span>
     </div>

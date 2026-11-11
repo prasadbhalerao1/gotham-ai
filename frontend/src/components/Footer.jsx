@@ -29,18 +29,18 @@ const Footer = () => {
           <ul className="space-y-2">
             {navItems.map((item) => (
               <li key={item.label}>
-                <Link to={item.to} className="text-bone-dim transition-colors hover:text-signal">
+                <Link to={item.to} className="-my-2 inline-block py-2 text-bone-dim transition-colors hover:text-signal">
                   {item.label}
                 </Link>
               </li>
             ))}
             <li>
-              <Link to="/resources" className="text-bone-dim transition-colors hover:text-signal">
+              <Link to="/resources" className="-my-2 inline-block py-2 text-bone-dim transition-colors hover:text-signal">
                 Resources
               </Link>
             </li>
             <li>
-              <Link to="/contact" className="text-bone-dim transition-colors hover:text-signal">
+              <Link to="/contact" className="-my-2 inline-block py-2 text-bone-dim transition-colors hover:text-signal">
                 Contact
               </Link>
             </li>
@@ -52,7 +52,7 @@ const Footer = () => {
           <ul className="mb-10 space-y-2">
             {site.leadership.map((p) => (
               <li key={p.name}>
-                <a href={p.linkedin} target="_blank" rel="noreferrer" className="group text-bone-dim transition-colors hover:text-signal">
+                <a href={p.linkedin} target="_blank" rel="noreferrer" className="group -my-2 inline-block py-2 text-bone-dim transition-colors hover:text-signal">
                   {p.name}
                   <span className="text-bone-mute"> · {p.role}</span>
                 </a>
@@ -92,7 +92,7 @@ const Footer = () => {
         <span className="label flex items-center gap-3">
           {/* site credit */}
           Site by
-          <a href={credit.linkedin} target="_blank" rel="noreferrer" className="text-bone-dim transition-colors hover:text-signal">
+          <a href={credit.linkedin} target="_blank" rel="noreferrer" className="-my-2 inline-block py-2 text-bone-dim transition-colors hover:text-signal">
             {credit.name}
           </a>
           <a href={credit.github} target="_blank" rel="noreferrer me" aria-label={`${credit.name} on GitHub`} className="transition-colors hover:text-signal">

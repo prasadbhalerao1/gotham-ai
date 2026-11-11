@@ -94,7 +94,7 @@ const Hero = () => {
             <dl data-hero-fade className="grid grid-cols-4 gap-4 sm:flex sm:gap-10">
               {stats.slice(0, 4).map((s) => (
                 <div key={s.label} className="flex flex-col">
-                  <dt className="order-2 mt-1 font-mono text-[0.625rem] uppercase leading-tight tracking-[0.14em] text-bone-mute">{s.short}</dt>
+                  <dt className="order-2 mt-1 font-mono text-[0.6875rem] uppercase leading-tight tracking-[0.14em] text-bone-mute">{s.short}</dt>
                   <dd className="order-1 text-2xl font-semibold leading-none text-bone sm:text-3xl">
                     {s.value.toLocaleString("en-IN")}
                     {s.plus && <span className="text-signal">+</span>}

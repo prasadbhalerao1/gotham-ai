@@ -23,9 +23,9 @@ function EventIndex({ current }) {
                 aria-current={on ? "page" : undefined}
                 className={`group flex items-baseline gap-3 border-b border-bone/10 py-3 text-sm transition-colors ${on ? "text-bone" : "text-bone-mute hover:text-bone"}`}
               >
-                <span className={`font-mono text-[0.625rem] ${on ? "text-signal" : ""}`}>{eventNumber(e)}</span>
+                <span className={`font-mono text-[0.6875rem] ${on ? "text-signal" : ""}`}>{eventNumber(e)}</span>
                 <span className="flex-1 truncate">{e.title}</span>
-                <span className="font-mono text-[0.625rem]">{eventParts(e).year}</span>
+                <span className="font-mono text-[0.6875rem]">{eventParts(e).year}</span>
               </Link>
             </li>
           );
@@ -63,16 +63,16 @@ function Speakers({ speakers }) {
   return (
     <Reveal stagger={0.08} className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
       {speakers.map((s) => (
-        <article key={s.name} className="group flex gap-5 border border-bone/10 p-4 transition-colors duration-500 hover:border-bone/30">
+        <article key={s.name} className="group flex min-w-0 gap-4 border border-bone/10 p-4 sm:gap-5 transition-colors duration-500 hover:border-bone/30">
           {s.image ? (
-            <div className="photo size-24 shrink-0 md:size-28">
+            <div className="photo size-20 shrink-0 sm:size-24 md:size-28">
               <img src={s.image} alt={s.name} loading="lazy" className="size-full object-cover object-top" />
             </div>
           ) : (
-            <Monogram name={s.name} className="size-24 shrink-0 !text-3xl md:size-28" />
+            <Monogram name={s.name} className="size-20 shrink-0 !text-3xl sm:size-24 md:size-28" />
           )}
           <div className="min-w-0">
-            <h3 className="text-xl leading-tight text-bone">{s.name}</h3>
+            <h3 className="text-xl leading-tight text-bone [overflow-wrap:anywhere]">{s.name}</h3>
             {s.title && <p className="mt-1 text-sm text-signal">{s.title}</p>}
             {s.bio && <p className="mt-2 text-sm leading-relaxed text-bone-dim">{s.bio}</p>}
           </div>

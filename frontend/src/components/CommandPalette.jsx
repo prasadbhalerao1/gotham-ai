@@ -189,12 +189,12 @@ const CommandPalette = ({ open, onClose, onContact }) => {
                     </span>
                     <span className="block truncate font-mono text-[0.6875rem] uppercase tracking-widest text-bone-mute">{item.meta}</span>
                   </span>
-                  <span className="hidden font-mono text-[0.625rem] uppercase tracking-[0.18em] text-bone-mute sm:block">{item.group}</span>
+                  <span className="hidden font-mono text-[0.6875rem] uppercase tracking-[0.18em] text-bone-mute sm:block">{item.group}</span>
                 </li>
               ))}
             </ul>
 
-            <div className="mt-4 flex flex-wrap items-center justify-between gap-3 font-mono text-[0.625rem] uppercase tracking-[0.16em] text-bone-mute">
+            <div className="mt-4 flex flex-wrap items-center justify-between gap-3 font-mono text-[0.6875rem] uppercase tracking-[0.16em] text-bone-mute">
               <span className="flex gap-5">
                 <span>↑↓ Move</span>
                 <span>↵ Open</span>
