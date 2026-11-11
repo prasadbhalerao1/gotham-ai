@@ -46,7 +46,7 @@ const AboutPage = () => {
               <Link to="/events" className="text-bone underline decoration-bone/30 underline-offset-4 hover:text-signal">
                 {sortedEvents.length} events
               </Link>{" "}
-              ({kinds.join(", ").toLowerCase()}) with {stats.find((s) => s.short === "Attendees").value}+ recorded attendees, and its members lead{" "}
+              ({kinds.join(", ").toLowerCase()}) with {stats.find((s) => s.short === "Attendees").value}+ attendees, and its members lead{" "}
               <Link to="/projects" className="text-bone underline decoration-bone/30 underline-offset-4 hover:text-signal">
                 {publishedProjects.length} industry projects
               </Link>{" "}

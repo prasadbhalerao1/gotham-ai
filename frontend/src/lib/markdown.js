@@ -88,7 +88,7 @@ function aboutMd() {
     `${site.name} is a student-led community (not a company or an official college department) based at ${site.institution}, ${site.city}, Maharashtra, India.`,
     facts([
       ["Events hosted", sortedEvents.length],
-      ["Recorded attendees", `${stats.find((s) => s.short === "Attendees").value}+`],
+      ["Attendees", `${stats.find((s) => s.short === "Attendees").value}+`],
       ["Industry projects", publishedProjects.length],
       ["Industry partners", partners.map((p) => p.name).join(", ")],
       ["Contact", site.email],

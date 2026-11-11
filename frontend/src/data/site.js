@@ -34,6 +34,9 @@ export const site = {
   joinForm:
     "https://docs.google.com/forms/d/e/1FAIpQLSc3ns7PZxGni5YExgTcGIsX-f_95syZ5__7tKeA9Wt4YKLMBw/viewform",
   mapLink: "https://maps.app.goo.gl/QzkAcTycAdpqbPZ96",
+  // total attendees across all events, shown as "1000+" (not every event recorded its
+  // count, so this is set by hand; the recorded per-event counts are used if they add up to more)
+  attendeesTotal: 1000,
   // Add the community's real profiles here, e.g. { name: "LinkedIn", href: "https://www.linkedin.com/company/…" }.
   // Empty means no social links are shown. Real URLs also feed `sameAs` SEO.
   socials: [],
@@ -151,10 +154,9 @@ export const partners = [...new Map(publishedProjects.map((p) => [p.partner.name
 export const stats = [
   { value: sortedEvents.length, label: "Events hosted", short: "Events" },
   {
-    value: sortedEvents.reduce((n, e) => n + (e.attendees || 0), 0),
-    label: "Recorded attendees",
+    value: Math.max(site.attendeesTotal || 0, sortedEvents.reduce((n, e) => n + (e.attendees || 0), 0)),
+    label: "Attendees",
     short: "Attendees",
-    note: "Counted only where attendance was recorded",
     plus: true,
   },
   { value: speakers.length, label: "Speakers & mentors", short: "Speakers" },
