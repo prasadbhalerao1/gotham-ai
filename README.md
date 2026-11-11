@@ -1,366 +1,74 @@
-# 🚀 Gotham AI
+<p align="center">
+  <img src="frontend/public/img/og-default.jpg" alt="Gotham AI — where minds meet machines" width="720" />
+</p>
 
-**Gotham AI** is a student-driven community dedicated to exploring the transformative world of Artificial Intelligence.  
-We connect learners, developers, and innovators through engaging events, workshops, and projects that foster creativity, collaboration, and technical growth.
+# Gotham AI
 
-Our mission is to **empower the next generation of AI enthusiasts** to turn ideas into impact — shaping the intelligent future, together.
+Gotham AI is a student-led AI and technology community at JSPM's Rajarshi Shahu College of
+Engineering (RSCOE), Tathawade, Pune. We run technical sessions, workshops and hackathons, and
+our members build real projects with industry partners.
 
-## 🧭 Architecture at a glance
+**[gotham-ai.vercel.app](https://gotham-ai.vercel.app)** ·
+[Events](https://gotham-ai.vercel.app/events) ·
+[Projects](https://gotham-ai.vercel.app/projects) ·
+[Join](https://docs.google.com/forms/d/e/1FAIpQLSc3ns7PZxGni5YExgTcGIsX-f_95syZ5__7tKeA9Wt4YKLMBw/viewform) ·
+gothamjspm@gmail.com
 
-- **Frontend** (`frontend/`): React 18 + Vite + Tailwind. Content is static data in `src/data/`;
-  `npm run build` validates it, builds the app and prerenders every route to HTML, plus
-  `sitemap.xml`, `llms.txt` and schema.org structured data.
-- **Hero**: a lazy-loaded Three.js scene (`src/three/gothamScene.js`).
-- **Backend** (`backend/`): Express, used by the frontend **only for the contact form**
-  (`POST /api/contact`), which emails gothamjspm@gmail.com. The older
-  event/project/resource endpoints are no longer used by the site.
+This repository is the community's website.
+
+## Run it locally
 
 ```bash
-cd frontend && npm install && npm run dev        # site at http://localhost:5173
-cd backend && npm install && npm start           # only needed to test the contact form
+cd frontend
+npm install
+npm run dev        # http://localhost:5173
 ```
 
-## 🌟 Overview
+That's all you need for the site. The backend only handles the contact form:
 
-Gotham AI is a comprehensive platform designed to bring together AI enthusiasts, researchers, and learners. It features:
-
-- **Dynamic Events System** - Showcase AI workshops, seminars, and tech talks
-- **Resources Hub** - Curated AI/ML learning materials with advanced filtering
-- **Contact System** - Beautiful form with email integration
-- **Professional Animations** - GSAP and Framer Motion for smooth UX
-- **Static & SEO-first** - Events, projects and resources live in `frontend/src/data/` and every page is prerendered to HTML (see [docs/content-guide.md](docs/content-guide.md))
-
----
-
-### 🎯 Core Features
-
-- **📅 Event Management**
-  - Dynamic event listing fetched from database
-  - Detailed event pages with photo galleries
-  - Speaker profiles and event information
-  - Status tracking (Live, Upcoming, Past)
-  - "Learn More" pages for each event
-
-- **📚 Resources Hub**
-  - Searchable resource library
-  - Advanced filtering (type, category, difficulty)
-  - Resource types: Articles, Tutorials, Videos, Courses, Datasets, Tools
-  - Categories: AI, ML, Deep Learning, NLP, Computer Vision, Robotics
-  - Difficulty levels: Beginner, Intermediate, Advanced
-
-- **📧 Contact System**
-  - Beautiful animated modal form
-  - Form validation with Zod
-  - Automatic email notifications
-  - Thank you emails to users
-  - Admin notifications
-  - MongoDB storage
-
-- **🎨 Professional UI/UX**
-  - Modern, gradient-based design
-  - Smooth animations with GSAP
-  - Page transitions with Framer Motion
-  - Buttery-smooth scrolling with Lenis
-  - Fully responsive (mobile, tablet, desktop)
-  - Accessible (ARIA labels, keyboard navigation)
-
-### 🔧 Technical Features
-
-- **Backend**
-  - RESTful API with Express.js
-  - MongoDB with Mongoose ODM
-  - Email service with Nodemailer
-  - Comprehensive error handling
-  - Request validation with Zod
-  - Rate limiting and security
-  - Structured logging with Winston
-
-- **Frontend**
-  - React 18 with Hooks
-  - React Router for navigation
-  - React Query for data fetching
-  - Tailwind CSS for styling
-  - Professional animations
-  - Optimized performance
-
----
-
-## 💻 Tech Stack
-
-### Backend
-
-- **Runtime:** Node.js
-- **Framework:** Express.js
-- **Database:** MongoDB Atlas
-- **ODM:** Mongoose
-- **Email:** Nodemailer (Gmail)
-- **Validation:** Zod
-- **Logging:** Winston, Morgan
-- **Security:** Helmet, CORS, Rate Limiting
-
-### Frontend
-
-- **Library:** React 18
-- **Build Tool:** Vite
-- **Routing:** React Router v6
-- **State:** React Query (TanStack Query)
-- **Styling:** Tailwind CSS
-- **Animations:** GSAP, Framer Motion
-- **Scrolling:** Lenis
-- **Forms:** React Hook Form
-- **Validation:** Zod
-- **HTTP:** Axios
-- **Icons:** Lucide React, React Icons
-
----
-
-## 📁 Project Structure
-
-```
-Gotham-AI/
-├── backend/                 # Node.js + Express backend
-│   ├── config/             # Database configuration
-│   ├── controllers/        # Request handlers
-│   ├── middleware/         # Error handling, validation
-│   ├── models/             # MongoDB schemas (Contact, Event, Project, Resource)
-│   ├── routes/             # API routes
-│   ├── scripts/            # (legacy, unused)
-│   ├── utils/              # Email service, logger
-│   ├── server.js           # Main server file
-│   └── package.json
-│
-├── frontend/               # React + Vite frontend
-│   ├── public/            # Static assets (images, audio)
-│   ├── src/
-│   │   ├── components/    # Reusable components (15 files)
-│   │   ├── pages/         # Page components (7 files)
-│   │   ├── services/      # API services (contact, event, project, resource)
-│   │   ├── config/        # Axios configuration
-│   │   ├── App.jsx        # Main app with routing
-│   │   └── main.jsx       # Entry point
-│   └── package.json
-│
-├── docs/                   # Project documentation
-│   ├── ProjectOverview.md # Architecture and tech stack overview
-│   └── content-guide.md   # How to add/update content
-│
-└── README.md              # This file
+```bash
+cd backend
+npm install
+cp .env.example .env   # EMAIL_USER, EMAIL_APP_PASSWORD (Gmail app password), ADMIN_EMAIL
+npm run dev
 ```
 
-## ⚡ Quick Start
+## How it's built
 
-### Prerequisites
+- **React, Vite and Tailwind**, with GSAP and Lenis for motion and a three.js night city in the hero.
+- **Static and prerendered.** Every page is built to plain HTML, so it loads fast and search
+  engines and AI assistants can read all of it. The build also writes `sitemap.xml`,
+  `llms.txt` and a Markdown copy of every page.
+- **Content as files.** Each event, project, resource and person is one file in
+  `frontend/src/content/`. There is no database or CMS.
+- **A small Express backend** whose only job is emailing contact-form messages.
 
-- Node.js (v16 or higher)
-- npm or yarn
-- MongoDB Atlas account (free tier works)
-- Gmail account with App Password
-
-### Installation
-
-1. **Clone the repository**
-
-   ```bash
-   git clone https://github.com/tarun-karn/Gotham-AI.git
-   cd Gotham-AI
-   ```
-
-2. **Set up Backend**
-
-   ```bash
-   cd backend
-   npm install
-   cp .env.example .env
-   # Edit .env with your credentials
-   npm run dev
-   ```
-
-3. **Set up Frontend** (in a new terminal)
-
-   ```bash
-   cd frontend
-   npm install
-   # .env is already configured
-   npm run dev
-   ```
-
-4. **Open your browser**
-   ```
-   http://localhost:5173
-   ```
-
----
-
-## 🎯 Key Highlights
-
-### Data-Driven Architecture
-
-- Add content to MongoDB → Appears automatically on website
-- No code changes needed for content updates
-- Easy to maintain and scale
-
-### Professional Animations
-
-- GSAP for scroll-triggered animations
-- Framer Motion for page transitions
-- Lenis for smooth scrolling
-- Not overwhelming, just perfect
-
-### Email Integration
-
-- Automatic thank you emails to users
-- Admin notifications for new contacts
-- Beautiful HTML email templates
-- Powered by Nodemailer + Gmail
-
-### Security & Performance
-
-- Rate limiting on contact form
-- Input validation on both ends
-- CORS protection
-- MongoDB injection protection
-- React Query caching
-- Optimized builds
-
----
-
-## 🚀 Key API Endpoints
-
-### Contact
-
-- `POST /api/contact` - Submit contact form (rate limited: 10 per 15 min)
-
-### Events
-
-- `GET /api/events` - Get all events (with optional filters)
-- `GET /api/events/:slug` - Get event by slug
-
-### Projects
-
-- `GET /api/projects` - Get all projects (with optional filters)
-- `GET /api/projects/:slug` - Get project by slug
-
-### Resources
-
-- `GET /api/resources` - Get all resources (with filters and pagination)
-- `GET /api/resources/featured` - Get featured resources
-- `GET /api/resources/:slug` - Get resource by slug
-
-### Other
-
-- `GET /` - Server info and endpoint list
-- `GET /health` - Health check (server + database status)
-
----
-
-## 🔧 Environment Variables
-
-### Backend (.env)
-
-```env
-MONGODB_URI=your_mongodb_connection_string
-PORT=5000
-NODE_ENV=development
-FRONTEND_ORIGIN=http://localhost:5173
-EMAIL_USER=your_gmail@gmail.com
-EMAIL_APP_PASSWORD=your_app_password
-JWT_SECRET=your_jwt_secret
+```
+frontend/
+  src/content/    events, projects, resources, team: one file each
+  src/pages/      routes
+  src/components/ UI
+  scripts/        prerender, content and SEO checks
+backend/          contact form → email
+docs/             content and SEO guides
 ```
 
-### Frontend (.env)
+## Adding an event
 
-```env
-VITE_API_URL=http://localhost:5000/api
-```
+Copy `frontend/src/content/events/_template.js`, name it after the event, fill it in and put
+the photos in `frontend/public/img/`. It then shows up everywhere: home page, events, search,
+sitemap and structured data. Events dated in the future are marked **Upcoming** automatically.
+Projects and resources work the same way.
 
----
+`npm run build` checks the content and the SEO of every page, and fails if something is missing.
+For every field and rule, see [docs/content-guide.md](docs/content-guide.md) and
+[AGENTS.md](AGENTS.md).
 
-#### Backend (Vercel)
+## Contributing
 
-1. **Push your code to GitHub**
+Found a bug or a typo? Open an issue or a pull request. Members of Gotham AI can help with
+events, projects and the site itself; reach us at gothamjspm@gmail.com.
 
-   ```bash
-   git add .
-   git commit -m "Add Vercel deployment config"
-   git push origin main
-   ```
-
-2. **Deploy to Vercel**
-   - Go to [Vercel Dashboard](https://vercel.com/dashboard)
-   - Click "Add New Project"
-   - Import your GitHub repository
-   - Select the `backend` folder as root directory
-   - Add environment variables:
-     - `MONGODB_URI` - Your MongoDB connection string
-     - `NODE_ENV` - `production`
-     - `FRONTEND_ORIGIN` - Your frontend URL (e.g., `https://gotham-ai-two.vercel.app`)
-     - `EMAIL_USER` - Your Gmail address
-     - `EMAIL_APP_PASSWORD` - Your Gmail app password
-     - `JWT_SECRET` - A secure random string
-   - Click "Deploy"
-
-3. **Configure MongoDB Atlas**
-   - Add Vercel's IP addresses to MongoDB Atlas Network Access
-   - Or allow access from anywhere (0.0.0.0/0) for serverless deployments
-
-#### Frontend (Vercel)
-
-1. **Deploy to Vercel**
-   - Go to [Vercel Dashboard](https://vercel.com/dashboard)
-   - Click "Add New Project"
-   - Import your GitHub repository
-   - Select the `frontend` folder as root directory
-   - Add environment variable:
-     - `VITE_API_URL` - Your backend API URL (e.g., `https://gotham-backend.vercel.app/api`)
-   - Build command: `npm run build`
-   - Output directory: `dist`
-   - Click "Deploy"
-
-2. **Update Backend CORS**
-   - After frontend deployment, update `FRONTEND_ORIGIN` in backend environment variables
-   - Redeploy backend if needed
-
-### Database
-
-- **MongoDB Atlas** (already cloud-based)
-- Configure network access (allow Vercel IPs or 0.0.0.0/0)
-- Set up database users
-- Enable backups
-
-### Alternative Deployment Options
-
-#### Backend
-
-- **Render:** Free tier available, easy setup
-- **Railway:** Great for Node.js apps
-- **Fly.io:** Global edge deployment
-
-#### Frontend
-
-- **Netlify:** Similar to Vercel
-- **Cloudflare Pages:** Fast global CDN
-- **GitHub Pages:** Free static hosting
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Please follow these steps:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 🌟 Star This Repository
-
-If you find this project useful, please consider giving it a star! ⭐
-
----
-
-<div align="center">
-
-**Built with ❤️ for the Gotham AI Community**
-
-</div>
+Led by [Aayush Deshpande](https://www.linkedin.com/in/aayushdeshpande-/) (Founder & President),
+[Prasad Bhalerao](https://www.linkedin.com/in/prasadbhalerao/) (Vice President) and
+[Vipul Nanaware](https://www.linkedin.com/in/vipul-nanaware-549801211/) (Social Media and Marketing Lead).
