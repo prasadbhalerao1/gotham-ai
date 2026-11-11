@@ -44,6 +44,11 @@ app.use(async (req, res, next) => {
     next();
   } catch (error) {
     logger.error("Database connection failed:", error);
+    // The contact form only needs email, so let it through without the DB
+    if (req.path.startsWith("/api/contact")) {
+      req.dbAvailable = false;
+      return next();
+    }
     // Set CORS headers on error
     res.setHeader(
       "Access-Control-Allow-Origin",
