@@ -51,8 +51,8 @@ export const projects = [
     ],
     team: [
       {
-        name: "Sanika Sadre",
-        role: "Community Project Lead",
+        name: "Prasad Bhalerao",
+        role: "Project Lead",
       },
     ],
     gallery: [],
@@ -118,8 +118,8 @@ export const projects = [
     ],
     team: [
       {
-        name: "Shruti Baviskar",
-        role: "Community Project Lead",
+        name: "Prasad Bhalerao",
+        role: "Project Lead",
       },
     ],
     gallery: [],
@@ -155,8 +155,8 @@ export const projects = [
     ],
     team: [
       {
-        name: "Sanika Sadre",
-        role: "Community Project Lead",
+        name: "Prasad Bhalerao",
+        role: "Project Lead",
       },
     ],
     gallery: [],
