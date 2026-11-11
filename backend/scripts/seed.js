@@ -7,10 +7,10 @@ import Resource from "../models/Resource.js";
 import Project from "../models/Project.js";
 import logger from "../utils/logger.js";
 
-// Import data from separate files
-import { events } from "./data/events.js";
-import { resources } from "./data/resources.js";
-import { projects } from "./data/projects.js";
+// Content now lives in the frontend (static, prerendered); kept here for optional DB seeding
+import { events } from "../../frontend/src/data/events.js";
+import { resources } from "../../frontend/src/data/resources.js";
+import { projects } from "../../frontend/src/data/projects.js";
 
 // Get the directory name of the current module
 const __filename = fileURLToPath(import.meta.url);
