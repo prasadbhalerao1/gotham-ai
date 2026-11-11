@@ -1,25 +1,27 @@
 <!doctype html>
-<html lang="en">
+<html lang="en-IN">
   <head>
     <meta charset="UTF-8" />
-    <link rel="preconnect" href="https://fonts.cdnfonts.com" />
-    <link rel="icon" type="image/jpeg" href="/img/logo.jpg" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#09090b" />
     <meta
       name="google-site-verification"
       content="_vDlKMqNlxWhWpWK0v23xdX6c0aN5uUMKBqIF0Y7N_Q"
     />
-    <meta
-      name="description"
-      content="Gotham AI (Versanix Community) at RSCOE - The ultimate AI/ML and Deep Learning hub at Rajarshi Shahu College Of Engineering, Tathawade."
-    />
-    <meta
-      name="keywords"
-      content="Gotham AI, RSCOE, Versanix, AI Club, Deep Learning, Prasad Bhalerao"
-    />
     <title>Gotham AI</title>
+    <script>
+      // first visit to the home page shows the intro gate; hide the page until then
+      try {
+        var bot = navigator.webdriver || /bot|crawl|spider|slurp|preview|facebookexternalhit|embedly|GPTBot|ClaudeBot|Claude-User|Claude-SearchBot|PerplexityBot|Perplexity-User|OAI-SearchBot|ChatGPT-User|Google-Extended|Bingbot|Googlebot|Applebot|DuckDuckBot|YandexBot|HeadlessChrome|Lighthouse/i.test(navigator.userAgent);
+        if (!bot && location.pathname === "/" && !sessionStorage.getItem("gotham-intro-seen"))
+          document.documentElement.classList.add("intro-pending");
+      } catch (e) {}
+    </script>
   </head>
-  <body>
+  <body style="background: #09090b">
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

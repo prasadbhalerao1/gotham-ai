@@ -7,7 +7,7 @@ import tailwind from "eslint-plugin-tailwindcss";
 
 export default [
   ...tailwind.configs["flat/recommended"],
-  { ignores: ["dist"] },
+  { ignores: ["dist", "dist-server"] },
   {
     files: ["**/*.{js,jsx}"],
     languageOptions: {
@@ -36,6 +36,14 @@ export default [
         { allowConstantExport: true },
       ],
       "react/prop-types": "off",
+      // design tokens use arbitrary values deliberately (vw type scales etc.)
+      "tailwindcss/no-custom-classname": "off",
+      "tailwindcss/classnames-order": "off",
     },
+  },
+  {
+    // build scripts and config files run in Node
+    files: ["scripts/**/*.{js,mjs}", "*.config.js"],
+    languageOptions: { globals: globals.node },
   },
 ];

@@ -17,34 +17,35 @@ export const submitContact = async (req, res, next) => {
     const ipAddress =
       req.headers["x-forwarded-for"] || req.connection.remoteAddress;
 
-    // Create contact entry
-    const contact = await Contact.create({
-      name,
-      email,
-      subject,
-      message,
-      phone,
-      ipAddress,
-    });
-
     logger.info(`New contact submission from ${email}`);
 
-    // Send emails asynchronously (don't wait for them)
-    Promise.all([
-      sendThankYouEmail(email, name),
-      sendAdminNotification({ name, email, subject, message, phone }),
-    ]).catch((error) => {
-      logger.error("Error sending emails:", error);
-    });
+    // Saving a copy is best-effort: the email is what matters, so a database
+    // outage must not lose the message.
+    let contact = null;
+    if (req.dbAvailable !== false) {
+      try {
+        contact = await Contact.create({ name, email, subject, message, phone, ipAddress });
+      } catch (dbError) {
+        logger.error("Could not store contact submission:", dbError);
+      }
+    }
+
+    // Await the notification before replying — on serverless hosts work left
+    // running after the response can be cut off, so the email would never send.
+    try {
+      await sendAdminNotification({ name, email, subject, message, phone });
+    } catch (mailError) {
+      logger.error("Contact notification failed:", mailError);
+      return next(new AppError("We couldn't send your message right now. Please try again in a moment.", 502));
+    }
+
+    // The visitor's confirmation is nice-to-have; don't fail the request over it.
+    await sendThankYouEmail(email, name).catch((e) => logger.error("Thank-you email failed:", e));
 
     res.status(201).json({
       success: true,
       message: "Thank you for contacting us! We will get back to you soon.",
-      data: {
-        id: contact._id,
-        name: contact.name,
-        email: contact.email,
-      },
+      data: { id: contact?._id ?? null, name, email },
     });
   } catch (error) {
     next(error);

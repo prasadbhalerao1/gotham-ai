@@ -83,11 +83,9 @@ npm start
 
 ### Seeding the Database
 
-To populate the database with sample events and resources:
-
-```bash
-npm run seed
-```
+Site content (events, projects, resources, team) now lives in
+`frontend/src/content/` and is prerendered; the database only stores
+contact-form submissions, so there is nothing to seed.
 
 ## API Endpoints
 
@@ -141,7 +139,6 @@ backend/
 │   ├── projectRoutes.js       # Project routes
 │   └── resourceRoutes.js      # Resource routes
 ├── scripts/
-│   ├── seed.js                # Database seeding script
 │   └── data/
 │       ├── events.js          # Sample event data
 │       ├── projects.js        # Sample project data

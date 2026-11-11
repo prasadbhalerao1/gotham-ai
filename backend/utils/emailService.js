@@ -1,6 +1,13 @@
 import nodemailer from "nodemailer";
 import logger from "./logger.js";
 
+// Where contact-form notifications go
+export const CONTACT_INBOX = process.env.ADMIN_EMAIL || "gothamjspm@gmail.com";
+
+// Visitor-supplied text is interpolated into HTML emails — escape it
+const esc = (v = "") =>
+  String(v).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+
 // Create transporter with Gmail configuration
 const createTransporter = () => {
   return nodemailer.createTransport({
@@ -70,7 +77,7 @@ export const sendThankYouEmail = async (userEmail, userName) => {
             <h1>🚀 Gotham AI</h1>
           </div>
           <div class="content">
-            <h2>Hello ${userName}!</h2>
+            <h2>Hello ${esc(userName)}!</h2>
             <p>Thank you for reaching out to Gotham AI. We've received your message and our team will get back to you as soon as possible.</p>
             <p>We're excited to connect with you and discuss how we can help you on your AI journey!</p>
             <p>In the meantime, feel free to explore our resources and upcoming events:</p>
@@ -104,7 +111,8 @@ export const sendAdminNotification = async (contactData) => {
 
     const mailOptions = {
       from: `"Gotham AI Contact Form" <${process.env.EMAIL_USER}>`,
-      to: process.env.EMAIL_USER,
+      to: CONTACT_INBOX,
+      replyTo: `"${contactData.name.replace(/"/g, "")}" <${contactData.email}>`, // hit Reply to answer the visitor
       subject: `New Contact Form Submission from ${contactData.name}`,
       html: `
         <!DOCTYPE html>
@@ -152,33 +160,33 @@ export const sendAdminNotification = async (contactData) => {
           <div class="content">
             <div class="field">
               <span class="label">Name:</span>
-              ${contactData.name}
+              ${esc(contactData.name)}
             </div>
             <div class="field">
               <span class="label">Email:</span>
-              ${contactData.email}
+              ${esc(contactData.email)}
             </div>
             ${
               contactData.phone
                 ? `
             <div class="field">
               <span class="label">Phone:</span>
-              ${contactData.phone}
+              ${esc(contactData.phone)}
             </div>
             `
                 : ""
             }
             <div class="field">
               <span class="label">Subject:</span>
-              ${contactData.subject}
+              ${esc(contactData.subject)}
             </div>
             <div class="field">
               <span class="label">Message:</span>
-              ${contactData.message}
+              <span style="white-space:pre-wrap">${esc(contactData.message)}</span>
             </div>
             <div class="field">
               <span class="label">Submitted At:</span>
-              ${new Date().toLocaleString()}
+              ${new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })} IST
             </div>
           </div>
         </body>

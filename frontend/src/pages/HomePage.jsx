@@ -1,60 +1,25 @@
-import { useEffect, useRef } from "react";
-import Lenis from "lenis";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/all";
-
-import Hero from "../components/Hero.jsx";
 import SEO from "../components/SEO.jsx";
-import Events from "../components/Events.jsx";
-import About from "../components/About.jsx";
-import Contact from "../components/Contact.jsx";
+import StructuredData from "../components/StructuredData.jsx";
+import { faqLd, organizationLd, websiteLd } from "../lib/structuredData.js";
+import Hero from "../components/home/Hero.jsx";
+import EventsReel from "../components/home/EventsReel.jsx";
+import Moments from "../components/home/Moments.jsx";
+import Faq from "../components/home/Faq.jsx";
+import Join from "../components/home/Join.jsx";
 
-gsap.registerPlugin(ScrollTrigger);
-
-const HomePage = () => {
-  const lenisRef = useRef(null);
-
-  useEffect(() => {
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      direction: "vertical",
-      smooth: true,
-      smoothTouch: false,
-      touchMultiplier: 2,
-    });
-
-    lenisRef.current = lenis;
-
-    lenis.on("scroll", ScrollTrigger.update);
-
-    gsap.ticker.add((time) => {
-      lenis.raf(time * 1000);
-    });
-
-    gsap.ticker.lagSmoothing(0);
-
-    return () => {
-      gsap.ticker.remove(lenis.raf);
-      lenis.destroy();
-    };
-  }, []);
-
-  return (
-    <>
-      <SEO
-        title="Gotham AI"
-        description="Join Gotham AI (Versanix Community) at JSPM RSCOE. Led by Prasad Bhalerao, we are the ultimate hub for AI/ML, Deep Learning, and CSBS innovation at Rajarshi Shahu College Of Engineering."
-        keywords="Gotham AI, Gotham Club, RSCOE, JSPM, Rajarshi Shahu College Of Engineering, Versanix, Prasad Bhalerao, AI Club, CSBS, Deep Learning, AIML, IIT Tathawade, Gautam AI, Versanix Community"
-      />
-      <div className="hero-section-marker">
-        <Hero />
-      </div>
-      <Events />
-      <About />
-      <Contact />
-    </>
-  );
-};
+const HomePage = () => (
+  <>
+    <SEO
+      title="Gotham AI"
+      description="Gotham AI is a student-led AI and technology community in Pune, at JSPM's RSCOE, Tathawade. Explore our events, hackathons, workshops, industry projects and team."
+    />
+    <StructuredData data={[organizationLd(), websiteLd(), faqLd()]} />
+    <Hero />
+    <EventsReel />
+    <Moments />
+    <Faq />
+    <Join />
+  </>
+);
 
 export default HomePage;

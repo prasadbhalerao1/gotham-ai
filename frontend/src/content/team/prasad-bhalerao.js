@@ -1,0 +1,20 @@
+export default {
+  name: "Prasad Bhalerao",
+  role: "Vice President",
+  order: 2,
+  bio: "Prasad Bhalerao is the Vice President of Gotham AI, the student-led AI and technology community at JSPM's Rajarshi Shahu College of Engineering (RSCOE), Pune. He studies Computer Science and Business Systems at RSCOE and works across artificial intelligence, full-stack development and developer communities.",
+  academic: "Computer Science and Business Systems, JSPM's Rajarshi Shahu College of Engineering",
+  interests: [
+    "Artificial Intelligence",
+    "Generative AI",
+    "Software Engineering",
+    "Full-Stack Development",
+    "Developer Communities",
+    "Hackathon Organization",
+    "Technology Innovation",
+    "Open Source",
+  ],
+  contributions: ["Designed and built the Gotham AI website"],
+  linkedin: "https://www.linkedin.com/in/prasadbhalerao/",
+  github: "https://github.com/prasadbhalerao1",
+};

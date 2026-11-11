@@ -1,39 +1,44 @@
-import { Helmet } from 'react-helmet-async';
+import { Helmet } from "react-helmet-async";
+import { useLocation } from "react-router-dom";
+import { SITE_URL, site } from "../data/site.js";
 
-const SEO = ({ title, description, keywords, canonical, type = 'website', name = 'Gotham AI' }) => {
-  const siteUrl = 'https://gotham-ai.vercel.app';
-  const defaultDescription = 'Gotham AI at RSCOE - The premier Versanix Community AI hub leading innovation in Deep Learning, AIML, and CSBS.';
-  const defaultKeywords = 'Gotham AI, Gotham Club, RSCOE, Versanix, AI Club, Deep Learning, Artificial Intelligence, Prasad Bhalerao, JSPM RSCOE, Rajarshi Shahu College Of Engineering, Tathawade, IIT Tathawade, Gautam AI, CSBS, Versanix Community, AIML';
-  
-  // Clean up title
-  const fullTitle = title === name ? title : `${title} | ${name}`;
-  
-  // Handle canonical URL
-  const currentUrl = canonical || (typeof window !== 'undefined' ? window.location.href : siteUrl);
-  // Ensure we consistently use the production domain for canonicals (clean up localhost references)
-  const safeCanonical = canonical || (typeof window !== 'undefined' ? window.location.pathname === '/' ? siteUrl : `${siteUrl}${window.location.pathname}` : siteUrl);
+const defaultDescription = site.description;
+const defaultKeywords =
+  "Gotham AI, Gotham Club, RSCOE, JSPM, Rajarshi Shahu College Of Engineering, Tathawade, Pune, AI Club, Machine Learning, Agentic AI, Deep Learning, Hackathon, Prasad Bhalerao";
+
+/**
+ * Page metadata. `title` gets " | Gotham AI" appended; pass `fullTitle` to set
+ * the whole title yourself. `noindex` keeps a page out of search results.
+ */
+const Seo = ({ title, fullTitle: exactTitle, description, keywords, image, imageAlt, type = "website", name = "Gotham AI", noindex = false }) => {
+  const { pathname } = useLocation();
+  const fullTitle = exactTitle ?? (!title || title === name ? `${name} | AI & Technology Community in Pune` : `${title} | ${name}`);
+  const canonical = pathname === "/" ? SITE_URL : `${SITE_URL}${pathname.replace(/\/$/, "")}`;
+  const ogImage = `${SITE_URL}${image || "/img/og-default.jpg"}`;
 
   return (
     <Helmet>
-      {/* Standard metadata */}
       <title>{fullTitle}</title>
       <meta name="description" content={description || defaultDescription} />
       <meta name="keywords" content={keywords || defaultKeywords} />
-      <link rel="canonical" href={safeCanonical} />
-
-      {/* Open Graph / Facebook */}
+      <link rel="canonical" href={canonical} />
+      {/* plain-text twin of this page for AI crawlers (written at build time) */}
+      {!noindex && <link rel="alternate" type="text/markdown" href={`${pathname === "/" ? "/index" : pathname.replace(/\/$/, "")}.md`} />}
+      <meta name="robots" content={noindex ? "noindex, follow" : "index, follow, max-image-preview:large, max-snippet:-1"} />
       <meta property="og:type" content={type} />
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={description || defaultDescription} />
-      <meta property="og:url" content={safeCanonical} />
+      <meta property="og:url" content={canonical} />
+      <meta property="og:image" content={ogImage} />
+      <meta property="og:image:alt" content={imageAlt || fullTitle} />
       <meta property="og:site_name" content={name} />
-
-      {/* Twitter */}
+      <meta property="og:locale" content="en_IN" />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={description || defaultDescription} />
+      <meta name="twitter:image" content={ogImage} />
     </Helmet>
   );
 };
 
-export default SEO;
+export default Seo;
