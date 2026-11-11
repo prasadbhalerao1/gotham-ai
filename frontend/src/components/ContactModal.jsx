@@ -1,19 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useMutation } from "@tanstack/react-query";
-import {
-  IoCloseOutline,
-  IoMailOutline,
-  IoPersonOutline,
-  IoCallOutline,
-  IoDocumentTextOutline,
-  IoCheckmarkCircleOutline,
-  IoAlertCircleOutline,
-} from "react-icons/io5";
 import contactService from "../services/contactService";
+import { lockScroll } from "../lib/smooth.js";
 
 const contactSchema = z.object({
   name: z
@@ -35,6 +27,13 @@ const contactSchema = z.object({
     .optional()
     .or(z.literal("")),
 });
+
+const fields = [
+  { name: "name", label: "Name", type: "text", autoComplete: "name" },
+  { name: "email", label: "Email", type: "email", autoComplete: "email" },
+  { name: "phone", label: "Phone (optional)", type: "tel", autoComplete: "tel" },
+  { name: "subject", label: "Subject", type: "text" },
+];
 
 const ContactModal = ({ isOpen, onClose }) => {
   const [submitStatus, setSubmitStatus] = useState(null);
@@ -76,251 +75,111 @@ const ContactModal = ({ isOpen, onClose }) => {
     }
   };
 
+  useEffect(() => {
+    if (!isOpen) return;
+    lockScroll(true);
+    const onKey = (e) => e.key === "Escape" && handleClose();
+    window.addEventListener("keydown", onKey);
+    return () => {
+      lockScroll(false);
+      window.removeEventListener("keydown", onKey);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
+
   const inputClass = (hasError) =>
-    `w-full rounded-lg border py-2 pl-9 pr-3 text-sm transition-colors focus:outline-none ${
-      hasError
-        ? "border-red-300 focus:border-red-500"
-        : "border-gray-200 focus:border-blue-500"
+    `w-full border-b bg-transparent pb-2 pt-1 text-lg text-bone placeholder:text-bone-mute focus:outline-none transition-colors ${
+      hasError ? "border-alert" : "border-bone/20 focus:border-signal"
     }`;
 
   return (
     <AnimatePresence>
       {isOpen && (
-        <>
-          {/* Backdrop */}
+        <div className="fixed inset-0 z-[60] flex items-end justify-center sm:items-center sm:p-6">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={handleClose}
-            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
+            className="absolute inset-0 bg-ink/80 backdrop-blur-sm"
           />
-
-          {/* Modal */}
-          <div className="pointer-events-none fixed inset-0 z-50 flex items-center justify-center p-4">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 16 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 16 }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="pointer-events-auto w-full max-w-md max-h-[90vh] overflow-y-auto rounded-2xl bg-white shadow-2xl"
-            >
-              {/* Header */}
-              <div className="relative rounded-t-2xl bg-gradient-to-r from-blue-600 to-cyan-600 px-5 py-4">
-                <button
-                  onClick={handleClose}
-                  disabled={mutation.isPending}
-                  className="absolute right-3 top-3 rounded-full bg-white/20 p-1.5 transition-colors hover:bg-white/30 disabled:opacity-50"
-                  aria-label="Close modal"
-                >
-                  <IoCloseOutline className="size-4 text-white" />
-                </button>
-                <h2 className="text-xl font-bold text-white">Get In Touch</h2>
-                <p className="text-xs text-blue-100 mt-0.5">
-                  Fill out the form and we'll get back to you soon.
-                </p>
+          <motion.div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="contact-title"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 24, transition: { duration: 0.25 } }}
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            data-lenis-prevent
+            className="grain relative max-h-[92vh] w-full max-w-xl overflow-y-auto border border-bone/15 bg-ink-800 p-6 sm:p-10"
+          >
+            <div className="mb-8 flex items-start justify-between gap-6">
+              <div>
+                <p className="label mb-3 text-signal">Open a channel</p>
+                <h2 id="contact-title" className="display text-5xl sm:text-6xl">
+                  Get in <span className="accent">touch</span>
+                </h2>
               </div>
+              <button
+                type="button"
+                onClick={handleClose}
+                disabled={mutation.isPending}
+                className="flex size-10 shrink-0 items-center justify-center rounded-full border border-bone/20 text-xl transition-colors hover:border-signal hover:text-signal disabled:opacity-50"
+                aria-label="Close contact form"
+              >
+                ×
+              </button>
+            </div>
 
-              {/* Status Messages */}
-              {submitStatus === "success" && (
-                <motion.div
-                  initial={{ opacity: 0, y: -8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mx-4 mt-3 flex items-center gap-2 rounded-lg border border-green-200 bg-green-50 px-3 py-2"
-                >
-                  <IoCheckmarkCircleOutline className="size-4 shrink-0 text-green-600" />
-                  <div>
-                    <p className="text-xs font-semibold text-green-900">
-                      Message Sent!
-                    </p>
-                    <p className="text-xs text-green-700">
-                      We'll get back to you via email shortly.
-                    </p>
-                  </div>
-                </motion.div>
-              )}
-
-              {submitStatus === "error" && (
-                <motion.div
-                  initial={{ opacity: 0, y: -8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mx-4 mt-3 flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2"
-                >
-                  <IoAlertCircleOutline className="size-4 shrink-0 text-red-600" />
-                  <div>
-                    <p className="text-xs font-semibold text-red-900">
-                      Something went wrong
-                    </p>
-                    <p className="text-xs text-red-700">
-                      {mutation.error?.message || "Please try again later."}
-                    </p>
-                  </div>
-                </motion.div>
-              )}
-
-              {/* Form */}
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-3 p-4">
-                {/* Name */}
-                <div>
-                  <label
-                    htmlFor="name"
-                    className="mb-1 block text-xs font-bold uppercase tracking-wide text-gray-600"
-                  >
-                    Full Name <span className="text-red-500">*</span>
-                  </label>
-                  <div className="relative">
-                    <IoPersonOutline className="absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-gray-400" />
-                    <input
-                      id="name"
-                      {...register("name")}
-                      type="text"
-                      placeholder="John Doe"
-                      className={inputClass(errors.name)}
-                    />
-                  </div>
-                  {errors.name && (
-                    <p className="mt-0.5 text-xs text-red-600">
-                      {errors.name.message}
-                    </p>
-                  )}
+            {submitStatus === "success" ? (
+              <div className="py-10 text-center" role="status">
+                <p className="display text-4xl text-signal">Signal received</p>
+                <p className="mt-3 text-bone-dim">Thanks — we&apos;ll get back to you soon.</p>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-6">
+                <div className="grid gap-6 sm:grid-cols-2">
+                  {fields.map((f) => (
+                    <label key={f.name} className={f.name === "subject" || f.name === "phone" ? "block sm:col-span-1" : "block"}>
+                      <span className="label mb-1 block">{f.label}</span>
+                      <input
+                        {...register(f.name)}
+                        type={f.type}
+                        autoComplete={f.autoComplete}
+                        aria-invalid={!!errors[f.name]}
+                        disabled={mutation.isPending}
+                        className={inputClass(errors[f.name])}
+                      />
+                      {errors[f.name] && <span className="mt-1 block text-xs text-alert">{errors[f.name].message}</span>}
+                    </label>
+                  ))}
                 </div>
-
-                {/* Email */}
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="mb-1 block text-xs font-bold uppercase tracking-wide text-gray-600"
-                  >
-                    Email Address <span className="text-red-500">*</span>
-                  </label>
-                  <div className="relative">
-                    <IoMailOutline className="absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-gray-400" />
-                    <input
-                      id="email"
-                      {...register("email")}
-                      type="email"
-                      placeholder="john@example.com"
-                      className={inputClass(errors.email)}
-                    />
-                  </div>
-                  {errors.email && (
-                    <p className="mt-0.5 text-xs text-red-600">
-                      {errors.email.message}
-                    </p>
-                  )}
-                </div>
-
-                {/* Phone (Optional) */}
-                <div>
-                  <label
-                    htmlFor="phone"
-                    className="mb-1 block text-xs font-bold uppercase tracking-wide text-gray-600"
-                  >
-                    Phone{" "}
-                    <span className="text-xs font-normal text-gray-400">
-                      (Optional)
-                    </span>
-                  </label>
-                  <div className="relative">
-                    <IoCallOutline className="absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-gray-400" />
-                    <input
-                      id="phone"
-                      {...register("phone")}
-                      type="tel"
-                      placeholder="+91 8767X XXXXX"
-                      className={inputClass(errors.phone)}
-                    />
-                  </div>
-                  {errors.phone && (
-                    <p className="mt-0.5 text-xs text-red-600">
-                      {errors.phone.message}
-                    </p>
-                  )}
-                </div>
-
-                {/* Subject */}
-                <div>
-                  <label
-                    htmlFor="subject"
-                    className="mb-1 block text-xs font-bold uppercase tracking-wide text-gray-600"
-                  >
-                    Subject <span className="text-red-500">*</span>
-                  </label>
-                  <div className="relative">
-                    <IoDocumentTextOutline className="absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-gray-400" />
-                    <input
-                      id="subject"
-                      {...register("subject")}
-                      type="text"
-                      placeholder="What would you like to discuss?"
-                      className={inputClass(errors.subject)}
-                    />
-                  </div>
-                  {errors.subject && (
-                    <p className="mt-0.5 text-xs text-red-600">
-                      {errors.subject.message}
-                    </p>
-                  )}
-                </div>
-
-                {/* Message */}
-                <div>
-                  <label
-                    htmlFor="message"
-                    className="mb-1 block text-xs font-bold uppercase tracking-wide text-gray-600"
-                  >
-                    Message <span className="text-red-500">*</span>
-                  </label>
+                <label className="block">
+                  <span className="label mb-1 block">Message</span>
                   <textarea
-                    id="message"
                     {...register("message")}
-                    rows="4"
-                    placeholder="Tell us more about your inquiry..."
-                    className={`w-full resize-none rounded-lg border px-3 py-2 text-sm transition-colors focus:outline-none ${
-                      errors.message
-                        ? "border-red-300 focus:border-red-500"
-                        : "border-gray-200 focus:border-blue-500"
-                    }`}
+                    rows={4}
+                    aria-invalid={!!errors.message}
+                    disabled={mutation.isPending}
+                    className={`${inputClass(errors.message)} resize-none`}
                   />
-                  {errors.message && (
-                    <p className="mt-0.5 text-xs text-red-600">
-                      {errors.message.message}
-                    </p>
-                  )}
-                </div>
+                  {errors.message && <span className="mt-1 block text-xs text-alert">{errors.message.message}</span>}
+                </label>
 
-                {/* Buttons */}
-                <div className="flex gap-2 pt-1">
-                  <button
-                    type="button"
-                    onClick={handleClose}
-                    disabled={mutation.isPending}
-                    className="flex-1 rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 disabled:opacity-50"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={mutation.isPending}
-                    className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600 px-4 py-2 text-sm font-semibold text-white transition-all duration-300 hover:from-blue-700 hover:to-cyan-700 disabled:cursor-not-allowed disabled:opacity-50"
-                  >
-                    {mutation.isPending ? (
-                      <>
-                        <div className="size-4 animate-spin rounded-full border-y-2 border-white" />
-                        Sending...
-                      </>
-                    ) : (
-                      <>
-                        <IoMailOutline className="size-4" />
-                        Send Message
-                      </>
-                    )}
-                  </button>
-                </div>
+                {submitStatus === "error" && (
+                  <p role="alert" className="border border-alert/40 px-4 py-3 text-sm text-alert">
+                    {mutation.error?.message || "Failed to send message. Please try again."}
+                  </p>
+                )}
+
+                <button type="submit" disabled={mutation.isPending} className="btn-signal w-full justify-center disabled:opacity-60">
+                  {mutation.isPending ? "Transmitting…" : "Send message →"}
+                </button>
               </form>
-            </motion.div>
-          </div>
-        </>
+            )}
+          </motion.div>
+        </div>
       )}
     </AnimatePresence>
   );

@@ -1,290 +1,168 @@
-import clsx from "clsx";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-import { useEffect, useRef, useState } from "react";
-import { useInView } from "react-intersection-observer";
-import { Link, useLocation } from "react-router-dom";
-import ContactModal from "./ContactModal";
+import { useEffect, useState } from "react";
+import { Link, NavLink, useLocation } from "react-router-dom";
+import { AnimatePresence, motion } from "framer-motion";
+import { lockScroll } from "../lib/smooth.js";
+import { navItems, site } from "../data/site.js";
+import Logo from "./Logo.jsx";
 
-const navItems = ["Event", "Projects", "About", "Contact"];
+
+function PuneClock() {
+  const [now, setNow] = useState(null);
+  useEffect(() => {
+    const tick = () =>
+      setNow(
+        new Intl.DateTimeFormat("en-GB", {
+          timeZone: "Asia/Kolkata",
+          hour: "2-digit",
+          minute: "2-digit",
+        }).format(new Date()),
+      );
+    tick();
+    const id = setInterval(tick, 15000);
+    return () => clearInterval(id);
+  }, []);
+  return <span suppressHydrationWarning>PUNE {now ?? "--:--"} IST</span>;
+}
 
 const NavBar = () => {
-  const [isAudioPlaying, setIsAudioPlaying] = useState(false);
-  const [isIndicatorActive, setIsIndicatorActive] = useState(false);
-  const [activeSection, setActiveSection] = useState("home");
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
-  const location = useLocation();
-
-  const audioElementRef = useRef(null);
-  const navContainerRef = useRef(null);
-  const menuPanelRef = useRef(null); // Ref for the mobile menu panel
-
-  const { ref: heroRef, inView: heroInView } = useInView({ threshold: 0.3 });
-  const { ref: eventsRef, inView: eventsInView } = useInView({
-    threshold: 0.3,
-  });
-  const { ref: aboutRef, inView: aboutInView } = useInView({ threshold: 0.3 });
-  const { ref: contactRef, inView: contactInView } = useInView({
-    threshold: 0.3,
-  });
-
-  // GSAP animation for the mobile menu
-  useGSAP(() => {
-    gsap.set(menuPanelRef.current, {
-      y: -20,
-      opacity: 0,
-      pointerEvents: "none",
-    });
-
-    if (isMenuOpen) {
-      gsap.to(menuPanelRef.current, {
-        y: 0,
-        opacity: 1,
-        duration: 0.5,
-        ease: "expo.out",
-        pointerEvents: "auto",
-      });
-    } else {
-      gsap.to(menuPanelRef.current, {
-        y: -20,
-        opacity: 0,
-        duration: 0.4,
-        ease: "power2.in",
-        pointerEvents: "none",
-      });
-    }
-  }, [isMenuOpen]);
+  const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const { pathname, hash } = useLocation();
 
   useEffect(() => {
-    if (contactInView) setActiveSection("contact");
-    else if (aboutInView) setActiveSection("about");
-    else if (eventsInView) setActiveSection("events");
-    else if (heroInView) setActiveSection("home");
-  }, [heroInView, eventsInView, aboutInView, contactInView]);
-
-  useEffect(() => {
-    const sections = {
-      hero: document.querySelector(".hero-section-marker"),
-      events: document.getElementById("events"),
-      about: document.getElementById("about"),
-      contact: document.getElementById("contact"),
+    let last = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrolled(y > 40);
+      setHidden(y > 400 && y > last + 2);
+      if (y < last - 2) setHidden(false);
+      last = y;
     };
-    if (sections.hero) heroRef(sections.hero);
-    if (sections.events) eventsRef(sections.events);
-    if (sections.about) aboutRef(sections.about);
-    if (sections.contact) contactRef(sections.contact);
-  }, [heroRef, eventsRef, aboutRef, contactRef]);
-
-  useEffect(() => {
-    if (!navContainerRef.current) return;
-    const classList = navContainerRef.current.classList;
-    classList.remove(
-      "home-nav",
-      "floating-nav",
-      "events-nav",
-      "about-nav",
-      "contact-nav",
-    );
-    if (activeSection === "home") classList.add("home-nav");
-    else {
-      classList.add("floating-nav");
-      if (activeSection === "events") classList.add("events-nav");
-      else if (activeSection === "about") classList.add("about-nav");
-      else if (activeSection === "contact") classList.add("contact-nav");
-    }
-  }, [activeSection]);
-
-  const toggleAudioIndicator = () => {
-    setIsAudioPlaying((prev) => !prev);
-    setIsIndicatorActive((prev) => !prev);
-  };
-
-  useEffect(() => {
-    if (isAudioPlaying) audioElementRef.current.play();
-    else audioElementRef.current.pause();
-  }, [isAudioPlaying]);
-
-  useEffect(() => {
-    gsap.fromTo(
-      navContainerRef.current,
-      { y: -20, opacity: 0, filter: "blur(4px)" },
-      {
-        y: 0,
-        opacity: 1,
-        filter: "blur(0px)",
-        duration: 0.8,
-        ease: "expo.out",
-      },
-    );
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const handleLinkClick = (e, item) => {
-    e.preventDefault();
-    setIsMenuOpen(false);
+  useEffect(() => setOpen(false), [pathname, hash]);
+  useEffect(() => {
+    lockScroll(open);
+    const onKey = (e) => e.key === "Escape" && setOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
 
-    if (item === "Event") {
-      window.location.href = "/events";
-      return;
-    }
-
-    if (item === "Projects") {
-      window.location.href = "/projects";
-      return;
-    }
-
-    // For other items (About, Contact), scroll to section
-    let elementId = item.toLowerCase();
-
-    // If not on home page, navigate to home first
-    if (location.pathname !== "/") {
-      window.location.href = `/#${elementId}`;
-      return;
-    }
-
-    const element = document.getElementById(elementId);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
-  };
+  const isActive = (to) =>
+    to.startsWith("/#") ? pathname === "/" && hash === to.slice(1) : pathname.startsWith(to);
 
   return (
-    <div
-      ref={navContainerRef}
-      className="nav-3d fixed inset-x-2 top-2 z-50 h-14 rounded-xl border-none transition-all duration-700 ease-out will-change-transform sm:inset-x-4 sm:top-4 sm:h-16"
-    >
-      <header className="relative flex size-full items-center justify-between px-3 sm:px-4">
-        <div className="flex items-center">
-          <Link
-            to="/"
-            onClick={() => {
-              window.scrollTo({ top: 0, behavior: "smooth" });
-              setIsMenuOpen(false);
-            }}
-            aria-label="Gotham AI Home"
-            className="rounded-lg p-1 focus:outline-none focus:ring-2 focus:ring-yellow-300/50"
-          >
-            <img
-              src="/img/logo.jpg"
-              alt="Gotham AI Logo"
-              width="40"
-              height="40"
-              className="h-auto w-8 cursor-pointer transition-transform duration-300 hover:scale-110 sm:w-10"
-            />
+    <>
+      <header
+        className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ease-expo ${
+          hidden && !open ? "-translate-y-full" : "translate-y-0"
+        }`}
+      >
+        <div
+          className={`wrap flex h-16 items-center justify-between gap-6 transition-colors duration-500 md:h-20 ${
+            scrolled && !open ? "bg-ink/70 backdrop-blur-md" : ""
+          }`}
+        >
+          <Link to="/" className="group flex items-center gap-3" aria-label="Gotham AI home">
+            <Logo title="" className="size-7 text-bone transition-transform duration-700 ease-expo group-hover:-rotate-12" />
+            <span className="text-lg font-semibold tracking-tight">Gotham AI</span>
           </Link>
-        </div>
 
-        <div className="flex h-full items-center">
-          {/* Desktop Navigation */}
-          <div className="hidden sm:flex">
-            {navItems.map((item) => {
-              const href =
-                item === "Event"
-                  ? "/events"
-                  : item === "Projects"
-                    ? "/projects"
-                    : `/#${item.toLowerCase()}`;
-              const isActive =
-                (item === "Event" && location.pathname.startsWith("/events")) ||
-                (item === "Projects" &&
-                  location.pathname.startsWith("/projects")) ||
-                (item === "About" && activeSection === "about") ||
-                (item === "Contact" && activeSection === "contact");
-              return (
-                <a
-                  key={item}
-                  href={href}
-                  className={`nav-hover-btn nav-item-enhanced nav-link-3d rounded px-2 py-1 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-yellow-300/50 ${isActive ? "scale-110 font-extrabold text-yellow-300" : "font-semibold text-blue-50/90"}`}
-                  onClick={(e) => handleLinkClick(e, item)}
-                >
-                  {item}
-                </a>
-              );
-            })}
-          </div>
-
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="flex size-8 items-center justify-center rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-300/50 sm:hidden"
-            aria-label="Toggle mobile menu"
-          >
-            <svg
-              className="size-5 text-white"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16m4 6H4"
-              />
-            </svg>
-          </button>
-
-          <button
-            onClick={toggleAudioIndicator}
-            className="ml-3 flex items-center space-x-0.5 rounded p-1 transition-transform duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-yellow-300/50 sm:ml-10"
-            aria-label={`${isAudioPlaying ? "Pause" : "Play"} background music`}
-            role="button"
-          >
-            <audio
-              ref={audioElementRef}
-              className="hidden"
-              src="/audio/loop.mp3"
-              loop
-            />
-            {[1, 2, 3, 4].map((bar) => (
-              <div
-                key={bar}
-                className={clsx("indicator-line", {
-                  active: isIndicatorActive,
-                })}
-                style={{ animationDelay: `${bar * 0.1}s` }}
-              />
+          <nav aria-label="Primary" className="hidden items-center gap-1 lg:flex">
+            {navItems.map((item, i) => (
+              <NavLink
+                key={item.label}
+                to={item.to}
+                className={`group relative px-4 py-2 font-mono text-[11px] uppercase tracking-[0.18em] transition-colors ${
+                  isActive(item.to) ? "text-signal" : "text-bone-dim hover:text-bone"
+                }`}
+              >
+                <span className="mr-1.5 text-bone-mute">0{i + 1}</span>
+                {item.label}
+                <span className="absolute inset-x-4 -bottom-0.5 h-px origin-left scale-x-0 bg-signal transition-transform duration-500 ease-expo group-hover:scale-x-100" />
+              </NavLink>
             ))}
-          </button>
+          </nav>
+
+          <div className="flex items-center gap-3">
+            <span className="label hidden xl:inline">
+              <PuneClock />
+            </span>
+            <a href={site.joinForm} target="_blank" rel="noreferrer" className="btn-signal hidden !px-5 !py-2.5 sm:inline-flex">
+              Join <span aria-hidden>↗</span>
+            </a>
+            <button
+              type="button"
+              onClick={() => setOpen((v) => !v)}
+              aria-expanded={open}
+              aria-controls="site-menu"
+              aria-label={open ? "Close menu" : "Open menu"}
+              className="relative flex size-11 items-center justify-center rounded-full border border-bone/20 transition-colors hover:border-signal lg:hidden"
+            >
+              <span
+                className={`absolute h-px w-5 bg-bone transition-transform duration-500 ease-expo ${
+                  open ? "rotate-45" : "-translate-y-1"
+                }`}
+              />
+              <span
+                className={`absolute h-px w-5 bg-bone transition-transform duration-500 ease-expo ${
+                  open ? "-rotate-45" : "translate-y-1"
+                }`}
+              />
+            </button>
+          </div>
         </div>
       </header>
 
-      {/* Mobile Menu Panel (Now Animated) */}
-      <div
-        ref={menuPanelRef}
-        className="absolute inset-x-0 top-[64px] mx-2 rounded-lg border border-white/10 bg-black/80 p-4 backdrop-blur-lg sm:hidden"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <nav>
-          <ul className="flex flex-col items-center space-y-4">
-            {navItems.map((item) => {
-              const href =
-                item === "Event"
-                  ? "/events"
-                  : item === "Projects"
-                    ? "/projects"
-                    : `#${item.toLowerCase()}`;
-              return (
-                <li key={item}>
-                  <a
-                    href={href}
-                    className="py-2 text-lg font-semibold text-blue-50/90 hover:text-yellow-300"
-                    onClick={(e) => handleLinkClick(e, item)}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            id="site-menu"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Site menu"
+            initial={{ clipPath: "circle(0% at 100% 0%)" }}
+            animate={{ clipPath: "circle(150% at 100% 0%)" }}
+            exit={{ clipPath: "circle(0% at 100% 0%)" }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            className="grain fixed inset-0 z-40 flex flex-col bg-ink-800 pt-24"
+          >
+            <nav aria-label="Mobile" className="wrap flex flex-1 flex-col justify-center gap-1">
+              {navItems.map((item, i) => (
+                <motion.div
+                  key={item.label}
+                  initial={{ y: 40, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.15 + i * 0.06, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <Link
+                    to={item.to}
+                    className="group flex items-baseline gap-4 border-b border-bone/10 py-3"
                   >
-                    {item}
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
-      </div>
-
-      <ContactModal
-        isOpen={isContactModalOpen}
-        onClose={() => setIsContactModalOpen(false)}
-      />
-    </div>
+                    <span className="font-mono text-xs text-signal">0{i + 1}</span>
+                    <span className="display text-[13vw] transition-colors group-hover:text-signal sm:text-7xl">
+                      {item.label}
+                    </span>
+                  </Link>
+                </motion.div>
+              ))}
+            </nav>
+            <div className="wrap flex flex-wrap items-center justify-between gap-4 pb-8 pt-6">
+              <a href={site.joinForm} target="_blank" rel="noreferrer" className="btn-signal">
+                Join the community ↗
+              </a>
+              <span className="label">
+                <PuneClock />
+              </span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 };
 
