@@ -7,7 +7,8 @@ High-level documentation for the project.
 | Document                                   | Description                                       |
 | ------------------------------------------ | ------------------------------------------------- |
 | [ProjectOverview.md](./ProjectOverview.md) | Architecture, tech stack, routes, and how to run  |
-| [content-guide.md](./content-guide.md)     | How to add/update events, projects, and resources |
+| [content-guide.md](./content-guide.md)     | How to add/update events, projects, resources and team |
+| [seo-guide.md](./seo-guide.md)             | Search & AI visibility: how it works, owner tasks |
 
 ## Also See
 

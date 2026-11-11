@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { gsap } from "../../lib/smooth.js";
-import { eventDateLabel, eventNumber, eventParts, isUpcoming, site, sortedEvents } from "../../data/site.js";
+import { eventCover, eventDateLabel, eventNumber, eventParts, isUpcoming, site, sortedEvents } from "../../data/site.js";
 import EventPanel from "../EventPanel.jsx";
 import { Reveal } from "../ui.jsx";
 
@@ -14,7 +14,9 @@ function Featured({ event, upcoming }) {
       <div className="relative overflow-hidden lg:col-span-7">
         <img
           src={event.cover}
-          alt={`${event.title} — ${event.location}`}
+          alt={eventCover(event).alt}
+          width={eventCover(event).width}
+          height={eventCover(event).height}
           className="aspect-[16/10] w-full object-cover transition-transform duration-1000 ease-expo group-hover:scale-[1.03]"
         />
         <span className="absolute left-4 top-4 rounded-full bg-signal px-3 py-1 font-mono text-[0.625rem] uppercase tracking-[0.16em] text-ink">
@@ -81,7 +83,7 @@ const EventsReel = () => {
     <section id="events" aria-labelledby="events-title" className="relative bg-ink">
       <div className="wrap pb-20 pt-28 md:pt-36">
         <div className="mb-12 flex flex-col justify-between gap-6 md:flex-row md:items-end">
-          <h2 id="events-title" className="display text-[15vw] sm:text-[11vw] md:text-[7.2vw] xl:text-[6.875rem]">
+          <h2 id="events-title" data-reveal="mask" className="display text-[15vw] sm:text-[11vw] md:text-[7.2vw] xl:text-[6.875rem]">
             Events
           </h2>
           <p className="max-w-sm text-bone-dim md:text-right">

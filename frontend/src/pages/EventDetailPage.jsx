@@ -6,7 +6,7 @@ import { breadcrumbLd, eventLd } from "../lib/structuredData.js";
 import Gallery from "../components/Gallery.jsx";
 import { Monogram, Reveal } from "../components/ui.jsx";
 import { Block, Breadcrumbs, Chip, MetaStrip, NumberedList, ParallaxImage, PrevNext, SectionTabs, Sections } from "../components/detail.jsx";
-import { eventDateLabel, eventNumber, eventParts, getEvent, isUpcoming, site, sortedEvents } from "../data/site.js";
+import { eventCover, eventDateLabel, eventMedia, eventNumber, eventParts, getEvent, isUpcoming, site, sortedEvents } from "../data/site.js";
 import NotFoundPage from "./NotFoundPage.jsx";
 
 function EventIndex({ current }) {
@@ -109,7 +109,13 @@ const EventDetailPage = () => {
 
   return (
     <>
-      <SEO title={event.title} description={event.summary} image={event.cover} type="article" />
+      <SEO
+        title={`${event.title} — ${eventDateLabel(event)}`}
+        description={`${event.summary} ${event.category} by Gotham AI at ${event.location}, ${eventDateLabel(event)}.`}
+        image={event.cover}
+        imageAlt={`${event.title} at ${event.location}`}
+        type="article"
+      />
       <StructuredData
         data={[
           eventLd(event),
@@ -129,9 +135,9 @@ const EventDetailPage = () => {
                 <Chip tone={upcoming ? "solid" : "default"}>{upcoming ? "Upcoming" : "Past event"}</Chip>
                 <Chip>{event.category}</Chip>
               </Reveal>
-              <Reveal delay={0.05}>
-                <h1 className="display mt-6 text-balance text-[15vw] sm:text-[10vw] lg:text-[6.6vw] xl:text-[6.5rem]">{event.title}</h1>
-              </Reveal>
+              <div>
+                <h1 data-reveal="mask" className="display mt-6 text-balance text-[15vw] sm:text-[10vw] lg:text-[6.6vw] xl:text-[6.5rem]">{event.title}</h1>
+              </div>
               <Reveal delay={0.12}>
                 <p className="mt-6 max-w-xl text-xl leading-relaxed text-bone-dim">{event.summary}</p>
                 <div className="mt-8 flex flex-wrap gap-3">
@@ -154,7 +160,7 @@ const EventDetailPage = () => {
             </div>
 
             <Reveal delay={0.1} className="relative lg:col-span-5">
-              <ParallaxImage src={event.cover} alt={`${event.title} — ${event.location}`} className="aspect-[4/5] w-full sm:aspect-[16/11] lg:aspect-[4/5]" />
+              <ParallaxImage src={event.cover} alt={eventCover(event).alt} className="aspect-[4/5] w-full sm:aspect-[16/11] lg:aspect-[4/5]" />
               <div className="absolute -bottom-px left-0 flex items-end gap-3 bg-ink pr-5 pt-4">
                 <span className="display text-7xl leading-[0.8] md:text-8xl">{parts.day}</span>
                 <span className="pb-1 font-mono text-xs uppercase leading-tight tracking-[0.14em] text-bone-dim">
@@ -172,6 +178,12 @@ const EventDetailPage = () => {
                 ["Date", eventDateLabel(event)],
                 event.time && ["Time", event.time],
                 ["Venue", event.location],
+                [
+                  "Organised by",
+                  <Link key="org" to="/about" className="underline decoration-bone/30 underline-offset-4 hover:text-signal">
+                    Gotham AI
+                  </Link>,
+                ],
                 ["Format", event.category],
                 event.attendees > 0 && ["Attendees", event.attendees.toLocaleString("en-IN")],
                 event.speakers?.length > 0 && ["Speakers", event.speakers.length],
@@ -213,7 +225,7 @@ const EventDetailPage = () => {
 
         {event.gallery?.length > 0 && (
           <Block id="photos" title="Photos" label={`${event.gallery.length} frames`} className="border-t border-bone/10 bg-ink-800">
-            <Gallery items={event.gallery} title={event.title} />
+            <Gallery items={eventMedia(event)} title={event.title} />
           </Block>
         )}
       </article>

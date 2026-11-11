@@ -59,7 +59,7 @@ const Join = () => {
         className="pointer-events-none absolute inset-0 transition-[background] duration-300"
         style={{
           background:
-            "radial-gradient(600px circle at var(--mx) var(--my), rgba(255,179,71,0.16), transparent 60%), radial-gradient(120% 70% at 50% 120%, rgba(255,179,71,0.12), transparent 60%)",
+            "radial-gradient(600px circle at var(--mx) var(--my), rgba(237,255,102,0.07), transparent 60%), radial-gradient(120% 70% at 50% 120%, rgba(237,255,102,0.05), transparent 60%)",
         }}
       />
       <div className="wrap relative">
@@ -67,13 +67,13 @@ const Join = () => {
           Join us
         </p>
         <div className="flex flex-col gap-10 md:flex-row md:items-end md:justify-between">
-          <Reveal>
-            <h2 id="join-title" className="display text-[19vw] md:text-[13vw] xl:text-[12.5rem]">
+          <div>
+            <h2 id="join-title" data-reveal="mask" className="display text-[19vw] md:text-[13vw] xl:text-[12.5rem]">
               Answer
               <br />
               the <span className="accent">signal</span>
             </h2>
-          </Reveal>
+          </div>
           <Badge />
         </div>
 
@@ -87,14 +87,33 @@ const Join = () => {
           ))}
         </Reveal>
 
-        <div className="mt-12 flex flex-wrap items-center gap-3">
-          <a href={site.joinForm} target="_blank" rel="noreferrer" className="btn-signal">
-            Join Gotham AI ↗
+        {/* contact is the main action here — one big, obvious target */}
+        <button
+          type="button"
+          onClick={openContact}
+          className="group mt-16 flex w-full flex-col gap-6 rounded-3xl bg-signal p-8 text-left text-ink transition-transform duration-500 ease-expo hover:-translate-y-1 md:mt-20 md:flex-row md:items-center md:justify-between md:p-12"
+        >
+          <span>
+            <span className="block font-mono text-[0.6875rem] uppercase tracking-[0.18em] text-ink/60">
+              Partnerships · speaking · sponsoring · questions
+            </span>
+            <span className="display mt-3 block text-6xl md:text-8xl">Contact us</span>
+          </span>
+          <span
+            aria-hidden
+            className="flex size-16 shrink-0 items-center justify-center rounded-full bg-ink text-3xl text-signal transition-transform duration-500 ease-expo group-hover:-rotate-45 md:size-24 md:text-4xl"
+          >
+            →
+          </span>
+        </button>
+
+        <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
+          <a href={`mailto:${site.email}`} className="label text-bone underline-offset-4 hover:text-signal hover:underline">
+            or email {site.email}
           </a>
-          <button type="button" onClick={openContact} className="btn-ghost">
-            Partner or contact us
-          </button>
-          <span className="label ml-2 hidden sm:inline">or find us on</span>
+          <a href={site.joinForm} target="_blank" rel="noreferrer" className="label underline-offset-4 hover:text-signal hover:underline">
+            Want to join instead? Fill the form ↗
+          </a>
           {site.socials.map((s) => (
             <a key={s.name} href={s.href} target="_blank" rel="noreferrer" className="label underline-offset-4 hover:text-signal hover:underline">
               {s.name}

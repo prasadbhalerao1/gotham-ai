@@ -1,6 +1,8 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import SEO from "../components/SEO.jsx";
+import StructuredData from "../components/StructuredData.jsx";
+import { breadcrumbLd, pageLd } from "../lib/structuredData.js";
 import PageHeader from "../components/PageHeader.jsx";
 import { resources } from "../data/resources.js";
 
@@ -27,7 +29,8 @@ const ResourcesPage = () => {
 
   return (
     <>
-      <SEO title="Resources" description="Curated AI and ML learning material picked by the Gotham AI community." />
+      <SEO fullTitle="AI & Machine Learning Learning Resources | Gotham AI" description="Courses, tutorials, books and datasets for learning AI and machine learning, picked by the Gotham AI community in Pune." />
+      <StructuredData data={[pageLd("CollectionPage", "/resources", { name: "Gotham AI learning resources" }), breadcrumbLd([["Resources", "/resources"]])]} />
       <PageHeader
         crumbs={[{ label: "Resources" }]}
         title={
@@ -64,28 +67,51 @@ const ResourcesPage = () => {
         <p className="label mb-4" aria-live="polite">
           {list.length} of {published.length} resources
         </p>
-        <ul>
-          {list.map((r) => (
-            <li key={r.slug}>
-              <Link
-                to={`/resources/${r.slug}`}
-                className="group grid gap-3 border-t border-bone/10 py-6 transition-colors hover:bg-ink-800/60 md:grid-cols-12 md:items-baseline md:px-4"
-              >
-                <span className="font-mono text-[0.6875rem] uppercase tracking-[0.16em] text-signal md:col-span-2">{r.type}</span>
-                <span className="md:col-span-6">
-                  <span className="display block text-4xl transition-colors group-hover:text-signal">{r.title}</span>
-                  <span className="mt-1 block text-bone-dim">{r.description}</span>
-                </span>
-                <span className="font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-bone-mute md:col-span-3">
-                  {r.category} · {r.difficulty}
-                  <br />
-                  {r.author}
-                </span>
-                <span aria-hidden className="hidden text-right text-xl md:col-span-1 md:block">→</span>
-              </Link>
-            </li>
-          ))}
-        </ul>
+        {list.length === 0 ? (
+          <p className="rounded-2xl border border-dashed border-bone/20 p-12 text-center text-bone-dim">Nothing matches — try another filter.</p>
+        ) : (
+          <ul className="grid overflow-hidden rounded-2xl border-l border-t border-bone/10 sm:grid-cols-2 lg:grid-cols-3">
+            {list.map((r, i) => (
+              <li key={r.slug} data-reveal="rise" className="border-b border-r border-bone/10">
+                <Link
+                  to={`/resources/${r.slug}`}
+                  className="group relative flex h-full min-h-[19rem] flex-col overflow-hidden p-7 transition-colors duration-500 hover:bg-ink-800"
+                >
+                  {/* oversized type word as a quiet backdrop */}
+                  <span
+                    aria-hidden
+                    className="display pointer-events-none absolute -bottom-3 -right-2 text-[6rem] leading-none text-bone/[0.04] transition-colors duration-500 group-hover:text-signal/10"
+                  >
+                    {r.type}
+                  </span>
+                  <span className="flex items-center justify-between font-mono text-[0.6875rem] uppercase tracking-[0.16em]">
+                    <span className="text-signal">{r.type}</span>
+                    <span className="text-bone-mute">{String(i + 1).padStart(2, "0")}</span>
+                  </span>
+                  <span className="display mt-8 text-4xl leading-[0.92] transition-colors duration-300 group-hover:text-signal">{r.title}</span>
+                  <span className="mt-3 line-clamp-3 text-bone-dim">{r.description}</span>
+                  <span className="relative mt-auto flex items-end justify-between gap-4 pt-8">
+                    <span className="font-mono text-[0.6875rem] uppercase leading-relaxed tracking-[0.12em] text-bone-mute">
+                      {r.category}
+                      <br />
+                      {r.author}
+                    </span>
+                    <span className="flex items-center gap-1" aria-label={`Level: ${r.difficulty}`}>
+                      {["Beginner", "Intermediate", "Advanced"].map((lvl, k) => (
+                        <span
+                          key={lvl}
+                          className={`h-1.5 w-4 rounded-full ${
+                            k <= ["Beginner", "Intermediate", "Advanced"].indexOf(r.difficulty) ? "bg-signal" : "bg-bone/15"
+                          }`}
+                        />
+                      ))}
+                    </span>
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
     </>
   );

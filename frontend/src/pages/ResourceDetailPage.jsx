@@ -1,5 +1,7 @@
 import { useParams } from "react-router-dom";
 import SEO from "../components/SEO.jsx";
+import StructuredData from "../components/StructuredData.jsx";
+import { breadcrumbLd } from "../lib/structuredData.js";
 import PageHeader from "../components/PageHeader.jsx";
 import { resources } from "../data/resources.js";
 import NotFoundPage from "./NotFoundPage.jsx";
@@ -11,7 +13,24 @@ const ResourceDetailPage = () => {
 
   return (
     <>
-      <SEO title={r.title} description={r.description} />
+      <SEO title={`${r.title} — ${r.type}`} description={`${r.description} A ${r.difficulty.toLowerCase()} ${r.category} resource recommended by Gotham AI.`} />
+      <StructuredData
+        data={[
+          {
+            "@context": "https://schema.org",
+            "@type": "LearningResource",
+            name: r.title,
+            description: r.description,
+            learningResourceType: r.type,
+            educationalLevel: r.difficulty,
+            ...(r.url && !/example\.com/.test(r.url) ? { url: r.url } : {}),
+          },
+          breadcrumbLd([
+            ["Resources", "/resources"],
+            [r.title, `/resources/${r.slug}`],
+          ]),
+        ]}
+      />
       <PageHeader crumbs={[{ label: "Resources", to: "/resources" }, { label: r.type }]} title={r.title} intro={r.description}>
         <dl className="mt-10 flex flex-wrap gap-x-10 gap-y-4">
           {[

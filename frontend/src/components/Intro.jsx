@@ -61,9 +61,9 @@ const Intro = () => {
       role="dialog"
       aria-modal="true"
       aria-label="Welcome to Gotham AI"
-      className={`fixed inset-0 z-[90] flex flex-col bg-ink text-bone transition-[clip-path] duration-1000 ease-expo ${
-        leaving ? "[clip-path:inset(0_0_100%_0)]" : "[clip-path:inset(0_0_0_0)]"
-      }`}
+      // no clip/transform while counting (keeps text on the crisp, non-composited
+      // path); the slide-away transition is only attached when leaving
+      className={`fixed inset-0 z-[90] flex flex-col bg-ink text-bone ${leaving ? "-translate-y-full transition-transform duration-1000 ease-expo" : ""}`}
     >
       <div className="wrap flex items-center justify-between pt-6">
         <span className="label">Gotham AI</span>
@@ -71,7 +71,7 @@ const Intro = () => {
       </div>
 
       <div className="flex flex-1 flex-col items-center justify-center gap-10">
-        <svg viewBox="140 120 740 740" className="w-28 md:w-36" aria-hidden>
+        <svg viewBox="140 120 740 740" className="w-28 md:w-36" shapeRendering="geometricPrecision" aria-hidden>
           <path
             d={MARK_PATH}
             pathLength="1"
@@ -91,9 +91,10 @@ const Intro = () => {
         </svg>
 
         <div className="text-center">
-          <p className="font-mono text-5xl tabular-nums tracking-tight text-bone md:text-6xl" aria-live="off">
+          <p className="display text-7xl tabular-nums leading-none text-bone [font-feature-settings:'tnum'] md:text-8xl" aria-live="off">
             {pct}
           </p>
+          <p className="label mt-4">Loading</p>
         </div>
       </div>
 

@@ -33,7 +33,7 @@ const IndexList = ({ rows, label }) => {
     <div ref={wrap} className="relative" onPointerLeave={() => setHovered(null)}>
       <ol aria-label={label} className="border-t border-bone/10">
         {rows.map((r) => (
-          <li key={r.key}>
+          <li key={r.key} data-reveal="rise">
             <Link
               to={r.to}
               onPointerEnter={() => setHovered(r.key)}

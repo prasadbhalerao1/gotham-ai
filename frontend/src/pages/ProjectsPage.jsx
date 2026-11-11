@@ -1,6 +1,6 @@
 import SEO from "../components/SEO.jsx";
 import StructuredData from "../components/StructuredData.jsx";
-import { breadcrumbLd, itemListLd } from "../lib/structuredData.js";
+import { breadcrumbLd, itemListLd, pageLd } from "../lib/structuredData.js";
 import PageHeader from "../components/PageHeader.jsx";
 import IndexList from "../components/IndexList.jsx";
 import ProjectPlate from "../components/ProjectPlate.jsx";
@@ -26,11 +26,12 @@ const ProjectsPage = () => {
   return (
     <>
       <SEO
-        title="Projects"
-        description="Industry projects led by Gotham AI members — AI access control, field-workforce platforms, post-quantum cryptography and cybercrime intelligence."
+        fullTitle="Student AI & Software Projects with Industry | Gotham AI"
+        description="Industry projects led by Gotham AI members at JSPM's RSCOE, Pune — AI access control, field-workforce platforms, post-quantum cryptography and cybercrime intelligence."
       />
       <StructuredData
         data={[
+          pageLd("CollectionPage", "/projects", { name: "Gotham AI projects" }),
           breadcrumbLd([["Projects", "/projects"]]),
           itemListLd(
             "Gotham AI projects",

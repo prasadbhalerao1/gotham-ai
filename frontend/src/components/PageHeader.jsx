@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { Reveal } from "./ui.jsx";
 
 const PageHeader = ({ crumbs = [], title, intro, children }) => (
   <header className="grain relative overflow-hidden border-b border-bone/10 bg-ink pb-16 pt-32 md:pb-20 md:pt-44">
@@ -26,13 +25,13 @@ const PageHeader = ({ crumbs = [], title, intro, children }) => (
           </span>
         ))}
       </nav>
-      <Reveal>
-        <h1 className="display text-balance text-[14vw] sm:text-[10vw] md:text-[8vw] xl:text-[7.5rem]">{title}</h1>
-      </Reveal>
+      <div>
+        <h1 data-reveal="mask" className="display text-balance text-[14vw] sm:text-[10vw] md:text-[8vw] xl:text-[7.5rem]">{title}</h1>
+      </div>
       {intro && (
-        <Reveal delay={0.1} className="mt-8 max-w-2xl text-lg leading-relaxed text-bone-dim md:text-xl">
+        <p data-reveal="rise" className="mt-8 max-w-2xl text-lg leading-relaxed text-bone-dim md:text-xl">
           {intro}
-        </Reveal>
+        </p>
       )}
       {children}
     </div>

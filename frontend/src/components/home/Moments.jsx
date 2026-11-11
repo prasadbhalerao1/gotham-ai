@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
-import { sortedEvents } from "../../data/site.js";
+import { eventMedia, sortedEvents } from "../../data/site.js";
 
 // Every photo from every event (videos skipped), interleaved so neighbours differ.
 const photos = (() => {
   const lists = sortedEvents.map((e) =>
-    (e.gallery || []).filter((g) => !/\.(mp4|webm|mov)$/i.test(g)).map((src) => ({ src, title: e.title, slug: e.slug })),
+    eventMedia(e)
+      .filter((m) => !m.video)
+      .map((m) => ({ ...m, title: e.title, slug: e.slug })),
   );
   const out = [];
   for (let i = 0; lists.some((l) => l[i]); i++) lists.forEach((l) => l[i] && out.push(l[i]));
@@ -27,7 +29,9 @@ function Row({ items, reverse }) {
         >
           <img
             src={p.src}
-            alt={i < items.length ? `${p.title} — Gotham AI` : ""}
+            alt={i < items.length ? p.alt : ""}
+            width={p.width}
+            height={p.height}
             loading="lazy"
             decoding="async"
             className="h-full w-auto max-w-none object-cover transition duration-700 ease-expo group-hover:scale-105"
@@ -44,7 +48,7 @@ function Row({ items, reverse }) {
 const Moments = () => (
   <section aria-labelledby="moments-title" className="overflow-hidden border-y border-bone/10 bg-ink-800 py-20 md:py-28">
     <div className="wrap mb-10 flex flex-col justify-between gap-4 md:flex-row md:items-end">
-      <h2 id="moments-title" className="display text-6xl md:text-8xl">
+      <h2 id="moments-title" data-reveal="mask" className="display text-6xl md:text-8xl">
         In the <span className="accent">room</span>
       </h2>
       <p className="label">{photos.length} photos from {sortedEvents.length} events</p>

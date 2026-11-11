@@ -2,11 +2,19 @@ import { renderToString } from "react-dom/server";
 import { StaticRouter } from "react-router-dom/server";
 import { HelmetProvider } from "react-helmet-async";
 import App from "./App.jsx";
-import { sortedEvents, publishedProjects } from "./data/site.js";
+import { SITE_URL, eventDateLabel, faqs, publishedProjects, site, sortedEvents } from "./data/site.js";
 import { resources } from "./data/resources.js";
+
+// data the prerender script needs (it can't import Vite-only modules itself)
+export { SITE_URL, eventDateLabel, faqs, publishedProjects, resources, site, sortedEvents };
+export { llmsFull, markdownPages } from "./lib/markdown.js";
 
 export const routes = [
   "/",
+  "/about",
+  "/team",
+  ...site.leadership.map((p) => `/team/${p.slug}`),
+  "/contact",
   "/events",
   "/projects",
   "/resources",

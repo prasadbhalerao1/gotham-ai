@@ -121,7 +121,7 @@ export function Block({ id, label, title, children, className = "" }) {
     <section id={id} aria-labelledby={`${id}-title`} className={`scroll-mt-24 py-16 md:py-24 ${className}`}>
       <div className="wrap">
         <div className="mb-10 flex items-baseline justify-between gap-6 border-b border-bone/10 pb-5 md:mb-14">
-          <h2 id={`${id}-title`} className="display text-5xl md:text-6xl">
+          <h2 id={`${id}-title`} data-reveal="mask" className="display text-5xl md:text-6xl">
             {title}
           </h2>
           {label && <span className="label shrink-0">{label}</span>}

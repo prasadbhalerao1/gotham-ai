@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -6,6 +6,8 @@ import { z } from "zod";
 import { useMutation } from "@tanstack/react-query";
 import contactService from "../services/contactService";
 import { lockScroll } from "../lib/smooth.js";
+import { site } from "../data/site.js";
+import { useFocusTrap } from "../lib/useFocusTrap.js";
 
 const contactSchema = z.object({
   name: z
@@ -37,6 +39,8 @@ const fields = [
 
 const ContactModal = ({ isOpen, onClose }) => {
   const [submitStatus, setSubmitStatus] = useState(null);
+  const panel = useRef(null);
+  useFocusTrap(panel, isOpen);
 
   const {
     register,
@@ -104,6 +108,7 @@ const ContactModal = ({ isOpen, onClose }) => {
             className="absolute inset-0 bg-ink/80 backdrop-blur-sm"
           />
           <motion.div
+            ref={panel}
             role="dialog"
             aria-modal="true"
             aria-labelledby="contact-title"
@@ -169,7 +174,11 @@ const ContactModal = ({ isOpen, onClose }) => {
 
                 {submitStatus === "error" && (
                   <p role="alert" className="border border-alert/40 px-4 py-3 text-sm text-alert">
-                    {mutation.error?.message || "Failed to send message. Please try again."}
+                    {mutation.error?.message || "Failed to send message. Please try again."} You can also email{" "}
+                    <a href={`mailto:${site.email}`} className="underline">
+                      {site.email}
+                    </a>
+                    .
                   </p>
                 )}
 

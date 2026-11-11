@@ -31,6 +31,31 @@
     text-rendering: optimizeLegibility;
   }
 
+  /* thin, quiet scrollbar that lights up lime when you grab it */
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(242, 242, 238, 0.22) transparent;
+  }
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(242, 242, 238, 0.18);
+    border-radius: 999px;
+    border: 2px solid var(--ink);
+  }
+  ::-webkit-scrollbar-thumb:hover,
+  ::-webkit-scrollbar-thumb:active {
+    background: var(--signal);
+  }
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
   ::selection {
     background: var(--signal);
     color: var(--ink);

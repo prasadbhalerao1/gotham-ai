@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import SEO from "../components/SEO.jsx";
 import StructuredData from "../components/StructuredData.jsx";
 import { breadcrumbLd, projectLd } from "../lib/structuredData.js";
@@ -7,7 +7,7 @@ import Gallery from "../components/Gallery.jsx";
 import ProjectPlate from "../components/ProjectPlate.jsx";
 import { Reveal } from "../components/ui.jsx";
 import { Block, Breadcrumbs, Chip, MetaStrip, NumberedList, ParallaxImage, PrevNext, SectionTabs } from "../components/detail.jsx";
-import { getProject, projectNumber, publishedProjects, site } from "../data/site.js";
+import { getProject, personByName, projectNumber, publishedProjects, site } from "../data/site.js";
 import { useContact } from "../lib/contact.js";
 import NotFoundPage from "./NotFoundPage.jsx";
 
@@ -34,7 +34,12 @@ const ProjectDetailPage = () => {
 
   return (
     <>
-      <SEO title={project.tagline ? `${project.title} — ${project.tagline}` : project.title} description={project.summary} image={project.cover} type="article" />
+      <SEO
+        title={project.tagline && project.tagline.length <= 40 ? `${project.title} — ${project.tagline}` : `${project.title} — Industry Project`}
+        description={`${project.summary} A Gotham AI industry project with ${project.partner.name}. Status: ${project.status}.`}
+        image={project.cover}
+        type="article"
+      />
       <StructuredData
         data={[
           projectLd(project),
@@ -54,10 +59,10 @@ const ProjectDetailPage = () => {
                 <Chip tone="signal">{project.status}</Chip>
                 <Chip>Industry project</Chip>
               </Reveal>
-              <Reveal delay={0.05}>
-                <h1 className="display mt-6 text-balance text-[17vw] sm:text-[12vw] lg:text-[8vw] xl:text-[8rem]">{project.title}</h1>
+              <div>
+                <h1 data-reveal="mask" className="display mt-6 text-balance text-[17vw] sm:text-[12vw] lg:text-[8vw] xl:text-[8rem]">{project.title}</h1>
                 {project.tagline && <p className="mt-3 font-serif text-3xl italic text-bone-dim md:text-4xl">{project.tagline}</p>}
-              </Reveal>
+              </div>
               <Reveal delay={0.12}>
                 <p className="mt-6 max-w-xl text-xl leading-relaxed text-bone-dim">{project.summary}</p>
                 <div className="mt-8 flex flex-wrap gap-3">
@@ -98,7 +103,16 @@ const ProjectDetailPage = () => {
                     project.partner.name
                   ),
                 ],
-                lead && [lead.role, lead.name],
+                lead && [
+                  lead.role,
+                  personByName(lead.name) ? (
+                    <Link key="lead" to={`/team/${personByName(lead.name).slug}`} className="underline decoration-bone/30 underline-offset-4 hover:text-signal">
+                      {lead.name}
+                    </Link>
+                  ) : (
+                    lead.name
+                  ),
+                ],
                 ["Capabilities", project.capabilities.length],
               ]}
             />
@@ -131,7 +145,15 @@ const ProjectDetailPage = () => {
               {project.team.map((m) => (
                 <li key={m.name} className="border border-bone/10 p-6">
                   <p className="label">{m.role}</p>
-                  <p className="mt-3 text-2xl text-bone">{m.name}</p>
+                  <p className="mt-3 text-2xl text-bone">
+                    {personByName(m.name) ? (
+                      <Link to={`/team/${personByName(m.name).slug}`} className="hover:text-signal">
+                        {m.name} →
+                      </Link>
+                    ) : (
+                      m.name
+                    )}
+                  </p>
                 </li>
               ))}
               <li>

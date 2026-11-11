@@ -6,9 +6,13 @@ const defaultDescription = site.description;
 const defaultKeywords =
   "Gotham AI, Gotham Club, RSCOE, JSPM, Rajarshi Shahu College Of Engineering, Tathawade, Pune, AI Club, Machine Learning, Agentic AI, Deep Learning, Hackathon, Prasad Bhalerao";
 
-const Seo = ({ title, description, keywords, image, type = "website", name = "Gotham AI" }) => {
+/**
+ * Page metadata. `title` gets " | Gotham AI" appended; pass `fullTitle` to set
+ * the whole title yourself. `noindex` keeps a page out of search results.
+ */
+const Seo = ({ title, fullTitle: exactTitle, description, keywords, image, imageAlt, type = "website", name = "Gotham AI", noindex = false }) => {
   const { pathname } = useLocation();
-  const fullTitle = !title || title === name ? `${name} — Where minds meet machines` : `${title} | ${name}`;
+  const fullTitle = exactTitle ?? (!title || title === name ? `${name} | AI & Technology Community in Pune` : `${title} | ${name}`);
   const canonical = pathname === "/" ? SITE_URL : `${SITE_URL}${pathname.replace(/\/$/, "")}`;
   const ogImage = `${SITE_URL}${image || "/img/og-default.jpg"}`;
 
@@ -18,11 +22,15 @@ const Seo = ({ title, description, keywords, image, type = "website", name = "Go
       <meta name="description" content={description || defaultDescription} />
       <meta name="keywords" content={keywords || defaultKeywords} />
       <link rel="canonical" href={canonical} />
+      {/* plain-text twin of this page for AI crawlers (written at build time) */}
+      {!noindex && <link rel="alternate" type="text/markdown" href={`${pathname === "/" ? "/index" : pathname.replace(/\/$/, "")}.md`} />}
+      <meta name="robots" content={noindex ? "noindex, follow" : "index, follow, max-image-preview:large, max-snippet:-1"} />
       <meta property="og:type" content={type} />
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={description || defaultDescription} />
       <meta property="og:url" content={canonical} />
       <meta property="og:image" content={ogImage} />
+      <meta property="og:image:alt" content={imageAlt || fullTitle} />
       <meta property="og:site_name" content={name} />
       <meta property="og:locale" content="en_IN" />
       <meta name="twitter:card" content="summary_large_image" />

@@ -1,15 +1,18 @@
 import { Link } from "react-router-dom";
-import { eventDateLabel } from "../data/site.js";
+import { eventCover, eventDateLabel } from "../data/site.js";
 
 const EventPanel = ({ event, number, upcoming = false, className = "" }) => (
   <Link
+    data-reveal="rise"
     to={`/events/${event.slug}`}
     className={`group relative flex flex-col overflow-hidden border border-bone/10 bg-ink-800 transition-colors duration-500 hover:border-signal/60 ${className}`}
   >
     <div className="photo relative aspect-[4/3] w-full">
       <img
         src={event.cover}
-        alt={`${event.title} at ${event.location}`}
+        alt={eventCover(event).alt}
+        width={eventCover(event).width}
+        height={eventCover(event).height}
         loading="lazy"
         decoding="async"
         className="size-full object-cover group-hover:scale-[1.04]"

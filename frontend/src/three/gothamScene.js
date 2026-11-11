@@ -207,6 +207,62 @@ export function createGothamScene(canvas, { reducedMotion = false, onReady } = {
   const moon = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), moonMat);
   scene.add(moon);
 
+  // thin clouds drifting across the moon
+  const wispMat = new THREE.ShaderMaterial({
+    uniforms: { uTime: { value: 0 }, uMoon: { value: moonPos }, uStrength: { value: reducedMotion ? 1 : 0 } },
+    vertexShader: skyVertex,
+    fragmentShader: /* glsl */ `
+      uniform float uTime; uniform vec3 uMoon; uniform float uStrength;
+      varying vec3 vWorld;
+      ${noise}
+      void main() {
+        vec2 p = vWorld.xy * vec2(0.02, 0.05) + vec2(uTime * 0.012, 0.0);
+        float c = smoothstep(0.5, 0.8, fbm(p * 2.0));
+        float d = length(vWorld.xy - uMoon.xy);
+        float lit = exp(-d * d / 900.0);
+        vec3 col = mix(vec3(0.03, 0.03, 0.036), vec3(0.55, 0.55, 0.52), lit);
+        gl_FragColor = vec4(col, c * (0.25 + lit * 0.5) * uStrength);
+      }`,
+    transparent: true,
+    depthWrite: false,
+  });
+  const wisps = new THREE.Mesh(new THREE.PlaneGeometry(900, 160), wispMat);
+  wisps.position.set(0, moonPos.y, skyZ + 3);
+  scene.add(wisps);
+
+  // slow red aviation lights on the tallest towers
+  const beaconPos = [];
+  const beaconSeed = [];
+  for (let i = 0; i < count; i++) {
+    if (scales[i * 3 + 1] < 22) continue;
+    city.getMatrixAt(i, m);
+    const p = new THREE.Vector3().setFromMatrixPosition(m);
+    beaconPos.push(p.x, scales[i * 3 + 1] + 0.6, p.z);
+    beaconSeed.push(seeds[i]);
+  }
+  const beaconGeo = new THREE.BufferGeometry();
+  beaconGeo.setAttribute("position", new THREE.Float32BufferAttribute(beaconPos, 3));
+  beaconGeo.setAttribute("aSeed", new THREE.Float32BufferAttribute(beaconSeed, 1));
+  const beaconMat = new THREE.ShaderMaterial({
+    uniforms: { uTime: { value: 0 }, uStrength: { value: reducedMotion ? 1 : 0 }, uPixelRatio: { value: renderer.getPixelRatio() } },
+    vertexShader: /* glsl */ `
+      uniform float uTime; uniform float uPixelRatio; attribute float aSeed; varying float vOn;
+      void main() {
+        vec4 mv = modelViewMatrix * vec4(position, 1.0);
+        float ph = fract(uTime * 0.45 + aSeed);
+        vOn = smoothstep(0.0, 0.08, ph) * smoothstep(0.35, 0.18, ph);
+        gl_PointSize = 9.0 * uPixelRatio * (40.0 / -mv.z);
+        gl_Position = projectionMatrix * mv;
+      }`,
+    fragmentShader: /* glsl */ `
+      uniform float uStrength; varying float vOn;
+      void main() { float d = length(gl_PointCoord - 0.5); gl_FragColor = vec4(1.0, 0.18, 0.12, smoothstep(0.5, 0.0, d) * vOn * uStrength); }`,
+    transparent: true,
+    depthWrite: false,
+    blending: THREE.AdditiveBlending,
+  });
+  scene.add(new THREE.Points(beaconGeo, beaconMat));
+
   let scroll = 0;
 
   const resize = () => {
@@ -256,6 +312,10 @@ export function createGothamScene(canvas, { reducedMotion = false, onReady } = {
     cityMat.uniforms.uIntro.value = ease;
     skyMat.uniforms.uTime.value = t;
     skyMat.uniforms.uStrength.value = moonOn;
+    wispMat.uniforms.uTime.value = t;
+    wispMat.uniforms.uStrength.value = moonOn;
+    beaconMat.uniforms.uTime.value = t;
+    beaconMat.uniforms.uStrength.value = moonOn;
 
     renderer.render(scene, camera);
     if (!ready) {

@@ -15,7 +15,8 @@
     <script>
       // first visit to the home page shows the intro gate; hide the page until then
       try {
-        if (location.pathname === "/" && !sessionStorage.getItem("gotham-intro-seen"))
+        var bot = navigator.webdriver || /bot|crawl|spider|slurp|preview|facebookexternalhit|embedly|GPTBot|ClaudeBot|Claude-User|Claude-SearchBot|PerplexityBot|Perplexity-User|OAI-SearchBot|ChatGPT-User|Google-Extended|Bingbot|Googlebot|Applebot|DuckDuckBot|YandexBot|HeadlessChrome|Lighthouse/i.test(navigator.userAgent);
+        if (!bot && location.pathname === "/" && !sessionStorage.getItem("gotham-intro-seen"))
           document.documentElement.classList.add("intro-pending");
       } catch (e) {}
     </script>

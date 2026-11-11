@@ -34,14 +34,14 @@ export function Reveal({ as: Tag = "div", children, className = "", delay = 0, y
 export function SectionHead({ label, title, aside, className = "" }) {
   return (
     <div className={`wrap mb-14 grid gap-8 md:mb-20 md:grid-cols-12 md:items-end ${className}`}>
-      <Reveal className="md:col-span-8">
-        {label && <p className="label mb-6">{label}</p>}
-        <h2 className="display text-balance text-[15vw] sm:text-[11vw] md:text-[7.2vw] xl:text-[6.875rem]">{title}</h2>
-      </Reveal>
+      <div className="md:col-span-8">
+        {label && <p data-reveal="rise" className="label mb-6">{label}</p>}
+        <h2 data-reveal="mask" className="display text-balance text-[15vw] sm:text-[11vw] md:text-[7.2vw] xl:text-[6.875rem]">{title}</h2>
+      </div>
       {aside && (
-        <Reveal delay={0.15} className="text-lg leading-relaxed text-bone-dim md:col-span-4 md:pb-3">
+        <p data-reveal="rise" className="text-lg leading-relaxed text-bone-dim md:col-span-4 md:pb-3">
           {aside}
-        </Reveal>
+        </p>
       )}
     </div>
   );

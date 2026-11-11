@@ -12,8 +12,8 @@ Our mission is to **empower the next generation of AI enthusiasts** to turn idea
   `sitemap.xml`, `llms.txt` and schema.org structured data.
 - **Hero**: a lazy-loaded Three.js scene (`src/three/gothamScene.js`).
 - **Backend** (`backend/`): Express, used by the frontend **only for the contact form**
-  (`POST /api/contact`). The older event/project/resource endpoints and the Mongo seed
-  script are no longer used by the site.
+  (`POST /api/contact`), which emails gothamjspm@gmail.com. The older
+  event/project/resource endpoints are no longer used by the site.
 
 ```bash
 cd frontend && npm install && npm run dev        # site at http://localhost:5173
@@ -124,7 +124,7 @@ Gotham-AI/
 │   ├── middleware/         # Error handling, validation
 │   ├── models/             # MongoDB schemas (Contact, Event, Project, Resource)
 │   ├── routes/             # API routes
-│   ├── scripts/            # Database seeding + sample data
+│   ├── scripts/            # (legacy, unused)
 │   ├── utils/              # Email service, logger
 │   ├── server.js           # Main server file
 │   └── package.json
@@ -172,7 +172,6 @@ Gotham-AI/
    npm install
    cp .env.example .env
    # Edit .env with your credentials
-   npm run seed
    npm run dev
    ```
 

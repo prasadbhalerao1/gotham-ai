@@ -57,7 +57,7 @@ function fadeTo(target, ms, done) {
   const t0 = performance.now();
   const step = (t) => {
     const k = Math.min(1, (t - t0) / ms);
-    audio.volume = from + (target - from) * k;
+    audio.volume = Math.min(1, Math.max(0, from + (target - from) * k));
     if (k < 1) fadeRaf = requestAnimationFrame(step);
     else done?.();
   };
