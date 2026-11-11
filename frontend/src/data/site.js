@@ -34,19 +34,15 @@ export const site = {
   joinForm:
     "https://docs.google.com/forms/d/e/1FAIpQLSc3ns7PZxGni5YExgTcGIsX-f_95syZ5__7tKeA9Wt4YKLMBw/viewform",
   mapLink: "https://maps.app.goo.gl/QzkAcTycAdpqbPZ96",
-  // TODO: replace with the community's actual profile URLs (the old footer
-  // only pointed at the platform home pages). Real URLs also feed `sameAs` SEO.
-  socials: [
-    { name: "LinkedIn", href: "https://linkedin.com" },
-    { name: "Instagram", href: "https://instagram.com" },
-  ],
+  // Add the community's real profiles here, e.g. { name: "LinkedIn", href: "https://www.linkedin.com/company/…" }.
+  // Empty means no social links are shown. Real URLs also feed `sameAs` SEO.
+  socials: [],
 };
 
 export const navItems = [
   { label: "About", to: "/about" },
   { label: "Events", to: "/events" },
   { label: "Projects", to: "/projects" },
-  { label: "Team", to: "/team" },
   { label: "FAQ", to: "/#faq" },
 ];
 
@@ -205,7 +201,7 @@ export const faqs = [
   {
     q: "Who leads Gotham AI?",
     a: `${team.map((p) => `${p.name} (${p.role})`).join(" and ")}.`,
-    to: "/team",
+    to: "/about#led-by",
   },
   {
     q: "How can organisations collaborate with Gotham AI?",

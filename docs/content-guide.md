@@ -9,7 +9,7 @@ rebuilt as static HTML (good for speed, search engines and AI search).
 | Events | `frontend/src/content/events/` | `/events/<file-name>` |
 | Projects | `frontend/src/content/projects/` | `/projects/<file-name>` |
 | Resources | `frontend/src/content/resources/` | `/resources/<file-name>` |
-| Team profiles | `frontend/src/content/team/` | `/team/<file-name>` |
+| Team ("Led by") | `frontend/src/content/team/` | — (no page) |
 | Community info, email, focus areas, FAQ, social links | `frontend/src/data/site.js` | — |
 | What search can find | `frontend/src/data/search.js` | — |
 
@@ -66,9 +66,9 @@ Set `published: false`. It disappears from every page, the sitemap and search da
 ### Add a team member
 
 Copy `frontend/src/content/team/_template.js` to `firstname-lastname.js`. Only publish
-facts the person has confirmed. They get a profile page at `/team/firstname-lastname`,
-appear on `/team` and in the footer, are linked from projects they lead, and are
-described to search engines as members of Gotham AI.
+facts the person has confirmed. People appear only in the "Led by" lists (footer and
+About page), linking to their LinkedIn, and are described to search engines as members
+of Gotham AI.
 
 ### Speakers
 
@@ -77,9 +77,9 @@ People are matched by name, so "Dr. Deepali Bhavale" and "Deepali Bhavale" count
 
 ### Things to fill in
 
-- `site.socials` in `site.js` currently points at platform home pages. Replace these with
-  the real Gotham AI profile URLs. They are also used for Google's knowledge panel (`sameAs`).
-- The files in `frontend/src/content/resources/` are still placeholder entries (example.com links) from the old site.
+- `site.socials` in `site.js` is empty, so no social links are shown. Add the real Gotham AI
+  LinkedIn / Instagram URLs there; they appear in the footer and contact section and are used
+  for Google's knowledge panel (`sameAs`).
 
 ### Before you push
 

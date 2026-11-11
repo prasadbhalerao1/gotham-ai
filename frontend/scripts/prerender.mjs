@@ -30,7 +30,7 @@ write("/__not-found__", "404.html");
 
 // ---- sitemap.xml: lastmod = when that page's content file last changed ---------
 const contentFile = (route) => {
-  const m = route.match(/^\/(events|projects|resources|team)\/([^/]+)$/);
+  const m = route.match(/^\/(events|projects|resources)\/([^/]+)$/);
   return m ? path.join(root, "src/content", m[1], `${m[2]}.js`) : null;
 };
 const lastChanged = (file) => {
@@ -50,10 +50,10 @@ const lastmodFor = (route) => {
   const f = contentFile(route);
   if (f && fs.existsSync(f)) return lastChanged(f);
   const section = route.slice(1);
-  if (["events", "projects", "resources", "team"].includes(section)) return sectionDate(section);
+  if (["events", "projects", "resources"].includes(section)) return sectionDate(section);
   return siteDate;
 };
-const priority = (r) => (r === "/" ? "1.0" : ["/events", "/about", "/projects", "/team"].includes(r) ? "0.9" : r.startsWith("/events/") || r.startsWith("/team/") ? "0.7" : "0.6");
+const priority = (r) => (r === "/" ? "1.0" : ["/events", "/about", "/projects"].includes(r) ? "0.9" : r.startsWith("/events/") ? "0.7" : "0.6");
 // image sitemap entries: every photo of an event is listed under its page
 const xml = (v) => String(v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 const imagesFor = (route) => {
@@ -87,7 +87,7 @@ ${site.name} is a student-led community (not a company or an official college de
 
 ## About
 - [About Gotham AI](${u("/about")}): what the community is, what it does, focus areas, location, and how to join or collaborate.
-- [Team](${u("/team")}): ${site.leadership.map((p) => `[${p.name}](${u(`/team/${p.slug}`)}), ${p.role}`).join("; ")}.
+- Led by: ${site.leadership.map((p) => `${p.name}, ${p.role} ([LinkedIn](${p.linkedin}))`).join("; ")}.
 - [Contact](${u("/contact")}): ${site.email} — partnerships, sponsoring, speaking and joining.
 
 ## Focus areas

@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import SEO from "../components/SEO.jsx";
 import StructuredData from "../components/StructuredData.jsx";
 import PageHeader from "../components/PageHeader.jsx";
-import { breadcrumbLd, organizationLd, pageLd } from "../lib/structuredData.js";
+import { breadcrumbLd, organizationLd, pageLd, personLd } from "../lib/structuredData.js";
 import { useContact } from "../lib/contact.js";
 import { eventYears, partners, publishedProjects, site, sortedEvents, stats } from "../data/site.js";
 
@@ -20,6 +20,7 @@ const AboutPage = () => {
       <StructuredData
         data={[
           organizationLd(),
+          ...site.leadership.map(personLd),
           pageLd("AboutPage", "/about", { name: "About Gotham AI", description: site.description }),
           breadcrumbLd([["About", "/about"]]),
         ]}
@@ -120,14 +121,14 @@ const AboutPage = () => {
         <aside className="lg:col-span-3 lg:col-start-10">
           <div className="sticky top-24 space-y-10">
             <div>
-              <h2 className="label mb-4">Led by</h2>
+              <h2 id="led-by" className="label mb-4 scroll-mt-28">Led by</h2>
               <ul className="space-y-3 border-t border-bone/10 pt-4">
                 {site.leadership.map((p) => (
                   <li key={p.slug}>
-                    <Link to={`/team/${p.slug}`} className="group block">
-                      <span className="block text-bone transition-colors group-hover:text-signal">{p.name}</span>
+                    <a href={p.linkedin} target="_blank" rel="noreferrer" className="group block">
+                      <span className="block text-bone transition-colors group-hover:text-signal">{p.name} ↗</span>
                       <span className="text-sm text-bone-mute">{p.role}</span>
-                    </Link>
+                    </a>
                   </li>
                 ))}
               </ul>

@@ -1,5 +1,5 @@
 // TEAM MEMBER TEMPLATE — copy to `firstname-lastname.js` in this folder.
-// The file name becomes the profile URL: /team/firstname-lastname.
+// People appear only in the "Led by" lists (footer + About page), linked to LinkedIn.
 // Only publish facts the person has confirmed. Files starting with "_" are ignored.
 export default {
   name: "Full Name",

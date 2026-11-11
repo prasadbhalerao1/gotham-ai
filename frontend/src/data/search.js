@@ -77,18 +77,6 @@ export const searchSources = [
     },
   },
   {
-    group: "Team",
-    items: site.leadership,
-    toEntry: (p) => ({
-      title: p.name,
-      meta: `${p.role}, ${site.name}`,
-      keywords: ["team lead", p.bio, ...(p.interests || [])].join(" "),
-      thumb: p.image,
-      mono: p.name.slice(0, 2),
-      to: `/team/${p.slug}`,
-    }),
-  },
-  {
     group: "FAQ",
     items: faqs,
     toEntry: (f) => ({ title: f.q, meta: f.a, keywords: "", mono: "?", to: f.to || "/#faq" }),

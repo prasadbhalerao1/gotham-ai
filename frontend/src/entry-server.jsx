@@ -12,8 +12,6 @@ export { llmsFull, markdownPages } from "./lib/markdown.js";
 export const routes = [
   "/",
   "/about",
-  "/team",
-  ...site.leadership.map((p) => `/team/${p.slug}`),
   "/contact",
   "/events",
   "/projects",

@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import SEO from "../components/SEO.jsx";
 import StructuredData from "../components/StructuredData.jsx";
 import { breadcrumbLd, projectLd } from "../lib/structuredData.js";
@@ -106,9 +106,9 @@ const ProjectDetailPage = () => {
                 lead && [
                   lead.role,
                   personByName(lead.name) ? (
-                    <Link key="lead" to={`/team/${personByName(lead.name).slug}`} className="underline decoration-bone/30 underline-offset-4 hover:text-signal">
+                    <a key="lead" href={personByName(lead.name).linkedin} target="_blank" rel="noreferrer" className="underline decoration-bone/30 underline-offset-4 hover:text-signal">
                       {lead.name}
-                    </Link>
+                    </a>
                   ) : (
                     lead.name
                   ),
@@ -147,9 +147,9 @@ const ProjectDetailPage = () => {
                   <p className="label">{m.role}</p>
                   <p className="mt-3 text-2xl text-bone">
                     {personByName(m.name) ? (
-                      <Link to={`/team/${personByName(m.name).slug}`} className="hover:text-signal">
-                        {m.name} →
-                      </Link>
+                      <a href={personByName(m.name).linkedin} target="_blank" rel="noreferrer" className="hover:text-signal">
+                        {m.name} ↗
+                      </a>
                     ) : (
                       m.name
                     )}

@@ -12,8 +12,6 @@ import ResourcesPage from "./pages/ResourcesPage.jsx";
 import ResourceDetailPage from "./pages/ResourceDetailPage.jsx";
 import NotFoundPage from "./pages/NotFoundPage.jsx";
 import AboutPage from "./pages/AboutPage.jsx";
-import TeamPage from "./pages/TeamPage.jsx";
-import PersonPage from "./pages/PersonPage.jsx";
 import ContactPage from "./pages/ContactPage.jsx";
 
 // Only the contact form talks to the backend; all content is static.
@@ -30,8 +28,6 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route index element={<HomePage />} />
             <Route path="about" element={<AboutPage />} />
-            <Route path="team" element={<TeamPage />} />
-            <Route path="team/:slug" element={<PersonPage />} />
             <Route path="contact" element={<ContactPage />} />
             <Route path="events" element={<EventsPage />} />
             <Route path="events/:slug" element={<EventDetailPage />} />

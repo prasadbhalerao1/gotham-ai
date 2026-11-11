@@ -19,6 +19,7 @@ Shahu College of Engineering (RSCOE), Tathawade, Pune. Production: https://gotha
 | --- | --- |
 | `frontend/` | React 18 + Vite + Tailwind. Every route is **prerendered to static HTML** at build time. |
 | `frontend/src/content/` | **All site content, one file per item** (events, projects, resources, team). |
+| Error pages | `NotFoundPage.jsx` (404, also built as `dist/404.html`, noindex) and `ErrorBoundary.jsx` (runtime crash screen). |
 | `frontend/src/data/` | Loaders + derived data (`site.js`: community info, FAQ, stats; `search.js`: what Ctrl K finds). |
 | `frontend/src/three/gothamScene.js` | The hero's WebGL night city (lazy-loaded, client only). |
 | `frontend/scripts/` | Build pipeline: image sizes → content check → build → prerender → SEO check. |
@@ -63,7 +64,7 @@ photos and a short recap section afterwards.
 ### A new project
 
 Copy `frontend/src/content/projects/_template.js`. Keep `title` short and put the long name in
-`tagline`. `team` names that match a team file automatically link to that person's profile.
+`tagline`. `team` names that match a team file automatically link to that person's LinkedIn.
 `cover` is optional (a typographic cover is drawn without one).
 
 ### A new resource
@@ -74,14 +75,15 @@ Advanced; `url` is where "Open resource" goes.
 ### A new team member
 
 Copy `frontend/src/content/team/_template.js` → `firstname-lastname.js`. Set `order` for their
-position. Only publish facts they have confirmed (role, LinkedIn/GitHub, bio). They get a profile at
-`/team/firstname-lastname`, appear on `/team`, in the footer "Led by" list and in search, and are
-described to search engines as members of Gotham AI.
+position and include their LinkedIn. Only publish facts they have confirmed. People appear **only**
+in the "Led by" lists (footer and About page), linking to their LinkedIn — there is deliberately no
+team page and no per-person page. They are still described to search engines as members of
+Gotham AI (Person entries on the About page).
 
 ### Community info
 
-`frontend/src/data/site.js`: description, email, focus areas, social links (`site.socials` still
-needs the real Gotham AI LinkedIn/Instagram URLs), FAQ. FAQ answers are also published as
+`frontend/src/data/site.js`: description, email, focus areas, social links (`site.socials` is empty
+until the real Gotham AI LinkedIn/Instagram URLs are added; empty means hidden), FAQ. FAQ answers are also published as
 structured data — keep them factual.
 
 ## SEO / AI crawlers (keep this working)

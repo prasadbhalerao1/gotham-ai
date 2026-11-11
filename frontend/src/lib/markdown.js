@@ -64,7 +64,7 @@ function projectMd(p) {
 function personMd(p) {
   const projects = ledBy(p.name);
   return [
-    `# ${p.name} — ${p.role}, ${site.name}`,
+    `### ${p.name} — ${p.role}, ${site.name}`,
     p.bio,
     facts([
       ["Role", `${p.role}, [${site.name}](${u("/about")})`],
@@ -72,11 +72,10 @@ function personMd(p) {
       ["LinkedIn", p.linkedin],
       ["GitHub", p.github],
       ["Website", p.website],
-      ["Profile", u(`/team/${p.slug}`)],
     ]),
-    p.interests?.length && `## Interests\n${list(p.interests)}`,
-    projects.length && `## Projects led\n${list(projects.map((x) => `[${x.title}](${u(`/projects/${x.slug}`)}) — ${x.status}`))}`,
-    p.contributions?.length && `## Contributions\n${list(p.contributions)}`,
+    p.interests?.length && `#### Interests\n${list(p.interests)}`,
+    projects.length && `#### Projects led\n${list(projects.map((x) => `[${x.title}](${u(`/projects/${x.slug}`)}) — ${x.status}`))}`,
+    p.contributions?.length && `#### Contributions\n${list(p.contributions)}`,
   ]
     .filter(Boolean)
     .join("\n\n");
@@ -96,7 +95,7 @@ function aboutMd() {
       ["Join", site.joinForm],
     ]),
     `## Focus areas\n${list(site.focusAreas)}`,
-    `## Leadership\n${list(site.leadership.map((p) => `[${p.name}](${u(`/team/${p.slug}`)}) — ${p.role}`))}`,
+    `## Led by\n\n${site.leadership.map(personMd).join("\n\n")}`,
     `## FAQ\n\n${faqs.map((f) => `### ${f.q}\n\n${f.a}`).join("\n\n")}`,
   ].join("\n\n");
 }
@@ -109,7 +108,6 @@ const homeMd = () =>
       `[About](${u("/about")})`,
       `[Events](${u("/events")}) — ${sortedEvents.length} so far`,
       `[Projects](${u("/projects")}) — ${publishedProjects.length} with industry partners`,
-      `[Team](${u("/team")})`,
       `[Resources](${u("/resources")})`,
       `[Contact](${u("/contact")}) — ${site.email}`,
     ])}`,
@@ -123,8 +121,6 @@ export function markdownPages() {
     ["/", homeMd()],
     ["/about", aboutMd()],
     ["/contact", `# Contact ${site.name}\n\n${facts([["Email", site.email], ["Join form", site.joinForm], ["Location", `${site.institution}, ${site.city}, Maharashtra, India`]])}\n\nFor partnerships, sponsoring or co-hosting events, speaking, or joining the community.`],
-    ["/team", `# ${site.name} team\n\n${list(site.leadership.map((p) => `[${p.name}](${u(`/team/${p.slug}`)}) — ${p.role}`))}`],
-    ...site.leadership.map((p) => [`/team/${p.slug}`, personMd(p)]),
     ["/events", `# ${site.name} events\n\n${list(sortedEvents.map((e) => `[${e.title}](${u(`/events/${e.slug}`)}) — ${eventDateLabel(e)}, ${e.location} (${e.category}). ${e.summary}`))}`],
     ...sortedEvents.map((e) => [`/events/${e.slug}`, eventMd(e)]),
     ["/projects", `# ${site.name} projects\n\n${list(publishedProjects.map((p) => `[${p.title}](${u(`/projects/${p.slug}`)}) — ${p.summary} (${p.status})`))}`],
@@ -136,6 +132,6 @@ export function markdownPages() {
 
 /** One file with everything, for assistants that prefer a single fetch. */
 export function llmsFull() {
-  const pages = markdownPages().filter(([p]) => !["/", "/events", "/projects", "/resources", "/team"].includes(p));
+  const pages = markdownPages().filter(([p]) => !["/", "/events", "/projects", "/resources"].includes(p));
   return `# ${site.name} — full site content\n\n> ${site.description}\n\n${pages.map(([, md]) => md).join("\n\n")}`;
 }

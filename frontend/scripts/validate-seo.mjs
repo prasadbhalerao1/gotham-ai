@@ -136,7 +136,7 @@ const llmsFull = read("llms-full.txt");
 if (!llms) errors.push("llms.txt: missing");
 if (!llmsFull) errors.push("llms-full.txt: missing");
 for (const r of routes) {
-  if (!/^\/(events|projects|team)\/[^/]+$/.test(r)) continue;
+  if (!/^\/(events|projects)\/[^/]+$/.test(r)) continue;
   if (!llms.includes(`${SITE}${r}`)) errors.push(`llms.txt: does not list ${r}`);
   if (!llmsFull.includes(`${SITE}${r}`)) errors.push(`llms-full.txt: does not include ${r}`);
 }
