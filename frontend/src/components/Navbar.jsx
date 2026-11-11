@@ -58,8 +58,20 @@ const NavBar = () => {
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
-  const isActive = (to) =>
-    to.startsWith("/#") ? pathname === "/" && hash === to.slice(1) : pathname.startsWith(to);
+  // in-page sections (e.g. /#faq) count as "here" only while they're on screen
+  const [inView, setInView] = useState(null);
+  useEffect(() => {
+    if (pathname !== "/") return setInView(null);
+    const ids = navItems.filter((n) => n.to.startsWith("/#")).map((n) => n.to.slice(2));
+    const els = ids.map((id) => document.getElementById(id)).filter(Boolean);
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => setInView((cur) => (e.isIntersecting ? e.target.id : cur === e.target.id ? null : cur))),
+      { rootMargin: "-40% 0px -40% 0px" },
+    );
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, [pathname]);
+  const isActive = (to) => (to.startsWith("/#") ? pathname === "/" && inView === to.slice(2) : pathname.startsWith(to));
 
   return (
     <div ref={shell}>

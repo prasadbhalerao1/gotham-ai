@@ -31,5 +31,18 @@ export function markEntered() {
 
 export const whenEntered = () => entered;
 
+// the loader's progress, so the hero city can power up in step with it
+let progress = null;
+const progressListeners = new Set();
+export function setIntroProgress(p) {
+  progress = p;
+  progressListeners.forEach((fn) => fn(p));
+}
+export function onIntroProgress(fn) {
+  progressListeners.add(fn);
+  if (progress !== null) fn(progress);
+  return () => progressListeners.delete(fn);
+}
+
 // pages that never show the intro resolve straight away
 if (typeof window !== "undefined" && !shouldShowIntro()) resolveEntered();

@@ -345,6 +345,7 @@ export function createGothamScene(canvas, { reducedMotion = false, onReady, getB
   let ready = false;
   let started = reducedMotion && !blackout;
   let startAt = 0;
+  let driven = null; // set by the first-visit loader: the city powers up with the progress
 
   const frame = () => {
     raf = requestAnimationFrame(frame);
@@ -352,7 +353,7 @@ export function createGothamScene(canvas, { reducedMotion = false, onReady, getB
     clock.getDelta();
     const t = clock.elapsedTime;
     // driven by wall-clock time so slow GPUs still finish the intro
-    intro = started ? (reducedMotion ? 1 : Math.min(1, (t - startAt) * 0.4)) : 0;
+    intro = driven !== null ? driven : started ? (reducedMotion ? 1 : Math.min(1, (t - startAt) * 0.4)) : 0;
     const ease = 1 - Math.pow(1 - intro, 3);
     const moonOn = THREE.MathUtils.smoothstep(intro, 0.3, 1);
 
@@ -407,6 +408,12 @@ export function createGothamScene(canvas, { reducedMotion = false, onReady, getB
       if (started) return;
       started = true;
       startAt = clock.elapsedTime;
+      if (reducedMotion) still();
+    },
+    /** power the city up in step with the loader (0…1) */
+    drive(p) {
+      driven = p;
+      started = true;
       if (reducedMotion) still();
     },
     setScroll(v) {

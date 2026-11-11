@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { MARK_DOT, MARK_PATH, MARK_STROKE } from "../lib/mark.js";
-import { markEntered, shouldShowIntro } from "../lib/intro.js";
+import { markEntered, setIntroProgress, shouldShowIntro } from "../lib/intro.js";
 import { lockScroll } from "../lib/smooth.js";
 
-const MIN_MS = 1800;
+const MIN_MS = 2600;
 
-/** First-visit intro: the mark draws itself while assets load, then the page
- *  opens on its own. */
+/** First-visit intro: the loader is the city powering up. The overlay is see-through,
+ *  its progress switches the hero city on window by window (see Hero), and at 100 the
+ *  counter fades as "Gotham AI" rises into the same spot. */
 const Intro = () => {
   const [show, setShow] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -34,21 +34,22 @@ const Intro = () => {
       p += (Math.min(target.current, cap) - p) * 0.12;
       if (p > 0.995) p = 1;
       setProgress(p);
+      setIntroProgress(p);
       if (p < 1) raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
   }, []);
 
-  // once loaded, hold a beat on the finished mark, then open
+  // once loaded, hold a beat on the lit city, then hand over to the hero
   useEffect(() => {
     if (progress < 1 || leaving) return;
     const id = setTimeout(() => {
       setLeaving(true);
       lockScroll(false);
       markEntered();
-      setTimeout(() => setShow(false), 1100);
-    }, 450);
+      setTimeout(() => setShow(false), 800);
+    }, 350);
     return () => clearTimeout(id);
   }, [progress, leaving]);
 
@@ -61,46 +62,15 @@ const Intro = () => {
       role="dialog"
       aria-modal="true"
       aria-label="Welcome to Gotham AI"
-      // no clip/transform while counting (keeps text on the crisp, non-composited
-      // path); the slide-away transition is only attached when leaving
-      className={`fixed inset-0 z-[90] flex flex-col bg-ink text-bone ${leaving ? "-translate-y-full transition-transform duration-1000 ease-expo" : ""}`}
+      className={`fixed inset-0 z-[90] flex flex-col text-bone transition-opacity duration-700 ${leaving ? "opacity-0" : ""}`}
     >
-      <div className="wrap flex items-center justify-between pt-6">
-        <span className="label">Gotham AI</span>
-        <span className="label">JSPM&apos;s RSCOE · Pune</span>
-      </div>
-
-      <div className="flex flex-1 flex-col items-center justify-center gap-10">
-        <svg viewBox="140 120 740 740" className="w-28 md:w-36" shapeRendering="geometricPrecision" aria-hidden>
-          <path
-            d={MARK_PATH}
-            pathLength="1"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={MARK_STROKE}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeDasharray="1"
-            strokeDashoffset={1 - Math.min(1, progress * 1.15)}
-          />
-          <circle
-            {...MARK_DOT}
-            className="fill-signal transition-transform duration-700 ease-expo"
-            style={{ transformOrigin: `${MARK_DOT.cx}px ${MARK_DOT.cy}px`, transform: `scale(${progress > 0.85 ? 1 : 0})` }}
-          />
-        </svg>
-
-        <div className="text-center">
-          <p className="display text-7xl tabular-nums leading-none text-bone [font-feature-settings:'tnum'] md:text-8xl" aria-live="off">
+      <div className="wrap flex flex-1 flex-col pb-8 pt-24 md:pb-10 md:pt-28">
+        {/* sits where the wordmark lands, so the number hands over to "Gotham AI" */}
+        <div className="mt-auto mb-[7.5rem] md:mb-[6.5rem]">
+          <p className="label mb-3">Powering up the city</p>
+          <p className="display text-[19.5vw] tabular-nums leading-[0.82] text-bone/90 [font-feature-settings:'tnum'] 2xl:text-[18rem]" aria-live="off">
             {pct}
           </p>
-          <p className="label mt-4">Loading</p>
-        </div>
-      </div>
-
-      <div className="wrap pb-6">
-        <div className="h-px w-full bg-bone/10">
-          <div className="h-px origin-left bg-signal" style={{ transform: `scaleX(${progress})` }} />
         </div>
       </div>
     </div>

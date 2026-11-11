@@ -176,6 +176,10 @@ html.intro-pending header {
   /* failsafe: if the script never runs, show the page anyway */
   animation: introFailsafe 0s 8s forwards;
 }
+/* …except the hero city, which powers up behind the loader */
+html.intro-pending [data-intro-visible] {
+  visibility: visible;
+}
 @keyframes introFailsafe {
   to { visibility: visible; }
 }

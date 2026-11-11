@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { gsap, ScrollTrigger } from "../../lib/smooth.js";
 import { site, stats } from "../../data/site.js";
-import { whenEntered } from "../../lib/intro.js";
+import { onIntroProgress, whenEntered } from "../../lib/intro.js";
 import { sound } from "../../lib/sound.js";
 
 const Hero = () => {
@@ -28,6 +28,12 @@ const Hero = () => {
     let scene;
     let trigger;
     let cancelled = false;
+    let loaded = null;
+    // on a first visit the loader's progress switches the city on, window by window
+    const offProgress = onIntroProgress((p) => {
+      loaded = p;
+      scene?.drive(p);
+    });
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     import("../../three/gothamScene.js")
       .then(({ createGothamScene }) => {
@@ -38,6 +44,7 @@ const Hero = () => {
           getBeat: sound.pulse, // each bass hit sends a wave through the city while music plays
         });
         sceneRef.current = scene;
+        if (loaded !== null) scene.drive(loaded);
         whenEntered().then(() => !cancelled && scene.start());
         trigger = ScrollTrigger.create({
           trigger: root.current,
@@ -51,6 +58,7 @@ const Hero = () => {
       });
     return () => {
       cancelled = true;
+      offProgress();
       trigger?.kill();
       scene?.dispose();
     };
@@ -106,6 +114,7 @@ const Hero = () => {
       <canvas
         ref={canvasRef}
         aria-hidden
+        data-intro-visible
         className={`absolute inset-0 size-full transition-opacity duration-[1800ms] ${sceneReady ? "opacity-100" : "opacity-0"}`}
       />
       <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-ink to-transparent" />
