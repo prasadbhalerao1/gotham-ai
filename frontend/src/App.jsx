@@ -1,58 +1,40 @@
-import { lazy, Suspense } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { HelmetProvider } from "react-helmet-async";
 
 import ErrorBoundary from "./components/ErrorBoundary.jsx";
 import Layout from "./components/Layout.jsx";
 import HomePage from "./pages/HomePage.jsx";
-import Loading from "./components/Loading.jsx";
+import EventsPage from "./pages/EventsPage.jsx";
+import EventDetailPage from "./pages/EventDetailPage.jsx";
+import ProjectsPage from "./pages/ProjectsPage.jsx";
+import ProjectDetailPage from "./pages/ProjectDetailPage.jsx";
+import ResourcesPage from "./pages/ResourcesPage.jsx";
+import ResourceDetailPage from "./pages/ResourceDetailPage.jsx";
+import NotFoundPage from "./pages/NotFoundPage.jsx";
 
-const EventsPage = lazy(() => import("./pages/EventsPage.jsx"));
-const EventDetailPage = lazy(() => import("./pages/EventDetailPage.jsx"));
-const ResourcesPage = lazy(() => import("./pages/ResourcesPage.jsx"));
-const ResourceDetailPage = lazy(() => import("./pages/ResourceDetailPage.jsx"));
-const ProjectsPage = lazy(() => import("./pages/ProjectsPage.jsx"));
-const ProjectDetailPage = lazy(() => import("./pages/ProjectDetailPage.jsx"));
-
+// Only the contact form talks to the backend; all content is static.
 const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnWindowFocus: false,
-      retry: 1,
-      staleTime: 5 * 60 * 1000, // 5 minutes
-    },
-  },
+  defaultOptions: { queries: { refetchOnWindowFocus: false, retry: 1 } },
 });
 
+// Pages are imported eagerly so every route can be prerendered to HTML.
 function App() {
   return (
     <ErrorBoundary>
-      <HelmetProvider>
-        <QueryClientProvider client={queryClient}>
-          <Router>
-            <Suspense fallback={<Loading />}>
-              <Routes>
-                <Route path="/" element={<Layout />}>
-                  <Route index element={<HomePage />} />
-                  <Route path="events" element={<EventsPage />} />
-                  <Route path="events/:slug" element={<EventDetailPage />} />
-                  <Route path="projects" element={<ProjectsPage />} />
-                  <Route
-                    path="projects/:slug"
-                    element={<ProjectDetailPage />}
-                  />
-                  <Route path="resources" element={<ResourcesPage />} />
-                  <Route
-                    path="resources/:slug"
-                    element={<ResourceDetailPage />}
-                  />
-                </Route>
-              </Routes>
-            </Suspense>
-          </Router>
-        </QueryClientProvider>
-      </HelmetProvider>
+      <QueryClientProvider client={queryClient}>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<HomePage />} />
+            <Route path="events" element={<EventsPage />} />
+            <Route path="events/:slug" element={<EventDetailPage />} />
+            <Route path="projects" element={<ProjectsPage />} />
+            <Route path="projects/:slug" element={<ProjectDetailPage />} />
+            <Route path="resources" element={<ResourcesPage />} />
+            <Route path="resources/:slug" element={<ResourceDetailPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Route>
+        </Routes>
+      </QueryClientProvider>
     </ErrorBoundary>
   );
 }
