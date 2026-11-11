@@ -54,7 +54,7 @@ const IndexList = ({ rows, label }) => {
                 </span>
                 {r.sub && <span className="mt-2 block text-bone-dim">{r.sub}</span>}
               </span>
-              <span className="col-start-2 flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-[11px] uppercase tracking-[0.14em] text-bone-mute md:col-start-3 md:flex-col md:items-end md:text-right">
+              <span className="col-start-2 flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-bone-mute md:col-start-3 md:flex-col md:items-end md:text-right">
                 {r.right}
               </span>
             </Link>
@@ -73,7 +73,7 @@ const IndexList = ({ rows, label }) => {
             current ? "scale-100 opacity-100" : "scale-75 opacity-0"
           }`}
         >
-          <div className="h-[220px] w-[300px] bg-ink-700">
+          <div className="h-[13.75rem] w-[18.75rem] bg-ink-700">
             {current?.image ? <img key={current.image} src={current.image} alt="" className="size-full object-cover" /> : current?.plate}
           </div>
         </div>

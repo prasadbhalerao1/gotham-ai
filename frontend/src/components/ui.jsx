@@ -36,7 +36,7 @@ export function SectionHead({ label, title, aside, className = "" }) {
     <div className={`wrap mb-14 grid gap-8 md:mb-20 md:grid-cols-12 md:items-end ${className}`}>
       <Reveal className="md:col-span-8">
         {label && <p className="label mb-6">{label}</p>}
-        <h2 className="display text-balance text-[15vw] sm:text-[11vw] md:text-[7.2vw] xl:text-[110px]">{title}</h2>
+        <h2 className="display text-balance text-[15vw] sm:text-[11vw] md:text-[7.2vw] xl:text-[6.875rem]">{title}</h2>
       </Reveal>
       {aside && (
         <Reveal delay={0.15} className="text-lg leading-relaxed text-bone-dim md:col-span-4 md:pb-3">
@@ -52,7 +52,7 @@ export function Monogram({ name, className = "" }) {
     .replace(/^(Dr\.|Mr\.|Ms\.|Br\.)\s*/, "")
     .split(/\s+/)
     .slice(0, 2)
-    .map((w) => w[0])
+    .map((w) => w-[0])
     .join("");
   return (
     <div className={`flex items-center justify-center bg-ink-700 font-display text-5xl text-bone/25 ${className}`} aria-hidden>

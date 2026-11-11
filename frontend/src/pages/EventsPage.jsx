@@ -68,7 +68,7 @@ const EventsPage = () => {
                 type="button"
                 aria-pressed={filter === f}
                 onClick={() => setFilter(f)}
-                className={`rounded-full border px-4 py-2 font-mono text-[11px] uppercase tracking-[0.14em] transition-colors duration-300 ${
+                className={`rounded-full border px-4 py-2 font-mono text-[0.6875rem] uppercase tracking-[0.14em] transition-colors duration-300 ${
                   filter === f ? "border-bone bg-bone text-ink" : "border-bone/20 text-bone-dim hover:border-bone/50 hover:text-bone"
                 }`}
               >

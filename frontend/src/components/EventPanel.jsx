@@ -14,10 +14,10 @@ const EventPanel = ({ event, number, upcoming = false, className = "" }) => (
         decoding="async"
         className="size-full object-cover group-hover:scale-[1.04]"
       />
-      <span className="absolute left-4 top-4 z-10 font-mono text-[11px] uppercase tracking-[0.18em] text-bone">
+      <span className="absolute left-4 top-4 z-10 font-mono text-[0.6875rem] uppercase tracking-[0.18em] text-bone">
         No. {number}
       </span>
-      <span className="absolute right-4 top-4 z-10 rounded-full border border-bone/30 bg-ink/40 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-bone backdrop-blur-sm">
+      <span className="absolute right-4 top-4 z-10 rounded-full border border-bone/30 bg-ink/40 px-3 py-1 font-mono text-[0.625rem] uppercase tracking-[0.16em] text-bone backdrop-blur-sm">
         {upcoming ? "Upcoming" : event.category}
       </span>
     </div>
@@ -26,7 +26,7 @@ const EventPanel = ({ event, number, upcoming = false, className = "" }) => (
       <h3 className="display text-4xl leading-[0.9] md:text-5xl">{event.title}</h3>
       <p className="line-clamp-2 text-bone-dim">{event.summary}</p>
       <div className="mt-auto flex items-end justify-between gap-4 border-t border-bone/10 pt-4">
-        <span className="font-mono text-[11px] uppercase leading-relaxed tracking-[0.12em] text-bone-mute">
+        <span className="font-mono text-[0.6875rem] uppercase leading-relaxed tracking-[0.12em] text-bone-mute">
           {event.location}
           {event.attendees > 0 && (
             <>

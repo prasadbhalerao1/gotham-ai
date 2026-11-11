@@ -55,7 +55,7 @@ const ProjectDetailPage = () => {
                 <Chip>Industry project</Chip>
               </Reveal>
               <Reveal delay={0.05}>
-                <h1 className="display mt-6 text-balance text-[17vw] sm:text-[12vw] lg:text-[8vw] xl:text-[128px]">{project.title}</h1>
+                <h1 className="display mt-6 text-balance text-[17vw] sm:text-[12vw] lg:text-[8vw] xl:text-[8rem]">{project.title}</h1>
                 {project.tagline && <p className="mt-3 font-serif text-3xl italic text-bone-dim md:text-4xl">{project.tagline}</p>}
               </Reveal>
               <Reveal delay={0.12}>

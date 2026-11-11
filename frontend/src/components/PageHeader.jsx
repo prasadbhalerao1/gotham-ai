@@ -27,7 +27,7 @@ const PageHeader = ({ crumbs = [], title, intro, children }) => (
         ))}
       </nav>
       <Reveal>
-        <h1 className="display text-balance text-[14vw] sm:text-[10vw] md:text-[8vw] xl:text-[120px]">{title}</h1>
+        <h1 className="display text-balance text-[14vw] sm:text-[10vw] md:text-[8vw] xl:text-[7.5rem]">{title}</h1>
       </Reveal>
       {intro && (
         <Reveal delay={0.1} className="mt-8 max-w-2xl text-lg leading-relaxed text-bone-dim md:text-xl">

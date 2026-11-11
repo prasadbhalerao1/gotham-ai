@@ -90,7 +90,7 @@ const Gallery = ({ items, title }) => {
                 className="size-full object-cover transition-transform duration-1000 ease-expo group-hover:scale-105"
               />
             )}
-            <span className="absolute bottom-2 left-2 rounded-full bg-ink/70 px-2 py-0.5 font-mono text-[10px] text-bone opacity-0 backdrop-blur transition-opacity duration-300 group-hover:opacity-100">
+            <span className="absolute bottom-2 left-2 rounded-full bg-ink/70 px-2 py-0.5 font-mono text-[0.625rem] text-bone opacity-0 backdrop-blur transition-opacity duration-300 group-hover:opacity-100">
               {String(i + 1).padStart(2, "0")}
             </span>
           </button>

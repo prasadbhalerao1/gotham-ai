@@ -37,7 +37,7 @@ export function Chip({ children, tone = "default", className = "" }) {
     solid: "border-signal bg-signal text-ink",
   };
   return (
-    <span className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 font-mono text-[10px] uppercase tracking-[0.16em] ${tones[tone]} ${className}`}>
+    <span className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 font-mono text-[0.625rem] uppercase tracking-[0.16em] ${tones[tone]} ${className}`}>
       {children}
     </span>
   );
@@ -103,7 +103,7 @@ export function SectionTabs({ tabs }) {
               scrollToTarget(`#${t.id}`, { offset: -70 });
             }}
             aria-current={active === t.id ? "true" : undefined}
-            className={`relative shrink-0 rounded-full px-4 py-2 font-mono text-[11px] uppercase tracking-[0.16em] transition-colors duration-300 ${
+            className={`relative shrink-0 rounded-full px-4 py-2 font-mono text-[0.6875rem] uppercase tracking-[0.16em] transition-colors duration-300 ${
               active === t.id ? "bg-bone text-ink" : "text-bone-dim hover:text-bone"
             }`}
           >

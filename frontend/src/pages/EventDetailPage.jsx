@@ -23,9 +23,9 @@ function EventIndex({ current }) {
                 aria-current={on ? "page" : undefined}
                 className={`group flex items-baseline gap-3 border-b border-bone/10 py-3 text-sm transition-colors ${on ? "text-bone" : "text-bone-mute hover:text-bone"}`}
               >
-                <span className={`font-mono text-[10px] ${on ? "text-signal" : ""}`}>{eventNumber(e)}</span>
+                <span className={`font-mono text-[0.625rem] ${on ? "text-signal" : ""}`}>{eventNumber(e)}</span>
                 <span className="flex-1 truncate">{e.title}</span>
-                <span className="font-mono text-[10px]">{eventParts(e).year}</span>
+                <span className="font-mono text-[0.625rem]">{eventParts(e).year}</span>
               </Link>
             </li>
           );
@@ -130,7 +130,7 @@ const EventDetailPage = () => {
                 <Chip>{event.category}</Chip>
               </Reveal>
               <Reveal delay={0.05}>
-                <h1 className="display mt-6 text-balance text-[15vw] sm:text-[10vw] lg:text-[6.6vw] xl:text-[104px]">{event.title}</h1>
+                <h1 className="display mt-6 text-balance text-[15vw] sm:text-[10vw] lg:text-[6.6vw] xl:text-[6.5rem]">{event.title}</h1>
               </Reveal>
               <Reveal delay={0.12}>
                 <p className="mt-6 max-w-xl text-xl leading-relaxed text-bone-dim">{event.summary}</p>

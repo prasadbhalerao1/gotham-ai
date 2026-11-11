@@ -68,7 +68,7 @@ const Join = () => {
         </p>
         <div className="flex flex-col gap-10 md:flex-row md:items-end md:justify-between">
           <Reveal>
-            <h2 id="join-title" className="display text-[19vw] md:text-[13vw] xl:text-[200px]">
+            <h2 id="join-title" className="display text-[19vw] md:text-[13vw] xl:text-[12.5rem]">
               Answer
               <br />
               the <span className="accent">signal</span>

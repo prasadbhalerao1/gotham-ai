@@ -17,7 +17,7 @@ function Featured({ event, upcoming }) {
           alt={`${event.title} — ${event.location}`}
           className="aspect-[16/10] w-full object-cover transition-transform duration-1000 ease-expo group-hover:scale-[1.03]"
         />
-        <span className="absolute left-4 top-4 rounded-full bg-signal px-3 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-ink">
+        <span className="absolute left-4 top-4 rounded-full bg-signal px-3 py-1 font-mono text-[0.625rem] uppercase tracking-[0.16em] text-ink">
           {upcoming ? "Upcoming" : "Latest event"}
         </span>
       </div>
@@ -32,7 +32,7 @@ function Featured({ event, upcoming }) {
         </div>
         <h3 className="display mt-6 text-5xl transition-colors duration-500 group-hover:text-signal md:text-6xl">{event.title}</h3>
         <p className="mt-4 max-w-md text-lg leading-relaxed text-bone-dim">{event.summary}</p>
-        <p className="mt-6 font-mono text-[11px] uppercase tracking-[0.14em] text-bone-mute">
+        <p className="mt-6 font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-bone-mute">
           {event.location}
           {event.gallery?.length ? ` · ${event.gallery.length} photos` : ""}
         </p>
@@ -81,7 +81,7 @@ const EventsReel = () => {
     <section id="events" aria-labelledby="events-title" className="relative bg-ink">
       <div className="wrap pb-20 pt-28 md:pt-36">
         <div className="mb-12 flex flex-col justify-between gap-6 md:flex-row md:items-end">
-          <h2 id="events-title" className="display text-[15vw] sm:text-[11vw] md:text-[7.2vw] xl:text-[110px]">
+          <h2 id="events-title" className="display text-[15vw] sm:text-[11vw] md:text-[7.2vw] xl:text-[6.875rem]">
             Events
           </h2>
           <p className="max-w-sm text-bone-dim md:text-right">
@@ -123,7 +123,7 @@ const EventsReel = () => {
                 event={e}
                 number={eventNumber(e)}
                 upcoming={now ? isUpcoming(e, now) : false}
-                className="w-[78vw] shrink-0 snap-start sm:w-[380px] lg:w-[min(28vw,420px)]"
+                className="w-[78vw] shrink-0 snap-start sm:w-[23.75rem] lg:w-[min(28vw,420px)]"
               />
             ))}
           </div>

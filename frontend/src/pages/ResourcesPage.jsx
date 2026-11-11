@@ -71,12 +71,12 @@ const ResourcesPage = () => {
                 to={`/resources/${r.slug}`}
                 className="group grid gap-3 border-t border-bone/10 py-6 transition-colors hover:bg-ink-800/60 md:grid-cols-12 md:items-baseline md:px-4"
               >
-                <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-signal md:col-span-2">{r.type}</span>
+                <span className="font-mono text-[0.6875rem] uppercase tracking-[0.16em] text-signal md:col-span-2">{r.type}</span>
                 <span className="md:col-span-6">
                   <span className="display block text-4xl transition-colors group-hover:text-signal">{r.title}</span>
                   <span className="mt-1 block text-bone-dim">{r.description}</span>
                 </span>
-                <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-bone-mute md:col-span-3">
+                <span className="font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-bone-mute md:col-span-3">
                   {r.category} · {r.difficulty}
                   <br />
                   {r.author}
