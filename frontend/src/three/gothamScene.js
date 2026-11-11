@@ -65,10 +65,12 @@ const noise = /* glsl */ `
 const cityVertex = /* glsl */ `
   attribute vec3 aScale;
   attribute float aSeed;
-  varying vec3 vLocal; varying vec3 vNormal; varying vec3 vScale; varying float vSeed; varying float vDepth;
+  varying vec3 vLocal; varying vec3 vNormal; varying vec3 vScale; varying float vSeed; varying float vDepth; varying vec3 vWorld;
   void main() {
     vLocal = position; vNormal = normal; vScale = aScale; vSeed = aSeed;
-    vec4 mv = viewMatrix * modelMatrix * instanceMatrix * vec4(position, 1.0);
+    vec4 world = modelMatrix * instanceMatrix * vec4(position, 1.0);
+    vWorld = world.xyz;
+    vec4 mv = viewMatrix * world;
     vDepth = -mv.z;
     gl_Position = projectionMatrix * mv;
   }
@@ -76,7 +78,11 @@ const cityVertex = /* glsl */ `
 
 const cityFragment = /* glsl */ `
   uniform float uTime; uniform vec3 uSky; uniform float uIntro;
-  varying vec3 vLocal; varying vec3 vNormal; varying vec3 vScale; varying float vSeed; varying float vDepth;
+  uniform vec3 uPointer; uniform float uPointerOn;
+  // up to 8 ripples at once (clicks and music hits): xy = origin, z = start time, w = strength
+  uniform vec4 uRipples[8];
+  uniform float uFlood; uniform float uBlackout;
+  varying vec3 vLocal; varying vec3 vNormal; varying vec3 vScale; varying float vSeed; varying float vDepth; varying vec3 vWorld;
   float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
   void main() {
     vec3 col = vec3(0.035, 0.036, 0.042);
@@ -87,11 +93,29 @@ const cityFragment = /* glsl */ `
       vec2 f = vec2(fract(u / 0.26), fract(v / 0.36));
       float win = step(0.3, f.x) * step(f.x, 0.7) * step(0.3, f.y) * step(f.y, 0.7);
       float h = hash(cell + vSeed * 17.0 + vNormal.xz * 3.0);
-      float lit = step(0.87, h);
+      // interaction: windows near the pointer switch on; a click sends a lime ring outwards
+      vec2 dp = (vWorld.xy - uPointer.xy) * vec2(1.0, 1.3);
+      float near = exp(-dot(dp, dp) / 220.0) * uPointerOn;
+      float lit = step(0.87 - near * 0.7, h);
       float on = smoothstep(0.0, 1.0, uIntro * 1.5 - (vLocal.y + 0.5) * 0.5 - h * 0.4);
       float breathe = 0.8 + 0.2 * sin(uTime * (0.3 + h) + h * 40.0);
       vec3 w = mix(vec3(1.0, 0.93, 0.8), vec3(0.85, 0.92, 1.0), step(0.95, hash(cell * 3.1 + vSeed)));
-      col += win * lit * w * 0.75 * on * breathe;
+      col += win * lit * w * (0.75 + near * 0.6) * on * breathe;
+      // easter egg: the whole skyline floods with lime from the ground up
+      float rise = smoothstep(vWorld.y - 6.0, vWorld.y, uFlood * 70.0) * smoothstep(0.0, 0.25, uFlood) * smoothstep(1.0, 0.7, uFlood);
+      col += win * step(0.3, h) * rise * vec3(0.93, 1.0, 0.4) * 0.9;
+      // 404 blackout: everything dark except a couple of flickering windows
+      float flicker = step(0.6, fract(sin(floor(uTime * 9.0 + h * 50.0)) * 43758.5)) * (0.6 + 0.4 * sin(uTime * 23.0));
+      col += win * step(0.9992, hash(cell * 1.7 + vSeed * 3.0)) * flicker * uBlackout * vec3(1.0, 0.93, 0.8) * 0.8;
+      // lime rings of windows rolling outwards
+      float ring = 0.0;
+      for (int i = 0; i < 8; i++) {
+        vec4 r = uRipples[i];
+        float age = uTime - r.z;
+        float rd = length((vWorld.xy - r.xy) * vec2(1.0, 1.3));
+        ring += r.w * exp(-pow(rd - age * 38.0, 2.0) / 30.0) * smoothstep(2.2, 0.0, age) * step(0.0, age);
+      }
+      col += win * step(0.45, h) * min(ring, 1.4) * vec3(0.93, 1.0, 0.4);
       // subtle top-down gradient on facades
       col *= 0.75 + 0.35 * (vLocal.y + 0.5);
     } else if (vNormal.y > 0.5) {
@@ -125,7 +149,12 @@ const skyFragment = /* glsl */ `
   }
 `;
 
-export function createGothamScene(canvas, { reducedMotion = false, onReady } = {}) {
+/**
+ * options: reducedMotion; onReady(); getBeat() → 0…1 pulse on each bass hit of the music
+ * (each hit sends a ripple from a random spot);
+ * blackout → start with the power out (404 page) until start() is called.
+ */
+export function createGothamScene(canvas, { reducedMotion = false, onReady, getBeat, blackout = false } = {}) {
   const small = window.innerWidth < 768;
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: "high-performance" });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
@@ -148,7 +177,16 @@ export function createGothamScene(canvas, { reducedMotion = false, onReady } = {
   const cityMat = new THREE.ShaderMaterial({
     vertexShader: cityVertex,
     fragmentShader: cityFragment,
-    uniforms: { uTime: { value: 0 }, uSky: { value: SKY }, uIntro: { value: reducedMotion ? 1 : 0 } },
+    uniforms: {
+      uTime: { value: 0 },
+      uSky: { value: SKY },
+      uIntro: { value: reducedMotion ? 1 : 0 },
+      uPointer: { value: new THREE.Vector3() },
+      uPointerOn: { value: 0 },
+      uRipples: { value: Array.from({ length: 8 }, () => new THREE.Vector4(0, 0, -100, 0)) },
+      uFlood: { value: 0 },
+      uBlackout: { value: blackout ? 1 : 0 },
+    },
   });
   const city = new THREE.InstancedMesh(geo, cityMat, count);
   const m = new THREE.Matrix4();
@@ -265,6 +303,25 @@ export function createGothamScene(canvas, { reducedMotion = false, onReady } = {
 
   let scroll = 0;
 
+  // pointer → a point on a plane through the middle of the city
+  const ray = new THREE.Raycaster();
+  const cityPlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 40);
+  const toCity = (nx, ny, out) => {
+    ray.setFromCamera({ x: nx, y: ny }, camera);
+    return ray.ray.intersectPlane(cityPlane, out);
+  };
+  const pointerTarget = new THREE.Vector3();
+  let pointerWanted = 0;
+  let nextRipple = 0;
+  const spot = new THREE.Vector3();
+  const addRipple = (nx, ny, strength) => {
+    if (!toCity(nx, ny, spot)) return;
+    cityMat.uniforms.uRipples.value[nextRipple].set(spot.x, spot.y, clock.elapsedTime, strength);
+    nextRipple = (nextRipple + 1) % 8;
+  };
+  let lastBeat = 0;
+  let floodAt = -10;
+
   const resize = () => {
     const w = canvas.clientWidth;
     const h = canvas.clientHeight;
@@ -284,9 +341,9 @@ export function createGothamScene(canvas, { reducedMotion = false, onReady } = {
 
   const clock = new THREE.Clock();
   let raf = 0;
-  let intro = reducedMotion ? 1 : 0;
+  let intro = reducedMotion && !blackout ? 1 : 0;
   let ready = false;
-  let started = reducedMotion;
+  let started = reducedMotion && !blackout;
   let startAt = 0;
 
   const frame = () => {
@@ -295,7 +352,7 @@ export function createGothamScene(canvas, { reducedMotion = false, onReady } = {
     clock.getDelta();
     const t = clock.elapsedTime;
     // driven by wall-clock time so slow GPUs still finish the intro
-    intro = reducedMotion ? 1 : started ? Math.min(1, (t - startAt) * 0.4) : 0;
+    intro = started ? (reducedMotion ? 1 : Math.min(1, (t - startAt) * 0.4)) : 0;
     const ease = 1 - Math.pow(1 - intro, 3);
     const moonOn = THREE.MathUtils.smoothstep(intro, 0.3, 1);
 
@@ -309,6 +366,18 @@ export function createGothamScene(canvas, { reducedMotion = false, onReady } = {
     moonMat.opacity = 0.45 * moonOn;
 
     cityMat.uniforms.uTime.value = t;
+    // the glow trails the pointer and fades slowly, so the city "settles" behind you
+    cityMat.uniforms.uPointer.value.lerp(pointerTarget, 0.08);
+    cityMat.uniforms.uPointerOn.value += (pointerWanted * moonOn - cityMat.uniforms.uPointerOn.value) * 0.05;
+    // each bass hit of the music sends a softer wave from a random spot in the skyline
+    if (getBeat && !reducedMotion && moonOn > 0.9) {
+      const b = getBeat();
+      if (b > 0.9 && lastBeat <= 0.9) addRipple(Math.random() * 1.8 - 0.9, Math.random() * 0.6 - 0.55, 0.7);
+      lastBeat = b;
+    }
+    cityMat.uniforms.uFlood.value = Math.min(1, Math.max(0, (t - floodAt) / 4));
+    if (t - floodAt > 4) cityMat.uniforms.uFlood.value = 0;
+    cityMat.uniforms.uBlackout.value = blackout ? 1 - ease : 0;
     cityMat.uniforms.uIntro.value = ease;
     skyMat.uniforms.uTime.value = t;
     skyMat.uniforms.uStrength.value = moonOn;
@@ -324,11 +393,13 @@ export function createGothamScene(canvas, { reducedMotion = false, onReady } = {
     }
   };
 
-  if (reducedMotion) {
-    intro = 1;
+  // reduced motion: draw single still frames instead of animating
+  const still = () => {
     frame();
     cancelAnimationFrame(raf);
-  } else frame();
+  };
+  if (reducedMotion) still();
+  else frame();
 
   return {
     /** begin the entrance once the intro has closed */
@@ -336,9 +407,26 @@ export function createGothamScene(canvas, { reducedMotion = false, onReady } = {
       if (started) return;
       started = true;
       startAt = clock.elapsedTime;
+      if (reducedMotion) still();
     },
     setScroll(v) {
       scroll = v;
+    },
+    /** pointer position in normalised device coords (-1..1), or null when it leaves */
+    setPointer(nx, ny) {
+      if (nx === null) {
+        pointerWanted = 0;
+        return;
+      }
+      if (toCity(nx, ny, pointerTarget)) pointerWanted = 1;
+    },
+    /** easter egg: flood the skyline with lime windows for a few seconds */
+    flood() {
+      if (!reducedMotion) floodAt = clock.elapsedTime;
+    },
+    /** a lime ring of windows spreading from the given point */
+    pulse(nx, ny) {
+      if (!reducedMotion) addRipple(nx, ny, 1.1);
     },
     dispose() {
       cancelAnimationFrame(raf);

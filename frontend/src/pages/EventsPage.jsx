@@ -59,7 +59,7 @@ const EventsPage = () => {
 
   const totals = [
     [sortedEvents.length, "Events"],
-    [stats.find((s) => s.short === "Attendees")?.value ?? 0, "Attendees", true],
+    [stats.find((s) => s.short === "Attendees")?.value ?? 0, "Attendees"],
     [stats.find((s) => s.short === "Speakers")?.value ?? 0, "Speakers"],
     [photoCount, "Photos"],
   ];
@@ -93,14 +93,14 @@ const EventsPage = () => {
         intro={`Technical sessions, workshops, meetups and hackathons since ${eventYears[eventYears.length - 1]} — on campus and across Pune.`}
       >
         <dl className="mt-10 flex flex-wrap gap-x-12 gap-y-6">
-          {totals.map(([v, label, plus]) => (
+          {totals.map(([v, label]) => (
             <div key={label} data-reveal="rise" className="flex flex-col">
               <dt className="order-2 mt-1 font-mono text-[0.6875rem] uppercase tracking-[0.16em] text-bone-mute">
                 {label}
               </dt>
               <dd className="display order-1 text-6xl md:text-7xl">
                 {v.toLocaleString("en-IN")}
-                {plus && <span className="text-signal">+</span>}
+                <span className="text-signal">+</span>
               </dd>
             </div>
           ))}

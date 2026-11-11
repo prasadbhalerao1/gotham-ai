@@ -157,7 +157,6 @@ export const stats = [
     value: Math.max(site.attendeesTotal || 0, sortedEvents.reduce((n, e) => n + (e.attendees || 0), 0)),
     label: "Attendees",
     short: "Attendees",
-    plus: true,
   },
   { value: speakers.length, label: "Speakers & mentors", short: "Speakers" },
   { value: publishedProjects.length, label: "Industry projects", short: "Projects" },

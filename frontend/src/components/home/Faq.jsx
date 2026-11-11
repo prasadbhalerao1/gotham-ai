@@ -12,16 +12,31 @@ const Faq = () => (
         </h2>
       </div>
       <div className="lg:col-span-8">
-        {faqs.map((f) => (
-          <details key={f.q} data-reveal="rise" className="group border-b border-bone/10 first:border-t">
-            <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-6 text-xl text-bone transition-colors hover:text-signal md:text-2xl [&::-webkit-details-marker]:hidden">
-              {f.q}
-              <span aria-hidden className="relative size-4 shrink-0">
+        {faqs.map((f, i) => (
+          <details
+            key={f.q}
+            data-reveal="rise"
+            className="faq group border-b border-bone/10 transition-colors duration-500 first:border-t open:border-b-signal/40"
+          >
+            <summary className="relative flex cursor-pointer list-none items-center gap-5 py-6 text-xl text-bone md:gap-8 md:text-2xl [&::-webkit-details-marker]:hidden">
+              {/* lime line that sweeps along the row on hover */}
+              <span
+                aria-hidden
+                className="pointer-events-none absolute -bottom-px left-0 h-px w-full origin-left scale-x-0 bg-signal transition-transform duration-700 ease-expo group-hover:scale-x-100 group-open:hidden"
+              />
+              <span aria-hidden className="w-7 shrink-0 font-mono text-xs text-bone-mute transition-colors duration-300 group-hover:text-signal group-open:text-signal">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <span className="flex-1 transition-transform duration-500 ease-expo group-hover:translate-x-2">{f.q}</span>
+              <span
+                aria-hidden
+                className="relative size-4 shrink-0 transition-colors duration-500 group-open:text-signal"
+              >
                 <span className="absolute left-0 top-1/2 h-px w-4 bg-current" />
-                <span className="absolute left-1/2 top-0 h-4 w-px bg-current transition-transform duration-300 group-open:scale-y-0" />
+                <span className="absolute left-1/2 top-0 h-4 w-px bg-current transition-transform duration-500 ease-expo group-open:rotate-90" />
               </span>
             </summary>
-            <p className="max-w-2xl pb-7 text-lg leading-relaxed text-bone-dim">
+            <p className="faq-answer max-w-2xl pb-7 pl-12 text-lg leading-relaxed text-bone-dim md:pl-[3.75rem]">
               {f.a}
               {f.to && (
                 <>

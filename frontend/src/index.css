@@ -208,6 +208,28 @@ html.intro-pending header {
   to { transform: translateX(-50%); }
 }
 
+/* FAQ: answers glide open (browsers without ::details-content just open instantly) */
+.faq {
+  interpolate-size: allow-keywords;
+}
+.faq::details-content {
+  block-size: 0;
+  overflow: hidden;
+  transition:
+    block-size 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    content-visibility 0.6s allow-discrete;
+}
+.faq[open]::details-content {
+  block-size: auto;
+}
+.faq[open] .faq-answer {
+  animation: faq-answer 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes faq-answer {
+  from { opacity: 0; transform: translateY(0.5rem); }
+  to { opacity: 1; transform: none; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

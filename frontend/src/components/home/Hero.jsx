@@ -3,11 +3,25 @@ import { Link } from "react-router-dom";
 import { gsap, ScrollTrigger } from "../../lib/smooth.js";
 import { site, stats } from "../../data/site.js";
 import { whenEntered } from "../../lib/intro.js";
+import { sound } from "../../lib/sound.js";
 
 const Hero = () => {
   const root = useRef(null);
   const canvasRef = useRef(null);
   const [sceneReady, setSceneReady] = useState(false);
+  const sceneRef = useRef(null);
+
+  // the city reacts to the pointer: hover lights windows, a click/tap sends a ripple
+  const ndc = (e) => {
+    const b = canvasRef.current.getBoundingClientRect();
+    return [((e.clientX - b.left) / b.width) * 2 - 1, -((e.clientY - b.top) / b.height) * 2 + 1];
+  };
+  const onPointerMove = (e) => e.pointerType === "mouse" && sceneRef.current?.setPointer(...ndc(e));
+  const onPointerLeave = () => sceneRef.current?.setPointer(null);
+  const onPointerDown = (e) => {
+    if (e.target.closest("a, button")) return;
+    sceneRef.current?.pulse(...ndc(e));
+  };
 
   // WebGL scene — loaded lazily, client only; its entrance waits for the intro gate
   useEffect(() => {
@@ -18,7 +32,12 @@ const Hero = () => {
     import("../../three/gothamScene.js")
       .then(({ createGothamScene }) => {
         if (cancelled) return;
-        scene = createGothamScene(canvasRef.current, { reducedMotion: reduced, onReady: () => setSceneReady(true) });
+        scene = createGothamScene(canvasRef.current, {
+          reducedMotion: reduced,
+          onReady: () => setSceneReady(true),
+          getBeat: sound.pulse, // each bass hit sends a wave through the city while music plays
+        });
+        sceneRef.current = scene;
         whenEntered().then(() => !cancelled && scene.start());
         trigger = ScrollTrigger.create({
           trigger: root.current,
@@ -35,6 +54,18 @@ const Hero = () => {
       trigger?.kill();
       scene?.dispose();
     };
+  }, []);
+
+  // easter egg: type "gotham" anywhere on the page and the skyline floods with lime
+  useEffect(() => {
+    let typed = "";
+    const onKey = (e) => {
+      if (e.key.length !== 1 || e.ctrlKey || e.metaKey || e.altKey || e.target.closest?.("input, textarea, [contenteditable]")) return;
+      typed = (typed + e.key.toLowerCase()).slice(-6);
+      if (typed === "gotham") sceneRef.current?.flood();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
   }, []);
 
   useEffect(() => {
@@ -59,7 +90,14 @@ const Hero = () => {
   }, []);
 
   return (
-    <section ref={root} aria-label="Gotham AI" className="relative flex min-h-[38.75rem] flex-col overflow-hidden bg-ink [height:100svh]">
+    <section
+      ref={root}
+      aria-label="Gotham AI"
+      onPointerMove={onPointerMove}
+      onPointerLeave={onPointerLeave}
+      onPointerDown={onPointerDown}
+      className="relative flex min-h-[38.75rem] flex-col overflow-hidden bg-ink [height:100svh]"
+    >
       <div
         aria-hidden
         className={`absolute inset-0 transition-opacity duration-[2000ms] ${sceneReady ? "opacity-0" : "opacity-100"}`}
@@ -97,7 +135,7 @@ const Hero = () => {
                   <dt className="order-2 mt-1 font-mono text-[0.6875rem] uppercase leading-tight tracking-[0.14em] text-bone-mute">{s.short}</dt>
                   <dd className="order-1 text-2xl font-semibold leading-none text-bone sm:text-3xl">
                     {s.value.toLocaleString("en-IN")}
-                    {s.plus && <span className="text-signal">+</span>}
+                    <span className="text-signal">+</span>
                   </dd>
                 </div>
               ))}

@@ -1,5 +1,5 @@
-// Site-wide ambient music: one looping track, faded in/out, with a level meter
-// the hero scene can react to. Audio only ever starts from a user gesture.
+// Site-wide ambient music: one looping track, faded in/out, plus a beat pulse the
+// hero city flashes to. Audio only ever starts from a user gesture.
 import { useSyncExternalStore } from "react";
 
 const SRC = "/audio/loop.mp3";
@@ -7,8 +7,7 @@ const VOLUME = 0.35;
 const KEY = "gotham-sound";
 
 let audio = null;
-let analyser = null;
-let data = null;
+let hits = null; // times (s) of the bass hits in the track, found once after it first plays
 let playing = false;
 let fadeRaf = 0;
 const listeners = new Set();
@@ -35,20 +34,54 @@ function ensureAudio() {
   audio.loop = true;
   audio.preload = "auto";
   audio.volume = 0;
-  try {
-    const Ctx = window.AudioContext || window.webkitAudioContext;
-    const ctx = new Ctx();
-    const src = ctx.createMediaElementSource(audio);
-    analyser = ctx.createAnalyser();
-    analyser.fftSize = 64;
-    data = new Uint8Array(analyser.frequencyBinCount);
-    src.connect(analyser);
-    analyser.connect(ctx.destination);
-    audio.addEventListener("play", () => ctx.state === "suspended" && ctx.resume());
-  } catch {
-    analyser = null; // no Web Audio: music still plays, the scene just won't pulse
-  }
   return audio;
+}
+
+/**
+ * Finds the bass hits in the track: low-pass it, take the loudness envelope, and keep the
+ * strong, sudden rises (about two a second). Runs once, offline, on the cached file, so the
+ * visuals land exactly on the music instead of guessing from a live signal.
+ */
+async function findHits() {
+  if (hits) return;
+  hits = [];
+  try {
+    const Offline = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+    const buf = await (await fetch(SRC)).arrayBuffer();
+    const track = await new Offline(1, 44100, 44100).decodeAudioData(buf);
+    const ctx = new Offline(1, track.length, track.sampleRate);
+    const src = ctx.createBufferSource();
+    const lowpass = ctx.createBiquadFilter();
+    src.buffer = track;
+    lowpass.type = "lowpass";
+    lowpass.frequency.value = 150;
+    src.connect(lowpass).connect(ctx.destination);
+    src.start();
+    const wave = (await ctx.startRendering()).getChannelData(0);
+
+    const fps = 200;
+    const hop = Math.round(track.sampleRate / fps);
+    const env = [];
+    for (let i = 0; i + hop <= wave.length; i += hop) {
+      let sum = 0;
+      for (let j = 0; j < hop; j++) sum += wave[i + j] ** 2;
+      env.push(Math.sqrt(sum / hop));
+    }
+    const rise = env.map((v, i) => Math.max(0, v - (env[i - 2] ?? v)));
+    const mean = rise.reduce((a, b) => a + b, 0) / rise.length;
+    const sd = Math.sqrt(rise.reduce((a, b) => a + (b - mean) ** 2, 0) / rise.length);
+    let last = -1;
+    for (let i = 1; i < rise.length; i++) {
+      const t = i / fps;
+      const isPeak = rise[i] === Math.max(...rise.slice(Math.max(0, i - 16), i + 17)); // ±80 ms
+      if (rise[i] > mean + 2.5 * sd && isPeak && t - last >= 0.2) {
+        hits.push(t);
+        last = t;
+      }
+    }
+  } catch {
+    hits = []; // can't analyse: the music still plays, the city just doesn't pulse
+  }
 }
 
 function fadeTo(target, ms, done) {
@@ -71,6 +104,7 @@ export const sound = {
     a.play()
       .then(() => {
         playing = true;
+        findHits();
         writePref("on");
         fadeTo(VOLUME, 1600);
         emit();
@@ -97,6 +131,7 @@ export const sound = {
     a.play()
       .then(() => {
         playing = true;
+        findHits();
         fadeTo(VOLUME, 1600);
         emit();
       })
@@ -117,13 +152,19 @@ export const sound = {
   isPlaying: () => playing,
   /** "on" | "off" | null (never chosen) */
   preference: readPref,
-  /** 0…1 loudness of the low end, for visuals. */
-  level() {
-    if (!playing || !analyser) return 0;
-    analyser.getByteFrequencyData(data);
-    let sum = 0;
-    for (let i = 0; i < 8; i++) sum += data[i];
-    return sum / (8 * 255);
+  /** 1 at the moment of a bass hit, decaying to 0 over ~0.3 s; 0 while muted. */
+  pulse() {
+    if (!playing || !hits?.length) return 0;
+    const t = audio.currentTime;
+    let lo = 0;
+    let hi = hits.length - 1;
+    if (t < hits[0]) return 0;
+    while (lo < hi) {
+      const mid = (lo + hi + 1) >> 1;
+      if (hits[mid] <= t) lo = mid;
+      else hi = mid - 1;
+    }
+    return Math.exp(-(t - hits[lo]) * 9) * Math.min(1, audio.volume / VOLUME);
   },
   subscribe(fn) {
     listeners.add(fn);
